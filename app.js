@@ -520,7 +520,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
             for(var i=0;i<sheetData.length;i++){
                 var to10={}
                 to10["Distributor"]=sheetData[i]["Distributor"]
-                to10["ClASS"]=sheetData[i]["CLASS"]
+                to10["CLASS"]=sheetData[i]["CLASS"]
                 objct10.push(to10)
             }
             classModel.deleteMany({})
