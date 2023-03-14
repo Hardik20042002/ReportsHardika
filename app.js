@@ -245,17 +245,17 @@ app.get(process.env.uri, (req, res) => {
     let b = imeiModel.distinct("Model")
     let c = imeiModel.distinct("Color")
     let d = fosModel.distinct("FOS")
+    temp1=undefined
+    temp2=undefined
+    temp3=undefined
+    temp4=undefined
+    temp5=undefined
     Promise.all([a, b,c,d]).then((returnedValues) => {
         const [dealer, model,color, fosd] = returnedValues;
         dealers=dealer
         colors=color
         models=model
         fosds=fosd
-        temp1=dealer
-        temp2=model
-        temp3=color
-        temp4="sast"
-        temp5=fosd
         res.render(process.env.h, {
             dealerDetails: dealer,
             modelDetails: model,
