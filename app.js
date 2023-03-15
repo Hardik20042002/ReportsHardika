@@ -17,6 +17,7 @@ var nameModel = require('./models/dealername');
 var outstandingModel = require('./models/outstanding');
 var chqModel = require('./models/cheque');
 var bodyParser = require('body-parser');
+var stringSimilarity = require("string-similarity");
 require('dotenv').config();
 const accountSid = process.env.SID;
 const authToken = process.env.authToken;
@@ -40,7 +41,6 @@ var colors=[]
 var models=[]
 var fosds=[]
 var temp1,temp2,temp3,temp4,temp5
-var d = new Date('2023','02','14')
 classobj=['A+/50','A1/32','A2/28', 'B1/20','B2/18', 'C1/14','C2/8','D1/6','D2/4','E/3','']
 const map = new Map([
     ['AURORA', 'A'],
@@ -93,6 +93,7 @@ const map = new Map([
     ['anupamtelecom','Anupam telecom ! GREATER NOIDA'],
     ['anushka','Anuska mobile center 2 ! GREATER NOIDA'],
     ['anushkamobilecenter','Anuska mobile center 2 ! GREATER NOIDA'],
+    ['anushkamobilecenter2','Anuska mobile center 2 ! GREATER NOIDA'],
     ['ayush','Ayush Communication ! GREATER NOIDA'],
     ['ayushcommunication','Ayush Communication ! GREATER NOIDA'],
     ['balajimobilezone','BALAJI MOBILE & ELECTRONICS (DADRI) ! GREATER NOIDA'],
@@ -130,10 +131,12 @@ const map = new Map([
     ['jaiambeycommunicationenterprises','JAI AMBEY COMMUNICATION ENTERPRISES ! GREATER NOIDA'],
     ['jaiambeent','JAI AMBEY COMMUNICATION ENTERPRISES ! GREATER NOIDA'],
     ['jrb','JRB TELECOM ! GREATER NOIDA'],
+    ['jrbtelecom','JRB TELECOM ! GREATER NOIDA'],
     ['jaiambeycom','Jai Ambey Communication ! GREATER NOIDA'],
     ['jaiambeycommunication','Jai Ambey Communication ! GREATER NOIDA'],
     ['jaiambecom','Jai Ambey Communication ! GREATER NOIDA'],
     ['kgn','K G N COMMUNICATION ! GREATER NOIDA'],
+    ['kgncom','K G N COMMUNICATION ! GREATER NOIDA'],
     ['kgncommunication','K G N COMMUNICATION ! GREATER NOIDA'],
     ['kanika','KANIKA COMMUNICATION (HABIBPUR) ! GREATER NOIDA'],
     ['kanikacommunication','KANIKA COMMUNICATION (HABIBPUR) ! GREATER NOIDA'],
@@ -163,82 +166,125 @@ const map = new Map([
     ['mahalaxmimobilestore','MAHALAXMI MOBILE STORE ! GREATER NOIDA'],
     ['mahalaxmistore','MAHALAXMI MOBILE STORE ! GREATER NOIDA'],
     ['matrix','MATRIX NETWORK MOBILE STORE ! GREATER NOIDA'],
+    ['matrixmobilestore','MATRIX NETWORK MOBILE STORE ! GREATER NOIDA'],
     ['hotspot','MOBILE HOTSPOT ! GREATER NOIDA'],
     ['mobilehotspot','MOBILE HOTSPOT ! GREATER NOIDA'],
+    ['mobilehotspot','MOBILE HOTSPOT ! GREATER NOIDA'],
     ['shingar','MOBILE SHINGAR (DADRI) ! GREATER NOIDA'],
+    ['shinghar','MOBILE SHINGAR (DADRI) ! GREATER NOIDA'],
     ['mobileshingar','MOBILE SHINGAR (DADRI) ! GREATER NOIDA'],
     ['solution','Mobile Solution ! GREATER NOIDA'],
     ['mobilesolution','Mobile Solution ! GREATER NOIDA'],
     ['mobileworld','Mobile World (noida) ! GREATER NOIDA'],
     ['world','Mobile World (noida) ! GREATER NOIDA'],
     ['newlavish','NEW LAVISH COMM & MOBILE WORLD (HABIBPUR) ! GREATER NOIDA'],
+    ['newlavishcom','NEW LAVISH COMM & MOBILE WORLD (HABIBPUR) ! GREATER NOIDA'],
     ['lavish','NEW LAVISH COMM & MOBILE WORLD (HABIBPUR) ! GREATER NOIDA'],
     ['newradhey','NEW RADHEY ELECTRONICS & MOBILE CENTER ! GREATER NOIDA'],
     ['radhey','NEW RADHEY ELECTRONICS & MOBILE CENTER ! GREATER NOIDA'],
     ['newrajdeep','NEW RAJDEEP MOBILE POINT (SURAJPUR) ! GREATER NOIDA'],
+    ['newrajdeepmobilepoint','NEW RAJDEEP MOBILE POINT (SURAJPUR) ! GREATER NOIDA'],
     ['newuniversal','NEW UNIVERSAL OFFICE SYSTEM ! GREATER NOIDA'],
+    ['newuniversalofficesystem','NEW UNIVERSAL OFFICE SYSTEM ! GREATER NOIDA'],
     ['noble','Noble Mobile Shope ! GREATER NOIDA'],
     ['nobel','Noble Mobile Shope ! GREATER NOIDA'],
+    ['noblemobileshope','Noble Mobile Shope ! GREATER NOIDA'],
     ['noor','Noor Communication ! GREATER NOIDA'],
+    ['noorcom','Noor Communication ! GREATER NOIDA'],
     ['om','OM COMMUNICATION ! GREATER NOIDA'],
     ['omcom','OM COMMUNICATION ! GREATER NOIDA'],
     ['omsai','Om Sai Communication( Greater Noida) ! GREATER NOIDA'],
+    ['omsaicom','Om Sai Communication( Greater Noida) ! GREATER NOIDA'],
     ['pandey','PANDEY COMMUNICATION ! GREATER NOIDA'],
+    ['pandeycom','PANDEY COMMUNICATION ! GREATER NOIDA'],
     ['pooja','POOJA COMMUNICATION (G.NOIDA) ! GREATER NOIDA'],
+    ['poojacom','POOJA COMMUNICATION (G.NOIDA) ! GREATER NOIDA'],
     ['praveen2','PRAVEEN MOBILE CENTER -2 ! GREATER NOIDA'],
+    ['praveen-2','PRAVEEN MOBILE CENTER -2 ! GREATER NOIDA'],
+    ['praveenmobilecenter2','PRAVEEN MOBILE CENTER -2 ! GREATER NOIDA'],
     ['praveen','PRAVEEN MOBILE CENTRE (SURJPUR) ! GREATER NOIDA'],
     ['praveen1','PRAVEEN MOBILE CENTRE (SURJPUR) ! GREATER NOIDA'],
     ['praveensurajpur','PRAVEEN MOBILE CENTRE (SURJPUR) ! GREATER NOIDA'],
+    ['praveenmobilecenter','PRAVEEN MOBILE CENTRE (SURJPUR) ! GREATER NOIDA'],
     ['priyanka','PRIYANKA MOBILE WORLD (HALDONI) ! GREATER NOIDA'],
+    ['priyankamobileworld','PRIYANKA MOBILE WORLD (HALDONI) ! GREATER NOIDA'],
     ['prince','Prince Enterpirese ! GREATER NOIDA'],
+    ['princeent','Prince Enterpirese ! GREATER NOIDA'],
     ['rk','R K TELECOM (TUGALPUR) ! GREATER NOIDA'],
     ['rahul','RAHUL TELECOM (AICHER) ! GREATER NOIDA'],
+    ['rahultelecom','RAHUL TELECOM (AICHER) ! GREATER NOIDA'],
     ['rana','RANA ENTERPRISES ! GREATER NOIDA'],
+    ['ranaent','RANA ENTERPRISES ! GREATER NOIDA'],
     ['rajdeep','Rajdeep Mobile Point ! GREATER NOIDA'],
+    ['rajdeepmobilepoint','Rajdeep Mobile Point ! GREATER NOIDA'],
     ['royal','Royal mobile house and electronics ! GREATER NOIDA'],
+    ['royalmobilehouseandelectronics','Royal mobile house and electronics ! GREATER NOIDA'],
     ['sn','S N COMMUNICATION (HALDONI) ! GREATER NOIDA'],
+    ['sncom','S N COMMUNICATION (HALDONI) ! GREATER NOIDA'],
     ['sm','S.M TRADER (KASNA) ! GREATER NOIDA'],
+    ['smtrader','S.M TRADER (KASNA) ! GREATER NOIDA'],
     ['sachin','SACHIN TELECOM AND MOBILE SHOP ! GREATER NOIDA'],
+    ['sachintelecomandmobileshop','SACHIN TELECOM AND MOBILE SHOP ! GREATER NOIDA'],
     ['sanchar','SANCHAR BHAWAN (GREATER NOIDA) ! GREATER NOIDA'],
+    ['sancharbhawan','SANCHAR BHAWAN (GREATER NOIDA) ! GREATER NOIDA'],
     ['satnam','SATNAM MOBILE STORE ! GREATER NOIDA'],
+    ['satnammobilestore','SATNAM MOBILE STORE ! GREATER NOIDA'],
     ['shivshakti','SHIV SHAKTI ELECTRONICS ! GREATER NOIDA'],
+    ['shivshaktielectronics','SHIV SHAKTI ELECTRONICS ! GREATER NOIDA'],
     ['shivtraders','SHIV TRADERS (SURAJPUR) ! GREATER NOIDA'],
     ['shivsurajpur','SHIV TRADERS (SURAJPUR) ! GREATER NOIDA'],
     ['shreebaba','SHREE BABA COMMUNICATION (KASNA) ! GREATER NOIDA'],
+    ['baba','SHREE BABA COMMUNICATION (KASNA) ! GREATER NOIDA'],
+    ['shreebabacom','SHREE BABA COMMUNICATION (KASNA) ! GREATER NOIDA'],
     ['shreebalajicom','SHREE BALAJI COMMUNICATION (SURAJPUR) ! GREATER NOIDA'],
     ['shreebalajisurajpur','SHREE BALAJI COMMUNICATION (SURAJPUR) ! GREATER NOIDA'],
+    ['shreebalajicommunication','SHREE BALAJI COMMUNICATION (SURAJPUR) ! GREATER NOIDA'],
     ['shreebalajicenter','SHREE BALAJI MOBILE CENTER (KASNA) ! GREATER NOIDA'],
-    ['shreebalajicentre','SHREE BALAJI MOBILE CENTER (KASNA) ! GREATER NOIDA'],
+    ['shreebalajimobilecentre','SHREE BALAJI MOBILE CENTER (KASNA) ! GREATER NOIDA'],
     ['shreebalajikasna','SHREE BALAJI MOBILE CENTER (KASNA) ! GREATER NOIDA'],
     ['shreeram','SHREE RAM MOBILE GALLERY ! GREATER NOIDA'],
+    ['shreerammobilegallery','SHREE RAM MOBILE GALLERY ! GREATER NOIDA'],
     ['shrisahibji','SHRI SAHIB JI MOBILE SOLUTION (DADRI) ! GREATER NOIDA'],
     ['shrisahib','SHRI SAHIB JI MOBILE SOLUTION (DADRI) ! GREATER NOIDA'],
     ['sahib','SHRI SAHIB JI MOBILE SOLUTION (DADRI) ! GREATER NOIDA'],
+    ['shrisahibjimobilesolution','SHRI SAHIB JI MOBILE SOLUTION (DADRI) ! GREATER NOIDA'],
     ['shrisahibji2','SHRIB SAHIB JI MOBILE SOLUTION-2 ! GREATER NOIDA'],
     ['shrisahib2','SHRIB SAHIB JI MOBILE SOLUTION-2 ! GREATER NOIDA'],
     ['sahib2','SHRIB SAHIB JI MOBILE SOLUTION-2 ! GREATER NOIDA'],
+    ['shrisahibjimobilesolution2','SHRIB SAHIB JI MOBILE SOLUTION-2 ! GREATER NOIDA'],
     ['sony','SONY ELECTRONICS (SURAJPUR) ! GREATER NOIDA'],
+    ['sonyelectronics','SONY ELECTRONICS (SURAJPUR) ! GREATER NOIDA'],
     ['star','STAR TELECOM CENTER(GEJHA) ! GREATER NOIDA'],
+    ['startelecom','STAR TELECOM CENTER(GEJHA) ! GREATER NOIDA'],
     ['susshma','SUSSHMA MOBILE POINT (TUGALPUR) ! GREATER NOIDA'],
     ['sushma','SUSSHMA MOBILE POINT (TUGALPUR) ! GREATER NOIDA'],
+    ['susshmamobilepoint','SUSSHMA MOBILE POINT (TUGALPUR) ! GREATER NOIDA'],
     ['sanjay','Sanjay Communication(Sec-93) ! GREATER NOIDA'],
+    ['sanjaycom','Sanjay Communication(Sec-93) ! GREATER NOIDA'],
     ['shyamlal','Shyam Lal & Sons ! GREATER NOIDA'],
+    ['shyamlalandsons','Shyam Lal & Sons ! GREATER NOIDA'],
     ['shyam','Shyam Lal & Sons ! GREATER NOIDA'],
     ['tomar','TOMAR ELECTRONICS ! GREATER NOIDA'],
+    ['tomarelectronics','TOMAR ELECTRONICS ! GREATER NOIDA'],
     ['tanish','Tanish Telecom(Surajpur) ! GREATER NOIDA'],
     ['tanishq','Tanish Telecom(Surajpur) ! GREATER NOIDA'],
+    ['tanishtelecom','Tanish Telecom(Surajpur) ! GREATER NOIDA'],
     ['mobilelife','The Mobile Life ! GREATER NOIDA'],
     ['life','The Mobile Life ! GREATER NOIDA'],
     ['themobilelife','The Mobile Life ! GREATER NOIDA'],
     ['universal','UNIVERSAL MOBILE CAFE ! GREATER NOIDA'],
     ['cafe','UNIVERSAL MOBILE CAFE ! GREATER NOIDA'],
+    ['universalmobilecafe','UNIVERSAL MOBILE CAFE ! GREATER NOIDA'],
     ['universalcafe','UNIVERSAL MOBILE CAFE ! GREATER NOIDA'],
     ['vk','V.K Mobile Point (HALDONI) ! GREATER NOIDA'],
+    ['vkmobilepoint','V.K Mobile Point (HALDONI) ! GREATER NOIDA'],
     ['vaishnav','VAISHNAV TELECOM ( ANSAL PLAZA) ! GREATER NOIDA'],
     ['vishal','VISHAL MOBILE HOUSE ! GREATER NOIDA'],
     ['vikky','Vikky Communication ! GREATER NOIDA'],
     ['viky','Vikky Communication ! GREATER NOIDA'],
-    ['yash','YASH SANCHAR WORLD ! GREATER NOIDA']
+    ['vikkycom','Vikky Communication ! GREATER NOIDA'],
+    ['yash','YASH SANCHAR WORLD ! GREATER NOIDA'],
+    ['yashsanchar','YASH SANCHAR WORLD ! GREATER NOIDA'],
 ])
 
 app.get(process.env.uri, (req, res) => {
@@ -276,7 +322,6 @@ app.get(process.env.uri, (req, res) => {
 });
 
 app.post(process.env.uri, upload.single('file'), (req, res) => {
-    d=new Date()
     const workbook = xlsx.readFile(req.file.path);
     const sheets = workbook.SheetNames;
     for (const sheetName of sheets) {
@@ -391,7 +436,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
             const sheetData = xlsx.utils.sheet_to_json(worksheet);
             for(var i=0;i<sheetData.length;i++){
                 var to5={}
-                to5["Model"] = sheetData[i]["MODEL"]
+                to5["Model"] = sheetData[i]['MODEL']
                 to5["Color"]=sheetData[i]["COLOUR"]
                 if(sheetData[i]['CLSOING STOCK']==''){
                     sheetData[i]['CLSOING STOCK']='0'
@@ -1157,7 +1202,8 @@ app.post(process.env.wl, (req, res) => {
     }
     else{
         dlr=dlr.split(' ').join('')
-        dlr=dummy.get(dlr);
+        dlr=stringSimilarity.findBestMatch(dlr,Array.from(dummy.keys())).bestMatch.target
+        dlr=dummy.get(dlr)
         nameModel.find({},(err,names)=>{
             nameMap=new Map()
             for(var i=0;i<names.length;i++){
@@ -1206,10 +1252,12 @@ app.post(process.env.wl, (req, res) => {
                         sum2+=(x*value[itr+3])
                         itr+=4
                     }
+                    var out=parseFloat(value[itr+3])+parseFloat(value[itr+4])
+                    var gap=parseFloat(out)-parseFloat(sum2)
                     client.messages.create({
                         from: process.env.NO,
                         to: fromNumber,
-                        body: '*'+dlr.split('!')[0]+'*'+'\n*LIMIT:* '+value[itr+2].toString()+'\n'+'*OUTSTANDING:* '+value[itr+3].toString()+'\n'+'*CHQ VALUE:* '+value[itr+4].toString()+'\n'+'*STOCK VALUE:* '+sum2.toString()+'\n'+'*GAP:* '+(value[itr+3]-sum2).toString()+'\n'+'*DATE:* '+d.toDateString()
+                        body: '*'+dlr.split('!')[0]+'*'+'\n*LIMIT:* '+value[itr+2].toString()+'\n'+'*OUTSTANDING:* '+out.toString()+'\n'+'*CHQ VALUE:* '+value[itr+4].toString()+'\n'+'*STOCK VALUE:* '+sum2.toString()+'\n'+'*GAP:* '+gap.toString()+'\n'+'*DATE:* '+(new Date()).toDateString()
                     }).then(message => {
                         console.log('Message sent:', message.sid);
                         res.end(twiml.toString());
