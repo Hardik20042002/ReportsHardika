@@ -40,6 +40,7 @@ var colors=[]
 var models=[]
 var fosds=[]
 var temp1,temp2,temp3,temp4,temp5
+var d = new Date('2023','03','14')
 classobj=['A+/50','A1/32','A2/28', 'B1/20','B2/18', 'C1/14','C2/8','D1/6','D2/4','E/3','']
 const map = new Map([
     ['AURORA', 'A'],
@@ -275,6 +276,7 @@ app.get(process.env.uri, (req, res) => {
 });
 
 app.post(process.env.uri, upload.single('file'), (req, res) => {
+    d=new Date()
     const workbook = xlsx.readFile(req.file.path);
     const sheets = workbook.SheetNames;
     for (const sheetName of sheets) {
@@ -1207,7 +1209,7 @@ app.post(process.env.wl, (req, res) => {
                     client.messages.create({
                         from: process.env.NO,
                         to: fromNumber,
-                        body: '*'+dlr.split('!')[0]+'*'+'\n*LIMIT:* '+value[itr+2].toString()+'\n'+'*OUTSTANDING:* '+value[itr+3].toString()+'\n'+'*CHQ VALUE:* '+value[itr+4].toString()+'\n'+'*STOCK VALUE:* '+sum2.toString()+'\n'+'*GAP:* '+(value[itr+3]-sum2).toString()
+                        body: '*'+dlr.split('!')[0]+'*'+'\n*LIMIT:* '+value[itr+2].toString()+'\n'+'*OUTSTANDING:* '+value[itr+3].toString()+'\n'+'*CHQ VALUE:* '+value[itr+4].toString()+'\n'+'*STOCK VALUE:* '+sum2.toString()+'\n'+'*GAP:* '+(value[itr+3]-sum2).toString()+'\n'+'*(DATE:* '+d.toLocaleDateString('en-US')+'*)*'
                     }).then(message => {
                         console.log('Message sent:', message.sid);
                         res.end(twiml.toString());
