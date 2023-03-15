@@ -1209,7 +1209,7 @@ app.post(process.env.wl, (req, res) => {
                     client.messages.create({
                         from: process.env.NO,
                         to: fromNumber,
-                        body: '*'+dlr.split('!')[0]+'*'+'\n*LIMIT:* '+value[itr+2].toString()+'\n'+'*OUTSTANDING:* '+value[itr+3].toString()+'\n'+'*CHQ VALUE:* '+value[itr+4].toString()+'\n'+'*STOCK VALUE:* '+sum2.toString()+'\n'+'*GAP:* '+(value[itr+3]-sum2).toString()+'\n'+'*DATE:* '+d.toLocaleDateString('en-US')
+                        body: '*'+dlr.split('!')[0]+'*'+'\n*LIMIT:* '+value[itr+2].toString()+'\n'+'*OUTSTANDING:* '+value[itr+3].toString()+'\n'+'*CHQ VALUE:* '+value[itr+4].toString()+'\n'+'*STOCK VALUE:* '+sum2.toString()+'\n'+'*GAP:* '+(value[itr+3]-sum2).toString()+'\n'+'*DATE:* '+d.toDateString()
                     }).then(message => {
                         console.log('Message sent:', message.sid);
                         res.end(twiml.toString());
