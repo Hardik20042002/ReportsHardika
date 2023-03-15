@@ -1,0 +1,293 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://phpcoder.tech/multiselect/js/jquery.multiselect.js"></script>
+    <link rel="stylesheet" href="https://phpcoder.tech/multiselect/css/jquery.multiselect.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Genos:ital,wght@1,300&display=swap" rel="stylesheet">
+  </head>
+</head>
+<nav class="navbar navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand d-inline" href="#">                               
+            <img src='https://user-images.githubusercontent.com/102477681/223489374-7cdf584d-e2ac-4688-84c4-2cede87ea0d0.png' alt="Logo" width="70" height="70" class="d-inline-block align-text-center rounded-circle border border-secondary border-1" style="background-color: white;">
+            <h1 class="d-inline text-center" style="font-family: 'Genos',sans-serif;margin-left: 10px;">Hardika Enterprises</h1>
+        </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">DashBoard</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="<%=uri%>">Home</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Report Type
+              </a>
+              <ul class="dropdown-menu dropdown-menu-dark">
+                <li><a class="dropdown-item" href="<%=suri%>">Sale Stock Report</a></li>
+                <li><a class="dropdown-item" href="<%=muri%>">Model Wise Report</a></li>
+                <li><a class="dropdown-item" href="<%=ouri%>">Outstanding Report</a></li>
+                <li><a class="dropdown-item" href="<%=auri%>">Activation Report</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+</nav>
+<div class="container" style="overflow: auto;margin-top: 30px;">
+    <div class=" nav justify-content-center" style="margin-top:120px;height: 60%;">
+     <div class="card border-dark mb-3 border-2" style="max-width: 40rem;width:700px;">
+        <div class="card-header border-dark border-2"><h5>Sale Stock Reports</h5></div>
+        <div class="card-body">
+            <form action="POST">
+                <%if(dealer==undefined&&model==undefined&&isColor==undefined&&type==undefined&&selectedfos==undefined){%>
+                    <div class="form-group row" style="margin: 0px;">
+                        <label for="colFormLabelLg" class="col-sm-4 col-form-label col-form-label-lg">Dealers</label>
+                        <div class="col-sm-7">
+                            <select name="dealer" id="dealer" class="form-control form-control-lg" multiple>
+                                <% for(var count=0;count<dealerDetails.length;count++) { %>
+                                    <option value="<%=dealerDetails[count]%>" selected><%=dealerDetails[count].split('!')[0] %></option>
+                                <% } %>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group row" style="margin: 0px;">
+                        <label for="colFormLabelLg" class="col-sm-4 col-form-label col-form-label-lg">Models</label>
+                        <div class="col-sm-7">
+                            <select name="model" id="model" class="form-control" multiple>
+                                <% for(var count=0;count<modelDetails.length;count++) { %>
+                                    <option value="<%= modelDetails[count]%>" selected><%= modelDetails[count] %></option>
+                                <% } %>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group row" style="margin: 0px;">
+                        <label for="colFormLabelLg" class="col-sm-4 col-form-label col-form-label-lg">Color Wise</label>
+                        <div class="col-sm-7">
+                            <select name="color" id="color" class="form-control" multiple>
+                                <option value="Yes">Yes</option>
+                                <option value="No" selected>No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group row" style="margin: 0px;">
+                        <label for="colFormLabelLg" class="col-sm-4 col-form-label col-form-label-lg">Report Type</label>
+                        <div class="col-sm-7">
+                            <select name="type" id="type" class="form-control" multiple>
+                                <option value="sa" selected>Sale</option>
+                                <option value="st" selected>Stock</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group row" style="margin: 0px;">
+                        <label for="colFormLabelLg" class="col-sm-4 col-form-label col-form-label-lg">FOS</label>
+                        <div class="col-sm-7">
+                            <select name="fosd" id="fosd" class="form-control" multiple>
+                                <% for(var count=0;count<fosDetails.length;count++) { %>
+                                    <option value="<%= fosDetails[count]%>" selected><%= fosDetails[count] %></option>
+                                <% } %>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                <%}else{%>
+                    <div class="form-group row" style="margin: 0px;">
+                        <label for="colFormLabelLg" class="col-sm-4 col-form-label col-form-label-lg">Dealers</label>
+                        <div class="col-sm-7">
+                            <select name="dealer" id="dealer" class="form-control form-control-lg" multiple>
+                                <% for(var count=0;count<dealerDetails.length;count++) { %>
+                                    <%if(dealer.includes(dealerDetails[count])){%>
+                                        <option value="<%=dealerDetails[count]%>" selected><%=dealerDetails[count].split('!')[0] %></option>
+                                    <%}else{%>
+                                        <option value="<%=dealerDetails[count]%>"><%=dealerDetails[count].split('!')[0] %></option>
+                                    <%}%>
+                                <% } %>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group row" style="margin: 0px;">
+                        <label for="colFormLabelLg" class="col-sm-4 col-form-label col-form-label-lg">Models</label>
+                        <div class="col-sm-7">
+                            <select name="model" id="model" class="form-control" multiple>
+                                <% for(var count=0;count<modelDetails.length;count++) { %>
+                                    <%if(model.includes(modelDetails[count])){%>
+                                        <option value="<%= modelDetails[count]%>" selected><%= modelDetails[count] %></option>
+                                    <%}else{%>
+                                        <option value="<%= modelDetails[count]%>"><%= modelDetails[count] %></option>
+                                    <%}%>
+                                <% } %>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group row" style="margin: 0px;">
+                        <label for="colFormLabelLg" class="col-sm-4 col-form-label col-form-label-lg">Color Wise</label>
+                        <div class="col-sm-7">
+                            <select name="color" id="color" class="form-control" multiple>
+                                <%if(isColor=="No"){%>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No" selected>No</option>
+                                <%}else{%>
+                                    <option value="Yes" selected>Yes</option>
+                                    <option value="No">No</option>
+                                <%}%>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group row" style="margin: 0px;">
+                        <label for="colFormLabelLg" class="col-sm-4 col-form-label col-form-label-lg">Report Type</label>
+                        <div class="col-sm-7">
+                            <select name="type" id="type" class="form-control" multiple>
+                                <%if(type=="sa"){%>
+                                    <option value="sa" selected>Sale</option>
+                                    <option value="st">Stock</option>
+                                <%}else if(type=="st"){%>
+                                    <option value="sa">Sale</option>
+                                    <option value="st" selected>Stock</option>
+                                <%}else{%>
+                                    <option value="sa" selected>Sale</option>
+                                    <option value="st" selected>Stock</option>
+                                <%}%>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group row" style="margin: 0px;">
+                        <label for="colFormLabelLg" class="col-sm-4 col-form-label col-form-label-lg">FOS</label>
+                        <div class="col-sm-7">
+                            <select name="fosd" id="fosd" class="form-control" multiple>
+                                <% for(var count=0;count<fosDetails.length;count++) { %>
+                                    <%if(selectedfos.includes(fosDetails[count])){%>
+                                        <option value="<%= fosDetails[count]%>" selected><%= fosDetails[count] %></option>
+                                    <%}else{%>
+                                        <option value="<%= fosDetails[count]%>"><%= fosDetails[count] %></option>
+                                    <%}%>
+                                <% } %>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                <%}%>
+                <button type="submit" class="btn btn-md btn-outline-dark" id="det" onclick="location.href='<%=baseurl%><%=sduri%>'">Get Report</button>
+            </form>
+        </div>
+      </div>
+</div>
+    <footer class="bg-dark text-center text-white fixed-bottom" style="height:12%";>
+        <div class="text-center p-3" style="background-color: rgba(24, 24, 24, 0.2);font-family: 'Genos',sans-serif;font-size: 20px;margin-bottom: 0px;">
+          © 2023 Copyright:
+          <p class="text-white" style="font-family: 'Genos',sans-serif;font-size: 20px;margin-top: 0px;">Hardika Enterprises Private Limited</p>
+        </div>
+      </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <script>
+        jQuery('#dealer').multiselect({
+            columns: 1,
+            placeholder: 'Select Dealers',
+            search: true,
+            selectAll: true
+        });
+        jQuery('#model').multiselect({
+            columns: 1,
+            placeholder: 'Select Models',
+            search: true,
+            selectAll: true
+        });
+        jQuery('#color').multiselect({
+            columns: 1,
+            placeholder: 'Do you want colorwise report?',
+            search: true
+        });
+        jQuery('#type').multiselect({
+            columns: 1,
+            placeholder: 'Select the required fields?',
+            search: true,
+            selectAll: true
+        });
+        jQuery('#fosd').multiselect({
+            columns: 1,
+            placeholder: 'Select fos?',
+            search: true,
+            selectAll: true
+        });
+        document.getElementById('det')
+            .addEventListener('click', (e) => {
+                e.preventDefault();
+                deal=[]
+                const upload1 = document.getElementById('dealer');
+                for(var i=0;i<upload1.length;i++){
+                    if(upload1.options[i].selected){
+                        deal.push(upload1.options[i].value)
+                    }
+                }
+                model=[]
+                const upload2 = document.getElementById('model');
+                for(var i=0;i<upload2.length;i++){
+                    if(upload2.options[i].selected){
+                        model.push(upload2.options[i].value)
+                    }
+                }
+                color=[]
+                const upload3 = document.getElementById('color');
+                for(var i=0;i<upload3.length;i++){
+                    if(upload3.options[i].selected){
+                        color.push(upload3.options[i].value)
+                    }
+                }
+                report=[]
+                const upload4 = document.getElementById('type');
+                for(var i=0;i<upload4.length;i++){
+                    if(upload4.options[i].selected){
+                        report.push(upload4.options[i].value)
+                    }
+                }
+                fosd=[]
+                const upload5 = document.getElementById('fosd');
+                for(var i=0;i<upload5.length;i++){
+                    if(upload5.options[i].selected){
+                        fosd.push(upload5.options[i].value)
+                    }
+                }
+                fetch('<%=duri%>', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        deal,
+                        model,
+                        color,
+                        report,
+                        fosd
+                    }),
+                })
+                    .then((res) => {
+                        return res.json();
+                    })
+                    .then((data) => console.log(data));
+            }); 
+    </script>
+<br>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://phpcoder.tech/multiselect/js/jquery.multiselect.js"></script>
+    <link rel="stylesheet" href="https://phpcoder.tech/multiselect/css/jquery.multiselect.css">
+	<style>
+		.popup {
+			display: none;
+			position: fixed;
+			top: 48%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			width: 96%;
+			height: 88%;
+			padding: 20px;
+			background-color: #ffffff;
+			border: 1px solid #cccccc;
+			box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+			z-index: 999;
+            position: relative;
+            overflow: auto;
+		}
+		#close {
+			position: relative;
+			top: 20px;
+			left: 20px;
+			cursor: pointer;
+		}
+        #download{
+            position:relative;
+            left: 20px;
+            top: 20px;
+        }
+	</style>
+</head>
+<body onload="openPopup()">
+    <button id="download" class="btn btn-lg btn-outline-dark" onClick="export_data()">Download excel</button> 
+    <button id="close" class="btn btn-lg btn-outline-dark" onclick="location.href='<%=baseurl%>/activation'">Close</button> 
+	<div class="popup" id="myPopup">
+        <table class="table" id="data">
+            <thead class="bg-dark" style="color:#ffffff">
+                <tr>
+                    <th scope="col">FOS</th>
+                    <th scope="col">CLASS</th>
+                    <th scope="col">DEALER</th>
+                    <%var total=[]%>
+                    <%for(var i=0;i<modelDetails.length;i++){%>
+                        <%if(!flag[i]){continue;}%>
+                        <th><%=modelDetails[i]%></th>
+                        <%total.push(0)%>
+                    <%}%>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <%for(var i=0;i<outstanding.length;i++){%>
+                    <%if(outstanding[i]['isZero']==false){continue;}%>
+                    <tr scope="row">
+                        <th><%= outstanding[i]['fos'].split(' ')[0]%></th>
+                        <th><%= outstanding[i]['fos'].split(' ')[1]%></th>
+                        <th><%= outstanding[i]['shop'].split('!')[0]%></th>
+                        <%var cnt=0,itr=0%>
+                        <%for(var j=0;j<modelDetails.length;j++){%>
+                            <%if(!flag[j]){continue;}%>
+                            <%cnt+=outstanding[i]['cnt'][j]%>
+                            <%total[itr]+=outstanding[i]['cnt'][j]%>
+                            <%itr+=1%>
+                            <th><%=outstanding[i]['cnt'][j]%></th>
+                        <%}%>
+                        <th><%=cnt%></th>
+                    </tr>
+                <%}%>
+                <tr>
+                    <%var tsum=0%>
+                    <th colspan="3" class="text-center">Total</th>
+                    <%for(var i=0;i<total.length;i++){%>
+                        <%tsum+=total[i]%>
+                        <th><%=total[i]%></th>
+                    <%}%>
+                    <th><%=tsum%></th>
+                </tr>
+            </tbody>
+        </table>
+	</div>
+    <script src="<%=link%>"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+	<script>
+        function export_data(){
+                            let data=document.getElementById('data');
+                            var fp=XLSX.utils.table_to_book(data,{sheet:'activation_report'});
+                            XLSX.write(fp,{
+                                bookType:'xlsx',
+                                type:'base64'
+                            });
+                            XLSX.writeFile(fp,'activationReport.xlsx');
+                        }
+		function openPopup() {
+			document.getElementById("myPopup").style.display = "block";
+		}
+	</script>
+
+</body>
+</html>

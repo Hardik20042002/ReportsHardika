@@ -1,0 +1,72 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://phpcoder.tech/multiselect/js/jquery.multiselect.js"></script>
+    <link rel="stylesheet" href="https://phpcoder.tech/multiselect/css/jquery.multiselect.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Genos:ital,wght@1,300&display=swap" rel="stylesheet">
+  </head>
+</head>
+<nav class="navbar navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand d-inline" href="#">                               
+            <img src='https://user-images.githubusercontent.com/102477681/223489374-7cdf584d-e2ac-4688-84c4-2cede87ea0d0.png' alt="Logo" width="70" height="70" class="d-inline-block align-text-center rounded-circle border border-secondary border-1" style="background-color: white;">
+            <h1 class="d-inline text-center" style="font-family: 'Genos',sans-serif;margin-left: 10px;">Hardika Enterprises</h1>
+        </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">DashBoard</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="<%=uri%>">Home</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Report Type
+              </a>
+              <ul class="dropdown-menu dropdown-menu-dark">
+                <li><a class="dropdown-item" href="<%=suri%>">Sale Stock Report</a></li>
+                <li><a class="dropdown-item" href="<%=muri%>">Model Wise Report</a></li>
+                <li><a class="dropdown-item" href="<%=ouri%>">Outstanding Report</a></li>
+                <li><a class="dropdown-item" href="<%=auri%>">Activation Report</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+</nav>
+    <div class="container">
+        <div class=" nav justify-content-center" style="margin-top:150px;">
+        <div class="card border-dark border-2 mb-3 " style="max-width: 40rem;">
+            <div class="card-header border-dark border-2"><h5>Outstanding Report</h5></div>
+            <div class="card-body text-center">
+                <form action="<%=oduri%>" method="get">
+                    <button type="submit" class="btn btn-md btn-outline-dark" id="out" onclick="location.href='<%=baseurl%><%=oduri%>'">Get Report</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <footer class="bg-dark text-center text-white fixed-bottom" style="height:12%";>
+        <div class="text-center p-3" style="background-color: rgba(24, 24, 24, 0.2);font-family: 'Genos',sans-serif;font-size: 20px;margin-bottom: 0px;">
+          © 2023 Copyright:
+          <p class="text-white" style="font-family: 'Genos',sans-serif;font-size: 20px;margin-top: 0px;">Hardika Enterprises Private Limited</p>
+        </div>
+      </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+<br>
+</body>
+</html>

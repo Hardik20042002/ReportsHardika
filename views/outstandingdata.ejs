@@ -1,0 +1,97 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://phpcoder.tech/multiselect/js/jquery.multiselect.js"></script>
+    <link rel="stylesheet" href="https://phpcoder.tech/multiselect/css/jquery.multiselect.css">
+	<style>
+		.popup {
+			display: none;
+			position: fixed;
+			top: 48%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			width: 96%;
+			height: 88%;
+			padding: 20px;
+			background-color: #ffffff;
+			border: 1px solid #cccccc;
+			box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+			z-index: 999;
+            position: relative;
+            overflow: auto;
+		}
+		#close {
+			position: relative;
+			top: 20px;
+			left: 20px;
+			cursor: pointer;
+		}
+        #download{
+            position:relative;
+            left: 20px;
+            top: 20px;
+        }
+	</style>
+</head>
+<body onload="openPopup()">
+    <button id="download" class="btn btn-lg btn-outline-dark" onClick="export_data()">Download excel</button> 
+    <button id="close" class="btn btn-lg btn-outline-dark" onclick="location.href='<%=baseurl%>/outstanding'">Close</button> 
+	<div class="popup" id="myPopup">
+        <table class="table" id="data">
+            <thead class="bg-dark" style="color:#ffffff">
+                <tr>
+                    <th scope="col">FOS</th>
+                    <th scope="col">CLASS</th>
+                    <th scope="col">DEALER</th>
+                    <th scope="col">LIMIT</th>
+                    <th scope="col">OUTSTANDING</th>
+                    <th scope="col">CHQ VALUE</th>
+                    <th scope="col">STOCK VALUE</th>
+                    <th scope="col">GAP</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% var cnt1=0%>
+                <% var cnt2=0%>
+                <%for(var i=0;i<outstanding.length;i++){%>
+                    <%if(outstanding[i]['qty']==0){continue;}%>
+                    <tr scope="row">
+                        <%cnt1+=outstanding[i]['outstanding']%>
+                        <%cnt2+=outstanding[i]['price']%>
+                        <th><%= outstanding[i]['fos'].split(' ')[0]%></th>
+                        <th><%= outstanding[i]['fos'].split(' ')[1]%></th>
+                        <th><%= outstanding[i]['shop'].split('!')[0]%></th>
+                        <th><%= outstanding[i]['limit']%></th>
+                        <th><%= parseFloat(outstanding[i]['outstanding'])+parseFloat(outstanding[i]['chq'])%></th>
+                        <th><%= outstanding[i]['chq']%></th>
+                        <th><%= outstanding[i]['price']%></th>
+                        <th><%= (parseFloat(outstanding[i]['outstanding'])+parseFloat(outstanding[i]['chq'])-outstanding[i]['price'])%></th>
+                    </tr>
+                <%}%>
+            </tbody>
+        </table>
+	</div>
+    <script src="<%=link%>"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+	<script>
+        function export_data(){
+                            let data=document.getElementById('data');
+                            var fp=XLSX.utils.table_to_book(data,{sheet:'outstanding_report'});
+                            XLSX.write(fp,{
+                                bookType:'xlsx',
+                                type:'base64'
+                            });
+                            XLSX.writeFile(fp,'outstandingReport.xlsx');
+                        }
+		function openPopup() {
+			document.getElementById("myPopup").style.display = "block";
+		}
+	</script>
+
+</body>
+</html>
