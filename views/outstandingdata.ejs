@@ -67,10 +67,10 @@
                         <th><%= outstanding[i]['fos'].split(' ')[1]%></th>
                         <th><%= outstanding[i]['shop'].split('!')[0]%></th>
                         <th><%= outstanding[i]['limit']%></th>
-                        <th><%= outstanding[i]['outstanding']%></th>
+                        <th><%= parseFloat(outstanding[i]['outstanding'])+parseFloat(outstanding[i]['chq'])%></th>
                         <th><%= outstanding[i]['chq']%></th>
                         <th><%= outstanding[i]['price']%></th>
-                        <th><%= (outstanding[i]['outstanding']-outstanding[i]['price'])%></th>
+                        <th><%= (parseFloat(outstanding[i]['outstanding'])+parseFloat(outstanding[i]['chq'])-outstanding[i]['price'])%></th>
                     </tr>
                 <%}%>
             </tbody>
