@@ -40,7 +40,7 @@ var colors=[]
 var models=[]
 var fosds=[]
 var temp1,temp2,temp3,temp4,temp5
-var d = new Date('2023','03','14')
+var d = new Date('2023','02','14')
 classobj=['A+/50','A1/32','A2/28', 'B1/20','B2/18', 'C1/14','C2/8','D1/6','D2/4','E/3','']
 const map = new Map([
     ['AURORA', 'A'],
