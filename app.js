@@ -348,6 +348,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                             cnt++;
                             if(cnt==13){
                                 console.log("Completed")
+                                console.log(new Date())
                                 res.redirect(process.env.uri);
                             }
                         })
@@ -380,6 +381,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                             cnt++
                             if(cnt==13){
                                 console.log("Completed")
+                                console.log(new Date())
                                 res.redirect(process.env.uri);
                             }
                         })
@@ -410,6 +412,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                             cnt++
                             if(cnt==13){
                                 console.log("Completed")
+                                console.log(new Date())
                                 res.redirect(process.env.uri);
                             }
                         })
@@ -440,6 +443,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                             cnt++
                             if(cnt==13){
                                 console.log("Completed")
+                                console.log(new Date())
                                 res.redirect(process.env.uri);
                             }
                         })
@@ -473,6 +477,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                             cnt++
                             if(cnt==13){
                                 console.log("Completed")
+                                console.log(new Date())
                                 res.redirect(process.env.uri);
                             }
                         })
@@ -509,6 +514,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                             cnt++
                             if(cnt==13){
                                 console.log("Completed")
+                                console.log(new Date())
                                 res.redirect(process.env.uri);
                             }
                         })
@@ -540,6 +546,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                             cnt++
                             if(cnt==13){
                                 console.log("Completed")
+                                console.log(new Date())
                                 res.redirect(process.env.uri);
                             }
                         })
@@ -568,6 +575,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                             cnt++
                             if(cnt==13){
                                 console.log("Completed")
+                                console.log(new Date())
                                 res.redirect(process.env.uri);
                             }
                         })
@@ -596,6 +604,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                             cnt++
                             if(cnt==13){
                                 console.log("Completed")
+                                console.log(new Date())
                                 res.redirect(process.env.uri);
                             }
                         })
@@ -624,6 +633,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                             cnt++
                             if(cnt==13){
                                 console.log("Completed")
+                                console.log(new Date())
                                 res.redirect(process.env.uri);
                             }
                         })
@@ -652,6 +662,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                             cnt++
                             if(cnt==13){
                                 console.log("Completed")
+                                console.log(new Date())
                                 res.redirect(process.env.uri);
                             }
                         })
@@ -680,6 +691,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                             cnt++
                             if(cnt==13){
                                 console.log("Completed")
+                                console.log(new Date())
                                 res.redirect(process.env.uri);
                             }
                         })
@@ -708,6 +720,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                             cnt++
                             if(cnt==13){
                                 console.log("Completed")
+                                console.log(new Date())
                                 res.redirect(process.env.uri);
                             }
                         })
