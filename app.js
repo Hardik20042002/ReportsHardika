@@ -322,6 +322,7 @@ app.get(process.env.uri, (req, res) => {
 });
 
 app.post(process.env.uri, upload.single('file'), (req, res) => {
+    var cnt=0;
     const workbook = xlsx.readFile(req.file.path);
     const sheets = workbook.SheetNames;
     for (const sheetName of sheets) {
@@ -344,6 +345,11 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                     imeiModel.insertMany(objct1)
                         .then(()=>{
                             console.log('PortalStockSuccess')
+                            cnt++;
+                            if(cnt==13){
+                                console.log("Completed")
+                                res.redirect(process.env.uri);
+                            }
                         })
                         .catch((err)=>{
                             console.log("Re Upload the correct portal stock")
@@ -371,6 +377,11 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                     imeiModel.insertMany(objct2)
                         .then(()=>{
                             console.log('VarificationSaleSuccess')
+                            cnt++
+                            if(cnt==13){
+                                console.log("Completed")
+                                res.redirect(process.env.uri);
+                            }
                         })
                         .catch((err)=>{
                             console.log("Re Upload the correct verification sale")
@@ -396,6 +407,11 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                     actualSaleModel.insertMany(objct3)
                         .then(()=>{
                             console.log('EWarrantySaleSuccess')
+                            cnt++
+                            if(cnt==13){
+                                console.log("Completed")
+                                res.redirect(process.env.uri);
+                            }
                         })
                         .catch((err)=>{
                             console.log("Re Upload the correct ewarranty sale")
@@ -421,6 +437,11 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                     scanModel.insertMany(objct4)
                         .then(()=>{
                             console.log('ScanSuccess')
+                            cnt++
+                            if(cnt==13){
+                                console.log("Completed")
+                                res.redirect(process.env.uri);
+                            }
                         })
                         .catch((err)=>{
                             console.log("Re Upload the correct scan data")
@@ -449,6 +470,11 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                     stockModel.insertMany(objct5)
                         .then(()=>{
                             console.log('WarehouseStockSuccess')
+                            cnt++
+                            if(cnt==13){
+                                console.log("Completed")
+                                res.redirect(process.env.uri);
+                            }
                         })
                         .catch((err)=>{
                             console.log("Re Upload the correct warehouse stock")
@@ -480,6 +506,11 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                     outstandingModel.insertMany(objct6)
                         .then(()=>{
                             console.log('TallyOutstandingSuccess')
+                            cnt++
+                            if(cnt==13){
+                                console.log("Completed")
+                                res.redirect(process.env.uri);
+                            }
                         })
                         .catch((err)=>{
                             console.log("Re Upload the correct tally outstanding")
@@ -506,6 +537,11 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                     chqModel.insertMany(objct7)
                         .then(()=>{
                             console.log('ChequeSuccess')
+                            cnt++
+                            if(cnt==13){
+                                console.log("Completed")
+                                res.redirect(process.env.uri);
+                            }
                         })
                         .catch((err)=>{
                             console.log("Re Upload the correct cheque data")
@@ -529,6 +565,11 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                     prevModel.insertMany(objct8)
                         .then(()=>{
                             console.log('PrevMonthSaleSuccess')
+                            cnt++
+                            if(cnt==13){
+                                console.log("Completed")
+                                res.redirect(process.env.uri);
+                            }
                         })
                         .catch((err)=>{
                             console.log("Re Upload the correct prev month sale")
@@ -552,6 +593,11 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                     fosModel.insertMany(objct9)
                         .then(()=>{
                             console.log('FosSuccess')
+                            cnt++
+                            if(cnt==13){
+                                console.log("Completed")
+                                res.redirect(process.env.uri);
+                            }
                         })
                         .catch((err)=>{
                             console.log("Re Upload the correct fos data")
@@ -575,6 +621,11 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                     classModel.insertMany(objct10)
                         .then(()=>{
                             console.log('ClassSuccess')
+                            cnt++
+                            if(cnt==13){
+                                console.log("Completed")
+                                res.redirect(process.env.uri);
+                            }
                         })
                         .catch((err)=>{
                             console.log("Re Upload the correct class data")
@@ -598,6 +649,11 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                     limitModel.insertMany(objct11)
                         .then(()=>{
                             console.log('LimitSuccess')
+                            cnt++
+                            if(cnt==13){
+                                console.log("Completed")
+                                res.redirect(process.env.uri);
+                            }
                         })
                         .catch((err)=>{
                             console.log("Re Upload the correct limit data")
@@ -621,6 +677,11 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                     nameModel.insertMany(objct12)
                         .then(()=>{
                             console.log('NameCompatableSuccess')
+                            cnt++
+                            if(cnt==13){
+                                console.log("Completed")
+                                res.redirect(process.env.uri);
+                            }
                         })
                         .catch((err)=>{
                             console.log("Re Upload the correct name compatable data")
@@ -644,6 +705,11 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                     priceModel.insertMany(objct13)
                         .then(()=>{
                             console.log('DPSuccess')
+                            cnt++
+                            if(cnt==13){
+                                console.log("Completed")
+                                res.redirect(process.env.uri);
+                            }
                         })
                         .catch((err)=>{
                             console.log("Re Upload the correct dp data")
@@ -653,7 +719,6 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                 })
         }
     }
-    res.redirect(process.env.uri);
     fs.unlinkSync(req.file.path);
 });
 
