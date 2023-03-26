@@ -16,6 +16,7 @@ var limitModel = require('./models/limit');
 var nameModel = require('./models/dealername');
 var outstandingModel = require('./models/outstanding');
 var chqModel = require('./models/cheque');
+var ovdModel = require('./models/overdue');
 var bodyParser = require('body-parser');
 var stringSimilarity = require("string-similarity");
 require('dotenv').config();
@@ -336,7 +337,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                 to1["IMEI"] = temp;
                 to1["Model"]=sheetData[i]["Product Model"]
                 to1["Color"]=sheetData[i]["Color"]
-                to1["Distributor"]=sheetData[i]["Distributor"]
+                to1["Distributor"]=sheetData[i]["Client"]
                 to1["VerificationTime"]=null
                 objct1.push(to1)
             }
@@ -346,7 +347,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                         .then(()=>{
                             console.log('PortalStockSuccess')
                             cnt++;
-                            if(cnt==13){
+                            if(cnt==14){
                                 console.log("Completed")
                                 console.log(new Date())
                                 res.redirect(process.env.uri);
@@ -369,7 +370,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                 to2["IMEI"] = temp;
                 to2["Model"]=sheetData[i]["Product Model"]
                 to2["Color"]=sheetData[i]["Color"]
-                to2["Distributor"]=sheetData[i]["Distributor"]
+                to2["Distributor"]=sheetData[i]["Client"]
                 to2["VerificationTime"]=sheetData[i]["Verification Time"]
                 objct2.push(to2)
             }
@@ -379,7 +380,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                         .then(()=>{
                             console.log('VarificationSaleSuccess')
                             cnt++
-                            if(cnt==13){
+                            if(cnt==14){
                                 console.log("Completed")
                                 console.log(new Date())
                                 res.redirect(process.env.uri);
@@ -401,7 +402,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                 var to3={}
                 to3["IMEI"] = sheetData[i]["IMEI 1"]
                 to3["Model"]=sheetData[i]["Product Model"]
-                to3["Distributor"]=sheetData[i]["Distributor"]
+                to3["Distributor"]=sheetData[i]["Client"]
                 objct3.push(to3)
             }
             actualSaleModel.deleteMany({})
@@ -410,7 +411,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                         .then(()=>{
                             console.log('EWarrantySaleSuccess')
                             cnt++
-                            if(cnt==13){
+                            if(cnt==14){
                                 console.log("Completed")
                                 console.log(new Date())
                                 res.redirect(process.env.uri);
@@ -441,7 +442,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                         .then(()=>{
                             console.log('ScanSuccess')
                             cnt++
-                            if(cnt==13){
+                            if(cnt==14){
                                 console.log("Completed")
                                 console.log(new Date())
                                 res.redirect(process.env.uri);
@@ -475,7 +476,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                         .then(()=>{
                             console.log('WarehouseStockSuccess')
                             cnt++
-                            if(cnt==13){
+                            if(cnt==14){
                                 console.log("Completed")
                                 console.log(new Date())
                                 res.redirect(process.env.uri);
@@ -512,7 +513,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                         .then(()=>{
                             console.log('TallyOutstandingSuccess')
                             cnt++
-                            if(cnt==13){
+                            if(cnt==14){
                                 console.log("Completed")
                                 console.log(new Date())
                                 res.redirect(process.env.uri);
@@ -544,7 +545,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                         .then(()=>{
                             console.log('ChequeSuccess')
                             cnt++
-                            if(cnt==13){
+                            if(cnt==14){
                                 console.log("Completed")
                                 console.log(new Date())
                                 res.redirect(process.env.uri);
@@ -573,7 +574,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                         .then(()=>{
                             console.log('PrevMonthSaleSuccess')
                             cnt++
-                            if(cnt==13){
+                            if(cnt==14){
                                 console.log("Completed")
                                 console.log(new Date())
                                 res.redirect(process.env.uri);
@@ -602,7 +603,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                         .then(()=>{
                             console.log('FosSuccess')
                             cnt++
-                            if(cnt==13){
+                            if(cnt==14){
                                 console.log("Completed")
                                 console.log(new Date())
                                 res.redirect(process.env.uri);
@@ -631,7 +632,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                         .then(()=>{
                             console.log('ClassSuccess')
                             cnt++
-                            if(cnt==13){
+                            if(cnt==14){
                                 console.log("Completed")
                                 console.log(new Date())
                                 res.redirect(process.env.uri);
@@ -660,7 +661,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                         .then(()=>{
                             console.log('LimitSuccess')
                             cnt++
-                            if(cnt==13){
+                            if(cnt==14){
                                 console.log("Completed")
                                 console.log(new Date())
                                 res.redirect(process.env.uri);
@@ -689,7 +690,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                         .then(()=>{
                             console.log('NameCompatableSuccess')
                             cnt++
-                            if(cnt==13){
+                            if(cnt==14){
                                 console.log("Completed")
                                 console.log(new Date())
                                 res.redirect(process.env.uri);
@@ -718,7 +719,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                         .then(()=>{
                             console.log('DPSuccess')
                             cnt++
-                            if(cnt==13){
+                            if(cnt==14){
                                 console.log("Completed")
                                 console.log(new Date())
                                 res.redirect(process.env.uri);
@@ -726,6 +727,38 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                         })
                         .catch((err)=>{
                             console.log("Re Upload the correct dp data")
+                        })
+                })
+                .catch((err)=>{
+                })
+        }
+        else if(sheetName==="15DAYSOUTSTANDING"){
+            var objct14=[]
+            const worksheet = workbook.Sheets[sheetName];
+            const sheetData = xlsx.utils.sheet_to_json(worksheet);
+            for(var i=0;i<sheetData.length;i++){
+                var to14={}
+                to14["Distributor"]=sheetData[i]["Dealer"]
+                if(sheetData[i]["OVERDUE 15DAYS"]==undefined){
+                    sheetData[i]["OVERDUE 15DAYS"]='0'
+                }
+                to14["Overdue"]=parseFloat(sheetData[i]["OVERDUE 15DAYS"])
+                objct14.push(to14)
+            }
+            ovdModel.deleteMany({})
+                .then(()=>{
+                    ovdModel.insertMany(objct14)
+                        .then(()=>{
+                            console.log('OverdueSuccess')
+                            cnt++
+                            if(cnt==14){
+                                console.log("Completed")
+                                console.log(new Date())
+                                res.redirect(process.env.uri);
+                            }
+                        })
+                        .catch((err)=>{
+                            console.log("Re Upload the correct 15 days overdue data")
                         })
                 })
                 .catch((err)=>{
@@ -1035,6 +1068,7 @@ app.get(process.env.oduri,(req,res)=>{
                         outstandingreports.push(limitModel.distinct('Limit',limitModel.find({'Distributor':t1[i]})))
                         outstandingreports.push(outstandingModel.distinct('Outstanding',outstandingModel.find({'Distributor':nameMap.get(t1[i])})))
                         outstandingreports.push(chqModel.distinct('Chq',chqModel.find({'Distributor':nameMap.get(t1[i])})))
+                        outstandingreports.push(ovdModel.distinct('Overdue',ovdModel.find({'Distributor':nameMap.get(t1[i])})))
                     }
                     Promise.all(outstandingreports).then((returnedValues) => {
                         var outstd=[]
@@ -1070,10 +1104,11 @@ app.get(process.env.oduri,(req,res)=>{
                                 'limit':array[itr+2],
                                 'outstanding':array[itr+3],
                                 'chq':array[itr+4],
+                                'ovd':array[itr+5],
                                 'qty':sum1,
                                 'price':sum2,
                             })
-                            itr+=5
+                            itr+=6
                         }
                         outstd.sort((a,b)=>{
                             return classobj.indexOf(a.fos.split(' ')[1])-classobj.indexOf(b.fos.split(' ')[1]);
@@ -1305,6 +1340,7 @@ app.post(process.env.wl, (req, res) => {
                 outreport.push(limitModel.distinct('Limit',limitModel.find({'Distributor':dlr})))
                 outreport.push(outstandingModel.distinct('Outstanding',outstandingModel.find({'Distributor':nameMap.get(dlr)})))
                 outreport.push(chqModel.distinct('Chq',chqModel.find({'Distributor':nameMap.get(dlr)})))
+                outreport.push(ovdModel.distinct('Overdue',ovdModel.find({'Distributor':nameMap.get(dlr)})))
                 Promise.all(outreport).then((value)=>{
                     var itr=0
                     var sum1=0,sum2=0
@@ -1335,7 +1371,7 @@ app.post(process.env.wl, (req, res) => {
                     client.messages.create({
                         from: process.env.NO,
                         to: fromNumber,
-                        body: '*'+dlr.split('!')[0]+'*'+'\n*LIMIT:* '+value[itr+2].toString()+'\n'+'*OUTSTANDING:* '+out.toString()+'\n'+'*CHQ VALUE:* '+value[itr+4].toString()+'\n'+'*STOCK VALUE:* '+sum2.toString()+'\n'+'*GAP:* '+gap.toString()+'\n'+'*DATE:* '+(new Date()).toDateString()
+                        body: '*'+dlr.split('!')[0]+'*'+'\n'+'*Date:* '+(new Date()).toDateString()+'\n'+'*T.Outstanding:* '+out.toString()+'\n'+'*Above 15Days:* '+value[itr+5].toString()+'\n'+'*Yesterday Deposit:* '+value[itr+4].toString()+'\n'+'*Stock Value:* '+sum2.toString()+'\n'+'*Gap:* '+gap.toString()+'\n'+'*Limit:* '+value[itr+2].toString()
                     }).then(message => {
                         console.log('Message sent:', message.sid);
                         res.end(twiml.toString());
