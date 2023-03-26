@@ -50,6 +50,7 @@
                     <th scope="col">DEALER</th>
                     <th scope="col">LIMIT</th>
                     <th scope="col">OUTSTANDING</th>
+                    <th scope="col">15DAYS OVERDUE</th>
                     <th scope="col">CHQ VALUE</th>
                     <th scope="col">STOCK VALUE</th>
                     <th scope="col">GAP</th>
@@ -68,6 +69,7 @@
                         <th><%= outstanding[i]['shop'].split('!')[0]%></th>
                         <th><%= outstanding[i]['limit']%></th>
                         <th><%= parseFloat(outstanding[i]['outstanding'])+parseFloat(outstanding[i]['chq'])%></th>
+                        <th><%= outstanding[i]['ovd']%></th>
                         <th><%= outstanding[i]['chq']%></th>
                         <th><%= outstanding[i]['price']%></th>
                         <th><%= (parseFloat(outstanding[i]['outstanding'])+parseFloat(outstanding[i]['chq'])-outstanding[i]['price'])%></th>
