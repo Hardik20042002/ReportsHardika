@@ -564,7 +564,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
             const sheetData = xlsx.utils.sheet_to_json(worksheet);
             for(var i=0;i<sheetData.length;i++){
                 var to8={}
-                to8["Distributor"]=sheetData[i]["Distributor"]+' ! GREATER NOIDA'
+                to8["Distributor"]=sheetData[i]["Distributor"]
                 to8["SALE"]=parseFloat(sheetData[i]["SALE"])
                 objct8.push(to8)
             }
