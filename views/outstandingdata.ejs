@@ -66,7 +66,7 @@
                         <%cnt2+=outstanding[i]['price']%>
                         <th><%= outstanding[i]['fos'].split(' ')[0]%></th>
                         <th><%= outstanding[i]['fos'].split(' ')[1]%></th>
-                        <th><%= outstanding[i]['shop'].split('!')[0]%></th>
+                        <th><%= outstanding[i]['shop'].split('-')[0]%></th>
                         <th><%= outstanding[i]['limit']%></th>
                         <th><%= parseFloat(outstanding[i]['outstanding'])+parseFloat(outstanding[i]['chq'])%></th>
                         <th><%= outstanding[i]['ovd']%></th>
