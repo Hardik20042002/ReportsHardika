@@ -108,7 +108,7 @@
                                     <th><%= fos[i].split(' ')[0]%></th>
                                     <th><%= fos[i].split(' ')[1]%></th>
                                     <th><%= fos[i].split(' ')[2]%></th>
-                                    <th><%= dealer[i].split('!')[0]%></th>
+                                    <th><%= dealer[i].split('-')[0]%></th>
                                     <%if(type=="sast"){%>
                                         <%for(var j=0;j<model.length;j++){%>
                                             <th><%= sale[i*model.length+j]%></th>
@@ -246,7 +246,7 @@
                                     <th><%= fos[i].split(' ')[0]%></th>
                                     <th><%= fos[i].split(' ')[1]%></th>
                                     <th><%= fos[i].split(' ')[2]%></th>
-                                    <th><%= dealer[i].split('!')[0]%></th>
+                                    <th><%= dealer[i].split('-')[0]%></th>
                                     <%if(type=="sast"){%>
                                         <%for(var j=0;j<model.length;j++){%>
                                             <%for(var k=0;k<colors.length;k++){%>
