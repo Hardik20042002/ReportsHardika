@@ -63,7 +63,7 @@
                     <tr scope="row">
                         <th><%= outstanding[i]['fos'].split(' ')[0]%></th>
                         <th><%= outstanding[i]['fos'].split(' ')[1]%></th>
-                        <th><%= outstanding[i]['shop'].split('!')[0]%></th>
+                        <th><%= outstanding[i]['shop'].split('-')[0]%></th>
                         <%var cnt=0,itr=0%>
                         <%for(var j=0;j<modelDetails.length;j++){%>
                             <%if(!flag[j]){continue;}%>
