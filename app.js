@@ -1547,8 +1547,7 @@ app.post(process.env.wl, (req, res) => {
     const fromNumber = req.body.From;
     var dlr=messageBody.toLowerCase()
     var mapper=new Map()
-    var date = new Date();
-    console.log(date.toLocaleString('en-US', { timeZone: 'Asia/Kolkata', hour12: false, hour: 'numeric', minute: 'numeric', second: 'numeric' }));
+    var date=new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata', hour12: false, hour: 'numeric', minute: 'numeric', second: 'numeric' }));
     var hour = date.getHours();
     var min = date.getMinutes();
     if((hour>=0&&hour<11)||(hour==11&&min<45)){
