@@ -1548,6 +1548,7 @@ app.post(process.env.wl, (req, res) => {
     var dlr=messageBody.toLowerCase()
     var mapper=new Map()
     var date = new Date();
+    console.log(date);
     var hour = date.getHours();
     var min = date.getMinutes();
     if((hour>=0&&hour<11)||(hour==11&&min<45)){
