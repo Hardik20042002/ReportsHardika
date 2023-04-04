@@ -1547,9 +1547,14 @@ app.post(process.env.wl, (req, res) => {
     const fromNumber = req.body.From;
     var dlr=messageBody.toLowerCase()
     var mapper=new Map()
-    var date=new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata', hour12: false, hour: 'numeric', minute: 'numeric', second: 'numeric' });
-    var hour = date.getHours();
-    var min = date.getMinutes();
+    var date = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata', year: 'numeric', month: 'long', day: 'numeric' });
+    var time=new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata', hour12: false, hour: 'numeric', minute: 'numeric', second: 'numeric' });
+    var [hour,min]=time.split(':');
+    hour=parseInt(hour)
+    min=parseInt(min)
+    hour=hour%24
+    min=min%60
+    console.log(date)
     if((hour>=0&&hour<11)||(hour==11&&min<45)){
         var msg="Today's data will be updated 11:45am";
         client.messages.create({
@@ -1622,7 +1627,7 @@ app.post(process.env.wl, (req, res) => {
                     client.messages.create({
                         from: process.env.NO,
                         to: fromNumber,
-                        body: '*'+dlr.split('-')[0]+'*'+'\n'+'*Date:* '+(new Date()).toDateString()+'\n'+'*T.Outstanding:* '+out.toString()+'\n'+'*Above 15Days:* '+value[itr+5].toString()+'\n'+'*Yesterday Deposit:* '+value[itr+4].toString()+'\n'+'*Stock Value:* '+sum2.toString()+'\n'+'*Gap:* '+gap.toString()+'\n'+'*Limit:* '+value[itr+2].toString()
+                        body: '*'+dlr.split('-')[0]+'*'+'\n'+'*Date:* '+date+'\n'+'*T.Outstanding:* '+out.toString()+'\n'+'*Above 15Days:* '+value[itr+5].toString()+'\n'+'*Yesterday Deposit:* '+value[itr+4].toString()+'\n'+'*Stock Value:* '+sum2.toString()+'\n'+'*Gap:* '+gap.toString()+'\n'+'*Limit:* '+value[itr+2].toString()
                     }).then(message => {
                         console.log('Message sent:', message.sid);
                         res.end(twiml.toString());
