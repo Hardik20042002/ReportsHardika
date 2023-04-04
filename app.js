@@ -1556,7 +1556,7 @@ app.post(process.env.wl, (req, res) => {
     min=min%60
     console.log(date)
     if((hour>=0&&hour<11)||(hour==11&&min<45)){
-        var msg="Today's data will be updated 11:45am";
+        var msg="Today's data will be updated by 11:45am";
         client.messages.create({
             from: process.env.NO,
             to: fromNumber,
