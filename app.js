@@ -330,6 +330,7 @@ app.get(process.env.uri, (req, res) => {
 
 app.post(process.env.uri, upload.single('file'), (req, res) => {
     var cnt=0;
+    var object=[]
     const workbook = xlsx.readFile(req.file.path);
     const sheets = workbook.SheetNames;
     for (const sheetName of sheets) {
@@ -353,11 +354,27 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                         .then(()=>{
                             console.log('PortalStockSuccess')
                             cnt++;
-                            if(cnt==14){
-                                console.log("Completed")
-                                console.log(new Date())
-                                res.redirect(process.env.uri);
-                            }
+                            if(cnt==15){
+                                var updatearr=[]
+                                for(var i=0;i<object.length;i++){
+                                    var dist=object[i]["Distributor"]
+                                    var im=object[i]["IMEI"]
+                                    updatearr.push(imeiModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
+                                            }
+                                        }
+                                    ))
+                                }
+                                Promise.all(updatearr).then(()=>{
+                                    console.log("Completed")
+                                    console.log(new Date())
+                                    res.redirect(process.env.uri);
+                                }).catch((err)=>{
+                                    console.log("Re Upload the correct REUPLOADING file")
+                                })
+                            }                            
                         })
                         .catch((err)=>{
                             console.log("Re Upload the correct portal stock")
@@ -386,11 +403,27 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                         .then(()=>{
                             console.log('VarificationSaleSuccess')
                             cnt++
-                            if(cnt==14){
-                                console.log("Completed")
-                                console.log(new Date())
-                                res.redirect(process.env.uri);
-                            }
+                            if(cnt==15){
+                                var updatearr=[]
+                                for(var i=0;i<object.length;i++){
+                                    var dist=object[i]["Distributor"]
+                                    var im=object[i]["IMEI"]
+                                    updatearr.push(imeiModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
+                                            }
+                                        }
+                                    ))
+                                }
+                                Promise.all(updatearr).then(()=>{
+                                    console.log("Completed")
+                                    console.log(new Date())
+                                    res.redirect(process.env.uri);
+                                }).catch((err)=>{
+                                    console.log("Re Upload the correct REUPLOADING file")
+                                })
+                            }                            
                         })
                         .catch((err)=>{
                             console.log("Re Upload the correct verification sale")
@@ -417,11 +450,27 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                         .then(()=>{
                             console.log('EWarrantySaleSuccess')
                             cnt++
-                            if(cnt==14){
-                                console.log("Completed")
-                                console.log(new Date())
-                                res.redirect(process.env.uri);
-                            }
+                            if(cnt==15){
+                                var updatearr=[]
+                                for(var i=0;i<object.length;i++){
+                                    var dist=object[i]["Distributor"]
+                                    var im=object[i]["IMEI"]
+                                    updatearr.push(imeiModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
+                                            }
+                                        }
+                                    ))
+                                }
+                                Promise.all(updatearr).then(()=>{
+                                    console.log("Completed")
+                                    console.log(new Date())
+                                    res.redirect(process.env.uri);
+                                }).catch((err)=>{
+                                    console.log("Re Upload the correct REUPLOADING file")
+                                })
+                            }                            
                         })
                         .catch((err)=>{
                             console.log("Re Upload the correct ewarranty sale")
@@ -448,11 +497,27 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                         .then(()=>{
                             console.log('ScanSuccess')
                             cnt++
-                            if(cnt==14){
-                                console.log("Completed")
-                                console.log(new Date())
-                                res.redirect(process.env.uri);
-                            }
+                            if(cnt==15){
+                                var updatearr=[]
+                                for(var i=0;i<object.length;i++){
+                                    var dist=object[i]["Distributor"]
+                                    var im=object[i]["IMEI"]
+                                    updatearr.push(imeiModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
+                                            }
+                                        }
+                                    ))
+                                }
+                                Promise.all(updatearr).then(()=>{
+                                    console.log("Completed")
+                                    console.log(new Date())
+                                    res.redirect(process.env.uri);
+                                }).catch((err)=>{
+                                    console.log("Re Upload the correct REUPLOADING file")
+                                })
+                            }                            
                         })
                         .catch((err)=>{
                             console.log("Re Upload the correct scan data")
@@ -482,11 +547,27 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                         .then(()=>{
                             console.log('WarehouseStockSuccess')
                             cnt++
-                            if(cnt==14){
-                                console.log("Completed")
-                                console.log(new Date())
-                                res.redirect(process.env.uri);
-                            }
+                            if(cnt==15){
+                                var updatearr=[]
+                                for(var i=0;i<object.length;i++){
+                                    var dist=object[i]["Distributor"]
+                                    var im=object[i]["IMEI"]
+                                    updatearr.push(imeiModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
+                                            }
+                                        }
+                                    ))
+                                }
+                                Promise.all(updatearr).then(()=>{
+                                    console.log("Completed")
+                                    console.log(new Date())
+                                    res.redirect(process.env.uri);
+                                }).catch((err)=>{
+                                    console.log("Re Upload the correct REUPLOADING file")
+                                })
+                            }                            
                         })
                         .catch((err)=>{
                             console.log("Re Upload the correct warehouse stock")
@@ -519,11 +600,27 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                         .then(()=>{
                             console.log('TallyOutstandingSuccess')
                             cnt++
-                            if(cnt==14){
-                                console.log("Completed")
-                                console.log(new Date())
-                                res.redirect(process.env.uri);
-                            }
+                            if(cnt==15){
+                                var updatearr=[]
+                                for(var i=0;i<object.length;i++){
+                                    var dist=object[i]["Distributor"]
+                                    var im=object[i]["IMEI"]
+                                    updatearr.push(imeiModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
+                                            }
+                                        }
+                                    ))
+                                }
+                                Promise.all(updatearr).then(()=>{
+                                    console.log("Completed")
+                                    console.log(new Date())
+                                    res.redirect(process.env.uri);
+                                }).catch((err)=>{
+                                    console.log("Re Upload the correct REUPLOADING file")
+                                })
+                            }                            
                         })
                         .catch((err)=>{
                             console.log("Re Upload the correct tally outstanding")
@@ -551,11 +648,27 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                         .then(()=>{
                             console.log('ChequeSuccess')
                             cnt++
-                            if(cnt==14){
-                                console.log("Completed")
-                                console.log(new Date())
-                                res.redirect(process.env.uri);
-                            }
+                            if(cnt==15){
+                                var updatearr=[]
+                                for(var i=0;i<object.length;i++){
+                                    var dist=object[i]["Distributor"]
+                                    var im=object[i]["IMEI"]
+                                    updatearr.push(imeiModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
+                                            }
+                                        }
+                                    ))
+                                }
+                                Promise.all(updatearr).then(()=>{
+                                    console.log("Completed")
+                                    console.log(new Date())
+                                    res.redirect(process.env.uri);
+                                }).catch((err)=>{
+                                    console.log("Re Upload the correct REUPLOADING file")
+                                })
+                            }                            
                         })
                         .catch((err)=>{
                             console.log("Re Upload the correct cheque data")
@@ -580,11 +693,27 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                         .then(()=>{
                             console.log('PrevMonthSaleSuccess')
                             cnt++
-                            if(cnt==14){
-                                console.log("Completed")
-                                console.log(new Date())
-                                res.redirect(process.env.uri);
-                            }
+                            if(cnt==15){
+                                var updatearr=[]
+                                for(var i=0;i<object.length;i++){
+                                    var dist=object[i]["Distributor"]
+                                    var im=object[i]["IMEI"]
+                                    updatearr.push(imeiModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
+                                            }
+                                        }
+                                    ))
+                                }
+                                Promise.all(updatearr).then(()=>{
+                                    console.log("Completed")
+                                    console.log(new Date())
+                                    res.redirect(process.env.uri);
+                                }).catch((err)=>{
+                                    console.log("Re Upload the correct REUPLOADING file")
+                                })
+                            }                            
                         })
                         .catch((err)=>{
                             console.log("Re Upload the correct prev month sale")
@@ -609,11 +738,27 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                         .then(()=>{
                             console.log('FosSuccess')
                             cnt++
-                            if(cnt==14){
-                                console.log("Completed")
-                                console.log(new Date())
-                                res.redirect(process.env.uri);
-                            }
+                            if(cnt==15){
+                                var updatearr=[]
+                                for(var i=0;i<object.length;i++){
+                                    var dist=object[i]["Distributor"]
+                                    var im=object[i]["IMEI"]
+                                    updatearr.push(imeiModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
+                                            }
+                                        }
+                                    ))
+                                }
+                                Promise.all(updatearr).then(()=>{
+                                    console.log("Completed")
+                                    console.log(new Date())
+                                    res.redirect(process.env.uri);
+                                }).catch((err)=>{
+                                    console.log("Re Upload the correct REUPLOADING file")
+                                })
+                            }                            
                         })
                         .catch((err)=>{
                             console.log("Re Upload the correct fos data")
@@ -638,11 +783,27 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                         .then(()=>{
                             console.log('ClassSuccess')
                             cnt++
-                            if(cnt==14){
-                                console.log("Completed")
-                                console.log(new Date())
-                                res.redirect(process.env.uri);
-                            }
+                            if(cnt==15){
+                                var updatearr=[]
+                                for(var i=0;i<object.length;i++){
+                                    var dist=object[i]["Distributor"]
+                                    var im=object[i]["IMEI"]
+                                    updatearr.push(imeiModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
+                                            }
+                                        }
+                                    ))
+                                }
+                                Promise.all(updatearr).then(()=>{
+                                    console.log("Completed")
+                                    console.log(new Date())
+                                    res.redirect(process.env.uri);
+                                }).catch((err)=>{
+                                    console.log("Re Upload the correct REUPLOADING file")
+                                })
+                            }                            
                         })
                         .catch((err)=>{
                             console.log("Re Upload the correct class data")
@@ -667,11 +828,27 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                         .then(()=>{
                             console.log('LimitSuccess')
                             cnt++
-                            if(cnt==14){
-                                console.log("Completed")
-                                console.log(new Date())
-                                res.redirect(process.env.uri);
-                            }
+                            if(cnt==15){
+                                var updatearr=[]
+                                for(var i=0;i<object.length;i++){
+                                    var dist=object[i]["Distributor"]
+                                    var im=object[i]["IMEI"]
+                                    updatearr.push(imeiModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
+                                            }
+                                        }
+                                    ))
+                                }
+                                Promise.all(updatearr).then(()=>{
+                                    console.log("Completed")
+                                    console.log(new Date())
+                                    res.redirect(process.env.uri);
+                                }).catch((err)=>{
+                                    console.log("Re Upload the correct REUPLOADING file")
+                                })
+                            }                            
                         })
                         .catch((err)=>{
                             console.log("Re Upload the correct limit data")
@@ -696,11 +873,27 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                         .then(()=>{
                             console.log('NameCompatableSuccess')
                             cnt++
-                            if(cnt==14){
-                                console.log("Completed")
-                                console.log(new Date())
-                                res.redirect(process.env.uri);
-                            }
+                            if(cnt==15){
+                                var updatearr=[]
+                                for(var i=0;i<object.length;i++){
+                                    var dist=object[i]["Distributor"]
+                                    var im=object[i]["IMEI"]
+                                    updatearr.push(imeiModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
+                                            }
+                                        }
+                                    ))
+                                }
+                                Promise.all(updatearr).then(()=>{
+                                    console.log("Completed")
+                                    console.log(new Date())
+                                    res.redirect(process.env.uri);
+                                }).catch((err)=>{
+                                    console.log("Re Upload the correct REUPLOADING file")
+                                })
+                            }                            
                         })
                         .catch((err)=>{
                             console.log("Re Upload the correct name compatable data")
@@ -725,11 +918,27 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                         .then(()=>{
                             console.log('DPSuccess')
                             cnt++
-                            if(cnt==14){
-                                console.log("Completed")
-                                console.log(new Date())
-                                res.redirect(process.env.uri);
-                            }
+                            if(cnt==15){
+                                var updatearr=[]
+                                for(var i=0;i<object.length;i++){
+                                    var dist=object[i]["Distributor"]
+                                    var im=object[i]["IMEI"]
+                                    updatearr.push(imeiModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
+                                            }
+                                        }
+                                    ))
+                                }
+                                Promise.all(updatearr).then(()=>{
+                                    console.log("Completed")
+                                    console.log(new Date())
+                                    res.redirect(process.env.uri);
+                                }).catch((err)=>{
+                                    console.log("Re Upload the correct REUPLOADING file")
+                                })
+                            }                            
                         })
                         .catch((err)=>{
                             console.log("Re Upload the correct dp data")
@@ -757,11 +966,27 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                         .then(()=>{
                             console.log('OverdueSuccess')
                             cnt++
-                            if(cnt==14){
-                                console.log("Completed")
-                                console.log(new Date())
-                                res.redirect(process.env.uri);
-                            }
+                            if(cnt==15){
+                                var updatearr=[]
+                                for(var i=0;i<object.length;i++){
+                                    var dist=object[i]["Distributor"]
+                                    var im=object[i]["IMEI"]
+                                    updatearr.push(imeiModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
+                                            }
+                                        }
+                                    ))
+                                }
+                                Promise.all(updatearr).then(()=>{
+                                    console.log("Completed")
+                                    console.log(new Date())
+                                    res.redirect(process.env.uri);
+                                }).catch((err)=>{
+                                    console.log("Re Upload the correct REUPLOADING file")
+                                })
+                            }                            
                         })
                         .catch((err)=>{
                             console.log("Re Upload the correct 15 days overdue data")
@@ -769,6 +994,38 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                 })
                 .catch((err)=>{
                 })
+        }
+        else if(sheetName==="OTHERUPLOADING"){
+            const worksheet = workbook.Sheets[sheetName];
+            const sheetData = xlsx.utils.sheet_to_json(worksheet);
+            for(var i=0;i<sheetData.length;i++){
+                var to15={}
+                to15["Distributor"]=sheetData[i]["Distributor"]
+                to15["IMEI"]=parseFloat(sheetData[i]["IMEI 1"])
+                object.push(to15)
+            }
+            cnt++;
+            if(cnt==15){
+                var updatearr=[]
+                for(var i=0;i<object.length;i++){
+                    var dist=object[i]["Distributor"]
+                    var im=object[i]["IMEI"]
+                    updatearr.push(imeiModel.updateOne({"IMEI":im},
+                        {
+                            $set:{
+                                "Distributor":dist
+                            }
+                        }
+                    ))
+                }
+                Promise.all(updatearr).then(()=>{
+                    console.log("Completed")
+                    console.log(new Date())
+                    res.redirect(process.env.uri);
+                }).catch((err)=>{
+                    console.log("Re Upload the correct REUPLOADING file")
+                })
+            }
         }
     }
     fs.unlinkSync(req.file.path);
@@ -1290,23 +1547,11 @@ app.post(process.env.wl, (req, res) => {
     const fromNumber = req.body.From;
     var dlr=messageBody.toLowerCase()
     var mapper=new Map()
-    if(dlr.split(' ')[0].toLowerCase()=='help'){
-        var ch=dlr.split(' ')[1][0].toLowerCase();
-        dummy.forEach((val,key)=>{
-            if(val[0].toLowerCase()==ch){
-                if(mapper.has(val.split('!')[0])){
-                    if(mapper.get(val.split('!')[0]).length>key.length)
-                    mapper.set(val.split('!')[0],key)
-                }
-                else{
-                    mapper.set(val.split('!')[0],key)
-                }
-            }
-        })
-        var msg='';
-        mapper.forEach(function(value, key) {
-            msg+=(key+' -> '+value+'\n');
-        })
+    var date = new Date();
+    var hour = date.getHours();
+    var min = date.getMinutes();
+    if((hour>=0&&hour<11)||(hour==11&&min<45)){
+        var msg="Today's data will be updated 11:45am";
         client.messages.create({
             from: process.env.NO,
             to: fromNumber,
