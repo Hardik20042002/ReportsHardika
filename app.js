@@ -24,6 +24,7 @@ const accountSid = process.env.SID;
 const authToken = process.env.authToken;
 const client = require('twilio')(accountSid, authToken);
 const twilio = require('twilio');
+const outstanding = require('./models/outstanding');
 var port = process.env.PORT || 3000;
 const upload = multer({ dest: './public/uploads' });
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true })
@@ -77,221 +78,224 @@ const map = new Map([
     ['WHITE', 'W'],
   ]);
   const dummy=new Map([
-    ['atoz','A TO Z MOBILE-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['atozmobile','A TO Z MOBILE-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['aman','AMAN MOBILE STORE-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['amanmobilestore','AMAN MOBILE STORE-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['ambe','AMBE SOFTWARE AND HARDWARE REP CENTRE-DADRI-GREATER NOIDA-UP WEST'],
-    ['ambey','AMBE SOFTWARE AND HARDWARE REP CENTRE-DADRI-GREATER NOIDA-UP WEST'],
-    ['ambesoftwareandhardwarerepcentre','AMBE SOFTWARE AND HARDWARE REP CENTRE-DADRI-GREATER NOIDA-UP WEST'],
-    ['arish','ARISH MOBILE CENTER-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['arishmobilecenter','ARISH MOBILE CENTER-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['atul','ATUL TELECOM CENTRE-KASNA-GREATER NOIDA-UP WEST'],
-    ['atultelecomcentre','ATUL TELECOM CENTRE-KASNA-GREATER NOIDA-UP WEST'],
-    ['avni','AVNI MOBILE SHOP-AICHER MARKET-GREATER NOIDA-UP WEST'],
-    ['avnimobileshop','AVNI MOBILE SHOP-AICHER MARKET-GREATER NOIDA-UP WEST'],
-    ['anupam','ANUPAM TELECOM-GAMMA 1-GREATER NOIDA-UP WEST'],
-    ['anupamtelecom','ANUPAM TELECOM-GAMMA 1-GREATER NOIDA-UP WEST'],
-    ['anushka','ANUSKA MOBILE CENTER-AICHER MARKET-GREATER NOIDA-UP WEST'],
-    ['anushkamobilecenter','ANUSKA MOBILE CENTER-AICHER MARKET-GREATER NOIDA-UP WEST'],
-    ['anushkamobilecenter2','ANUSKA MOBILE CENTER-AICHER MARKET-GREATER NOIDA-UP WEST'],
-    ['ayush','AYUSH COMMUNICATION-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['ayushcommunication','AYUSH COMMUNICATION-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['balajimobilezone','BALAJI MOBILE AND ELECTRONICS-DADRI-GREATER NOIDA-UP WEST'],
-    ['balajidadri','BALAJI MOBILE AND ELECTRONICS-DADRI-GREATER NOIDA-UP WEST'],
-    ['balajimobileandelectronics','BALAJI MOBILE AND ELECTRONICS-DADRI-GREATER NOIDA-UP WEST'],
-    ['bansiwala','BANSIWALA STORES-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['bansiwalastores','BANSIWALA STORES-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['bhoomi','BHOOMI MOBILE SOLUTION-DADRI-GREATER NOIDA-UP WEST'],
-    ['bhoomimobilesolution','BHOOMI MOBILE SOLUTION-DADRI-GREATER NOIDA-UP WEST'],
-    ['brs','BRS ELECTRONICS-KASNA-GREATER NOIDA-UP WEST'],
-    ['brselectronics','BRS ELECTRONICS-KASNA-GREATER NOIDA-UP WEST'],
-    ['balajitrader','BALAJI TRADERS-DADRI-GREATER NOIDA-UP WEST'],
-    ['balajitraders','BALAJI TRADERS-DADRI-GREATER NOIDA-UP WEST'],
-    ['computer','COMPUTER WIZARD-PARI CHOWK-GREATER NOIDA-UP WEST'],
-    ['wizard','COMPUTER WIZARD-PARI CHOWK-GREATER NOIDA-UP WEST'],
-    ['computerwizard','COMPUTER WIZARD-PARI CHOWK-GREATER NOIDA-UP WEST'],
-    ['devent','DEV ENTERPRISES-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['deventerprises','DEV ENTERPRISES-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['devcom','DEV COMMUNICATION-AICHER MARKET-GREATER NOIDA-UP WEST'],
-    ['devcommunication','DEV COMMUNICATION-AICHER MARKET-GREATER NOIDA-UP WEST'],
-    ['divine','DIVINE COMMUNICATION-AICHER MARKET-GREATER NOIDA-UP WEST'],
-    ['divinecom','DIVINE COMMUNICATION-AICHER MARKET-GREATER NOIDA-UP WEST'],
-    ['famous','FAMOUS MOBILE POINT-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['famousmobilepoint','FAMOUS MOBILE POINT-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['fauji','FAUJI TELECOM-DADRI-GREATER NOIDA-UP WEST'],
-    ['faujitelecom','FAUJI TELECOM-DADRI-GREATER NOIDA-UP WEST'],
-    ['goel','GOEL MOBILE AND SAMARTH ELECTRONICS-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['samarth','GOEL MOBILE AND SAMARTH ELECTRONICS-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['goelmobileandsamarthelectronics','GOEL MOBILE AND SAMARTH ELECTRONICS-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['istore','I STORE-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['ishu','ISHU COMMUNICATION-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['ishucommunication','ISHU COMMUNICATION-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['jagdamba','JAGDAMBA MOBILE HUB-GAMMA 1-GREATER NOIDA-UP WEST'],
-    ['jagdambamobilehub','JAGDAMBA MOBILE HUB-GAMMA 1-GREATER NOIDA-UP WEST'],
-    ['jaiambeyent','JAI AMBEY COMMUNICATION ENTERPRISES-DADRI-GREATER NOIDA-UP WEST'],
-    ['jaiambeyenterprises','JAI AMBEY COMMUNICATION ENTERPRISES-DADRI-GREATER NOIDA-UP WEST'],
-    ['jaiambeycommunicationenterprises','JAI AMBEY COMMUNICATION ENTERPRISES-DADRI-GREATER NOIDA-UP WEST'],
-    ['jaiambeent','JAI AMBEY COMMUNICATION ENTERPRISES-DADRI-GREATER NOIDA-UP WEST'],
-    ['jrb','JRB TELECOM-KASNA-GREATER NOIDA-UP WEST'],
-    ['jrbtelecom','JRB TELECOM-KASNA-GREATER NOIDA-UP WEST'],
-    ['jaiambeycom','JAI AMBEY COMMUNICATION-DADRI-GREATER NOIDA-UP WEST'],
-    ['jaiambeycommunication','JAI AMBEY COMMUNICATION-DADRI-GREATER NOIDA-UP WEST'],
-    ['jaiambecom','JAI AMBEY COMMUNICATION-DADRI-GREATER NOIDA-UP WEST'],
-    ['kgn','K G N COMMUNICATION-SECTOR 87-GREATER NOIDA-UP WEST'],
-    ['kgncom','K G N COMMUNICATION-SECTOR 87-GREATER NOIDA-UP WEST'],
-    ['kgncommunication','K G N COMMUNICATION-SECTOR 87-GREATER NOIDA-UP WEST'],
-    ['kanika','KANIKA COMMUNICATION-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['kanikacommunication','KANIKA COMMUNICATION-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['kashish','KASHISH COMMUNICATION-KULESARA-GREATER NOIDA-UP WEST'],
-    ['kashishcommunication','KASHISH COMMUNICATION-KULESARA-GREATER NOIDA-UP WEST'],
-    ['kgad','KGAD MOBIWORLD-GEJHA-GREATER NOIDA-UP WEST'],
-    ['kgadmobiworld','KGAD MOBIWORLD-GEJHA-GREATER NOIDA-UP WEST'],
-    ['krishna','KRISHNA TELECOM-RAMPUR-GREATER NOIDA-UP WEST'],
-    ['krishnatelecom','KRISHNA TELECOM-RAMPUR-GREATER NOIDA-UP WEST'],
-    ['keshav','KESHAV MOBILE POINT-AICHER MARKET-GREATER NOIDA-UP WEST'],
-    ['keshavmobilepoint','KESHAV MOBILE POINT-AICHER MARKET-GREATER NOIDA-UP WEST'],
-    ['lk','L K MOBILE POINT-KASNA-GREATER NOIDA-UP WEST'],
-    ['lkmobilepoint','L K MOBILE POINT-KASNA-GREATER NOIDA-UP WEST'],
-    ['mr','M R COMMUNICATION-KASNA-GREATER NOIDA-UP WEST'],
-    ['mrcom','M R COMMUNICATION-KASNA-GREATER NOIDA-UP WEST'],
-    ['mrcommunication','M.R. COMMUNICATION-KASNA-GREATER NOIDA-UP WEST'],
+    ['atoz','0131000877'],
+    ['atozmobile','0131000877'],
+    ['aman','IN119161'],
+    ['amanmobilestore','IN119161'],
+    ['ambe','0131001006'],
+    ['ambey','0131001006'],
+    ['ambesoftwareandhardwarerepcentre','0131001006'],
+    ['arish','0131001450'],
+    ['arishmobilecenter','0131001450'],
+    ['atul','0131000020'],
+    ['atultelecomcentre','0131000020'],
+    ['avni','0131005179'],
+    ['avnimobileshop','0131005179'],
+    ['anupam','0131003213'],
+    ['anupamtelecom','0131003213'],
+    ['anushka','0131002043'],
+    ['anushkamobilecenter','0131002043'],
+    ['anushkamobilecenter2','0131002043'],
+    ['ayush','0131002292'],
+    ['ayushcommunication','0131002292'],
+    ['balajimobilezone','0131000914'],
+    ['balajidadri','0131000914'],
+    ['balajimobileandelectronics','0131000914'],
+    ['bansiwala','0131000293'],
+    ['bansiwalastores','0131000293'],
+    ['bhoomi','IN117968'],
+    ['bhoomimobilesolution','IN117968'],
+    ['brs','0131000205'],
+    ['brselectronics','0131000205'],
+    ['balajitrader','0131002504'],
+    ['balajitraders','0131002504'],
+    ['computer','0131002931'],
+    ['wizard','0131002931'],
+    ['computerwizard','0131002931'],
+    ['devent','0131002606'],
+    ['deventerprises','0131002606'],
+    ['devcom','0131005180'],
+    ['devcommunication','0131005180'],
+    ['divine','IN120674'],
+    ['divinecom','IN120674'],
+    ['famous','0131000459'],
+    ['famousmobilepoint','0131000459'],
+    ['fauji','0131000171'],
+    ['faujitelecom','0131000171'],
+    ['goel','0131002633'],
+    ['samarth','0131002633'],
+    ['goelmobileandsamarthelectronics','0131002633'],
+    ['istore','0131002917'],
+    ['ishu','0131005149'],
+    ['ishucommunication','0131005149'],
+    ['jagdamba','0131001118'],
+    ['jagdambamobilehub','0131001118'],
+    ['jaiambeyent','IN109586'],
+    ['jaiambeyenterprises','IN109586'],
+    ['jaiambeycommunicationenterprises','IN109586'],
+    ['jaiambeent','IN109586'],
+    ['jrb','IN121471'],
+    ['jrbtelecom','IN121471'],
+    ['jaiambeycom','0131002592'],
+    ['jaiambeycommunication','0131002592'],
+    ['jaiambecom','0131002592'],
+    ['kgn','IN120694'],
+    ['kgncom','IN120694'],
+    ['kgncommunication','IN120694'],
+    ['kanika','0131000704'],
+    ['kanikacommunication','0131000704'],
+    ['kashish','IN102857'],
+    ['kashishcommunication','IN102857'],
+    ['kgad','IN102858'],
+    ['kgadmobiworld','IN102858'],
+    ['krishna','0131002197'],
+    ['krishnatelecom','0131002197'],
+    ['keshav','0131002226'],
+    ['keshavmobilepoint','0131002226'],
+    ['lk','IN120878'],
+    ['lkmobilepoint','IN120878'],
+    ['mr','0131002628'],
+    ['mrcom','0131002628'],
+    ['mrcommunication','0131002628'],
     // ['ms','M/S DIVINE COMMUNICATION ! GREATER NOIDA'],
     // ['mscom','M/S DIVINE COMMUNICATION ! GREATER NOIDA'],
     // ['msdivinecom','M/S DIVINE COMMUNICATION ! GREATER NOIDA'],
     // ['msdivine','M/S DIVINE COMMUNICATION ! GREATER NOIDA'],
     // ['msdivinecommunication','M/S DIVINE COMMUNICATION ! GREATER NOIDA'],
     // ['mscommunication','M/S DIVINE COMMUNICATION ! GREATER NOIDA'],
-    ['mahalaxmip','MAHALAXMI MOBILE POINT-DADRI-GREATER NOIDA-UP WEST'],
-    ['mahalaxmimobilepoint','MAHALAXMI MOBILE POINT-DADRI-GREATER NOIDA-UP WEST'],
-    ['mahalaxmipoint','MAHALAXMI MOBILE POINT-DADRI-GREATER NOIDA-UP WEST'],
-    ['mahalaxmis','MAHALAXMI MOBILE STORE-DADRI-GREATER NOIDA-UP WEST'],
-    ['mahalaxmimobilestore','MAHALAXMI MOBILE STORE-DADRI-GREATER NOIDA-UP WEST'],
-    ['mahalaxmistore','MAHALAXMI MOBILE STORE-DADRI-GREATER NOIDA-UP WEST'],
-    ['matrix','MATRIX NETWORK MOBILE STORE-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['matrixmobilestore','MATRIX NETWORK MOBILE STORE-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['hotspot','MOBILE HOTSPOT-AICHER MARKET-GREATER NOIDA-UP WEST'],
-    ['mobilehotspot','MOBILE HOTSPOT-AICHER MARKET-GREATER NOIDA-UP WEST'],
-    ['mobilehotspot','MOBILE HOTSPOT-AICHER MARKET-GREATER NOIDA-UP WEST'],
-    ['shingar','MOBILE SHINGAR-DADRI-GREATER NOIDA-UP WEST'],
-    ['shinghar','MOBILE SHINGAR-DADRI-GREATER NOIDA-UP WEST'],
-    ['mobileshingar','MOBILE SHINGAR-DADRI-GREATER NOIDA-UP WEST'],
-    ['solution','MOBILE SOLUTION-GAMMA 1-GREATER NOIDA-UP WEST'],
-    ['mobilesolution','MOBILE SOLUTION-GAMMA 1-GREATER NOIDA-UP WEST'],
-    ['mobileworld','MOBILE WORLD-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['world','MOBILE WORLD-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['newlavish','NEW LAVISH COMM AND MOBILE WORLD-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['newlavishcom','NEW LAVISH COMM AND MOBILE WORLD-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['lavish','NEW LAVISH COMM AND MOBILE WORLD-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['newradhey','NEW RADHEY ELECTRONICS AND MOBILE CENTER-DADRI-GREATER NOIDA-UP WEST'],
-    ['radhey','NEW RADHEY ELECTRONICS AND MOBILE CENTER-DADRI-GREATER NOIDA-UP WEST'],
-    ['newrajdeep','NEW RAJDEEP MOBILE POINT-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['newrajdeepmobilepoint','NEW RAJDEEP MOBILE POINT-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['newuniversal','NEW UNIVERSAL OFFICE SYSTEM-GAMMA 1-GREATER NOIDA-UP WEST'],
-    ['newuniversalofficesystem','NEW UNIVERSAL OFFICE SYSTEM-GAMMA 1-GREATER NOIDA-UP WEST'],
-    ['noble','NOBLE MOBILE SHOPE-GAMMA 1-GREATER NOIDA-UP WEST'],
-    ['nobel','NOBLE MOBILE SHOPE-GAMMA 1-GREATER NOIDA-UP WEST'],
-    ['noblemobileshope','NOBLE MOBILE SHOPE-GAMMA 1-GREATER NOIDA-UP WEST'],
-    ['noor','NOOR COMMUNICATION-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['noorcom','NOOR COMMUNICATION-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['om','OM COMMUNICATION-KULESARA-GREATER NOIDA-UP WEST'],
-    ['omcom','OM COMMUNICATION-KULESARA-GREATER NOIDA-UP WEST'],
-    ['omsai','OM SAI COMMUNICATION-HALDONI MODE-GREATER NOIDA-UP WEST'],
-    ['omsaicom','OM SAI COMMUNICATION-HALDONI MODE-GREATER NOIDA-UP WEST'],
-    ['pandey','PANDEY COMMUNICATION-SECTOR 87-GREATER NOIDA-UP WEST'],
-    ['pandeycom','PANDEY COMMUNICATION-SECTOR 87-GREATER NOIDA-UP WEST'],
-    ['pooja','POOJA COMMUNICATION-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['poojacom','POOJA COMMUNICATION-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['praveen2','PRAVEEN MOBILE CENTER 2-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['praveen-2','PRAVEEN MOBILE CENTER 2-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['praveenmobilecenter2','PRAVEEN MOBILE CENTER 2-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['praveen','PRAVEEN MOBILE CENTRE-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['praveen1','PRAVEEN MOBILE CENTRE-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['praveensurajpur','PRAVEEN MOBILE CENTRE-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['praveenmobilecenter','PRAVEEN MOBILE CENTRE-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['priyanka','PRIYANKA MOBILE WORLD-HALDONI MODE-GREATER NOIDA-UP WEST'],
-    ['priyankamobileworld','PRIYANKA MOBILE WORLD-HALDONI MODE-GREATER NOIDA-UP WEST'],
-    ['prince','PRINCE ENTERPIRESE-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['princeent','PRINCE ENTERPIRESE-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['rk','R K TELECOM-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['rahul','RAHUL TELECOM-AICHER MARKET-GREATER NOIDA-UP WEST'],
-    ['rahultelecom','RAHUL TELECOM-AICHER MARKET-GREATER NOIDA-UP WEST'],
-    ['rana','RANA ENTERPRISES-DADRI-GREATER NOIDA-UP WEST'],
-    ['ranaent','RANA ENTERPRISES-DADRI-GREATER NOIDA-UP WEST'],
-    ['rajdeep','RAJDEEP MOBILE POINT-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['rajdeepmobilepoint','RAJDEEP MOBILE POINT-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['royal','ROYAL MOBILE HOUSE AND ELECTRONICS-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['royalmobilehouseandelectronics','ROYAL MOBILE HOUSE AND ELECTRONICS-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['sn','S N COMMUNICATION-KULESARA-GREATER NOIDA-UP WEST'],
-    ['sncom','S N COMMUNICATION-KULESARA-GREATER NOIDA-UP WEST'],
-    ['sm','S M TRADER-KASNA-GREATER NOIDA-UP WEST'],
-    ['smtrader','S M TRADER-KASNA-GREATER NOIDA-UP WEST'],
-    ['sachin','SACHIN TELECOM AND MOBILE SHOP-DADRI-GREATER NOIDA-UP WEST'],
-    ['sachintelecomandmobileshop','SACHIN TELECOM AND MOBILE SHOP-DADRI-GREATER NOIDA-UP WEST'],
-    ['sanchar','SANCHAR BHAWAN-AICHER MARKET-GREATER NOIDA-UP WEST'],
-    ['sancharbhawan','SANCHAR BHAWAN-AICHER MARKET-GREATER NOIDA-UP WEST'],
-    ['satnam','SATNAM MOBILE STORE-KULESARA-GREATER NOIDA-UP WEST'],
-    ['satnammobilestore','SATNAM MOBILE STORE-KULESARA-GREATER NOIDA-UP WEST'],
-    ['shivshakti','SHIV SHAKTI ELECTRONICS-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['shivshaktielectronics','SHIV SHAKTI ELECTRONICS-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['shivtraders','SHIV TRADERS-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['shivsurajpur','SHIV TRADERS-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['shreebaba','SHREE BABA COMMUNICATION-KASNA-GREATER NOIDA-UP WEST'],
-    ['baba','SHREE BABA COMMUNICATION-KASNA-GREATER NOIDA-UP WEST'],
-    ['shreebabacom','SHREE BABA COMMUNICATION-KASNA-GREATER NOIDA-UP WEST'],
-    ['shreebalajicom','SHREE BALAJI COMMUNICATION-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['shreebalajisurajpur','SHREE BALAJI COMMUNICATION-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['shreebalajicommunication','SHREE BALAJI COMMUNICATION-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['shreebalajicenter','SHREE BALAJI MOBILE CENTER-KASNA-GREATER NOIDA-UP WEST'],
-    ['shreebalajimobilecentre','SHREE BALAJI MOBILE CENTER-KASNA-GREATER NOIDA-UP WEST'],
-    ['shreebalajikasna','SHREE BALAJI MOBILE CENTER-KASNA-GREATER NOIDA-UP WEST'],
-    ['shreeram','SHREE RAM MOBILE GALLERY-DADRI-GREATER NOIDA-UP WEST'],
-    ['shreerammobilegallery','SHREE RAM MOBILE GALLERY-DADRI-GREATER NOIDA-UP WEST'],
-    ['shrisahibji','SHRI SAHIB JI MOBILE SOLUTION-DADRI-GREATER NOIDA-UP WEST'],
-    ['shrisahib','SHRI SAHIB JI MOBILE SOLUTION-DADRI-GREATER NOIDA-UP WEST'],
-    ['sahib','SHRI SAHIB JI MOBILE SOLUTION-DADRI-GREATER NOIDA-UP WEST'],
-    ['shrisahibjimobilesolution','SHRI SAHIB JI MOBILE SOLUTION-DADRI-GREATER NOIDA-UP WEST'],
-    ['shrisahibji2','SHRIB SAHIB JI MOBILE SOLUTION-DADRI-GREATER NOIDA-UP WEST'],
-    ['shrisahib2','SHRIB SAHIB JI MOBILE SOLUTION-DADRI-GREATER NOIDA-UP WEST'],
-    ['sahib2','SHRIB SAHIB JI MOBILE SOLUTION-DADRI-GREATER NOIDA-UP WEST'],
-    ['shrisahibjimobilesolution2','SHRIB SAHIB JI MOBILE SOLUTION-DADRI-GREATER NOIDA-UP WEST'],
-    ['sony','SONY ELECTRONICS-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['sonyelectronics','SONY ELECTRONICS-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['star','STAR TELECOM CENTER-GEJHA-GREATER NOIDA-UP WEST'],
-    ['startelecom','STAR TELECOM CENTER-GEJHA-GREATER NOIDA-UP WEST'],
-    ['susshma','SUSSHMA MOBILE POINT-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['sushma','SUSSHMA MOBILE POINT-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['susshmamobilepoint','SUSSHMA MOBILE POINT-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['sanjay','SANJAY COMMUNICATION-GEJHA-GREATER NOIDA-UP WEST'],
-    ['sanjaycom','SANJAY COMMUNICATION-GEJHA-GREATER NOIDA-UP WEST'],
-    ['shyamlal','SHYAM LAL AND SONS-DADRI-GREATER NOIDA-UP WEST'],
-    ['shyamlalandsons','SHYAM LAL AND SONS-DADRI-GREATER NOIDA-UP WEST'],
-    ['shyam','SHYAM LAL AND SONS-DADRI-GREATER NOIDA-UP WEST'],
-    ['tomar','TOMAR ELECTRONICS-SECTOR 141-GREATER NOIDA-UP WEST'],
-    ['tomarelectronics','TOMAR ELECTRONICS-SECTOR 141-GREATER NOIDA-UP WEST'],
-    ['tanish','TANISH TELECOM-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['tanishq','TANISH TELECOM-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['tanishtelecom','TANISH TELECOM-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['mobilelife','THE MOBILE LIFE-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['life','THE MOBILE LIFE-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['themobilelife','THE MOBILE LIFE-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['universal','UNIVERSAL MOBILE CAFE-GAMMA 1-GREATER NOIDA-UP WEST'],
-    ['cafe','UNIVERSAL MOBILE CAFE-GAMMA 1-GREATER NOIDA-UP WEST'],
-    ['universalmobilecafe','UNIVERSAL MOBILE CAFE-GAMMA 1-GREATER NOIDA-UP WEST'],
-    ['universalcafe','UNIVERSAL MOBILE CAFE-GAMMA 1-GREATER NOIDA-UP WEST'],
-    ['vk','V K MOBILE POINT-HALDONI MODE-GREATER NOIDA-UP WEST'],
-    ['vkmobilepoint','V K MOBILE POINT-HALDONI MODE-GREATER NOIDA-UP WEST'],
-    ['vaishnav','VAISHNAV TELECOM-PARI CHOWK-GREATER NOIDA-UP WEST'],
-    ['vishal','VISHAL MOBILE HOUSE-GAMMA 1-GREATER NOIDA-UP WEST'],
-    ['vikky','VIKKY COMMUNICATION-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['viky','VIKKY COMMUNICATION-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['vikkycom','VIKKY COMMUNICATION-SURAJPUR-GREATER NOIDA-UP WEST'],
-    ['yash','YASH SANCHAR WORLD-DADRI-GREATER NOIDA-UP WEST'],
-    ['yashsanchar','YASH SANCHAR WORLD-DADRI-GREATER NOIDA-UP WEST'],
-    ['raja','RAJA MOBILE REPAIRING CENTER-KASNA-GREATER NOIDA-UP WEST'],
-    ['rajamobile','RAJA MOBILE REPAIRING CENTER-KASNA-GREATER NOIDA-UP WEST'],
-    ['rinku','RINKU MOBILE POINT-DADRI-GREATER NOIDA-UP WEST'],
-    ['rinkumobile','RINKU MOBILE POINT-DADRI-GREATER NOIDA-UP WEST'],
+    ['mahalaxmip','0131000806'],
+    ['mahalaxmimobilepoint','0131000806'],
+    ['mahalaxmipoint','0131000806'],
+    ['mahalaxmis','IN112369'],
+    ['mahalaxmimobilestore','IN112369'],
+    ['mahalaxmistore','IN112369'],
+    ['matrix','0131000962'],
+    ['matrixmobilestore','0131000962'],
+    ['hotspot','IN110695'],
+    ['mobilehotspot','IN110695'],
+    ['mobilehotspot','IN110695'],
+    ['shingar','0131001417'],
+    ['shinghar','0131001417'],
+    ['mobileshingar','0131001417'],
+    ['solution','0131005097'],
+    ['mobilesolution','0131005097'],
+    ['mobileworld','0131005093'],
+    ['world','0131005093'],
+    ['newlavish','0131001683'],
+    ['newlavishcom','0131001683'],
+    ['lavish','0131001683'],
+    ['newradhey','0131000546'],
+    ['radhey','0131000546'],
+    ['newrajdeep','0131001738'],
+    ['newrajdeepmobilepoint','0131001738'],
+    ['newuniversal','0131001951'],
+    ['newuniversalofficesystem','0131001951'],
+    ['noble','0131003071'],
+    ['nobel','0131003071'],
+    ['noblemobileshope','0131003071'],
+    ['noor','0131002723'],
+    ['noorcom','0131002723'],
+    ['om','IN122886'],
+    ['omcom','IN122886'],
+    ['omsai','0131002143'],
+    ['omsaicom','0131002143'],
+    ['pandey','0131002227'],
+    ['pandeycom','0131002227'],
+    ['pooja','0131000713'],
+    ['poojacom','0131000713'],
+    ['praveen2','0131005151'],
+    ['praveen-2','0131005151'],
+    ['praveenmobilecenter2','0131005151'],
+    ['praveen','0131001335'],
+    ['praveen1','0131001335'],
+    ['praveensurajpur','0131001335'],
+    ['praveenmobilecenter','0131001335'],
+    ['priyanka','0131000966'],
+    ['priyankamobileworld','0131000966'],
+    ['prince','0131005153'],
+    ['princeent','0131005153'],
+    ['rk','0131005092'],
+    ['rktelecom','0131005092'],
+    ['rahul','0131001001'],
+    ['rahultelecom','0131001001'],
+    ['rana','IN122846'],
+    ['ranaent','IN122846'],
+    ['rajdeep','0131002429'],
+    ['rajdeepmobilepoint','0131002429'],
+    ['royal','0131000479'],
+    ['royalmobilehouseandelectronics','0131000479'],
+    ['sn','0131000904'],
+    ['sncom','0131000904'],
+    ['sm','0131001733'],
+    ['smtrader','0131001733'],
+    ['sachin','IN109590'],
+    ['sachintelecomandmobileshop','IN109590'],
+    ['sanchar','0131002907'],
+    ['sancharbhawan','0131002907'],
+    ['satnam','IN107899'],
+    ['satnammobilestore','IN107899'],
+    ['shivshakti','IN109083'],
+    ['shivshaktielectronics','IN109083'],
+    ['shivtraders','0131001390'],
+    ['shivsurajpur','0131001390'],
+    ['shreebaba','0131001872'],
+    ['baba','0131001872'],
+    ['shreebabacom','0131001872'],
+    ['shreebalajicom','0131001151'],
+    ['shreebalajisurajpur','0131001151'],
+    ['shreebalajicommunication','0131001151'],
+    ['shreebalajicenter','0131002629'],
+    ['shreebalajimobilecentre','0131002629'],
+    ['shreebalajikasna','0131002629'],
+    ['shreeram','IN121456'],
+    ['shreerammobilegallery','IN121456'],
+    ['shrisahibji','0131001765'],
+    ['shrisahib','0131001765'],
+    ['sahib','0131001765'],
+    ['shrisahibjimobilesolution','0131001765'],
+    ['shrisahibji2','0131000714'],
+    ['shrisahib2','0131000714'],
+    ['sahib2','0131000714'],
+    ['shrisahibjimobilesolution2','0131000714'],
+    ['sony','0131001067'],
+    ['sonyelectronics','0131001067'],
+    ['star','0131001871'],
+    ['startelecom','0131001871'],
+    ['susshma','0131000254'],
+    ['sushma','0131000254'],
+    ['susshmamobilepoint','0131000254'],
+    ['sandeep','HARDIKA001'],
+    ['sanjay','0131002604'],
+    ['sanjaycom','0131002604'],
+    ['shyamlal','0131002428'],
+    ['shyamlalandsons','0131002428'],
+    ['shyam','0131002428'],
+    ['tomar','IN120680'],
+    ['tomarelectronics','IN120680'],
+    ['tanish','0131001337'],
+    ['tanishq','0131001337'],
+    ['tanishtelecom','0131001337'],
+    ['mobilelife','0131002921'],
+    ['life','0131002921'],
+    ['themobilelife','0131002921'],
+    ['universal','0131000442'],
+    ['cafe','0131000442'],
+    ['universalmobilecafe','0131000442'],
+    ['universalcafe','0131000442'],
+    ['vk','0131004902'],
+    ['vkmobilepoint','0131004902'],
+    ['vaishnav','0131001071'],
+    ['vaishnavtelecom','0131001071'],
+    ['vishal','IN109248'],
+    ['vikky','0131002331'],
+    ['viky','0131002331'],
+    ['vikkycom','0131002331'],
+    ['yash','IN102147'],
+    ['yashsanchar','IN102147'],
+    ['raja','0131000825'],
+    ['rajamobile','0131000825'],
+    ['rinku','0131000963'],
+    ['rinkumobile','0131000963'],
 ])
 
 app.get(process.env.uri, (req, res) => {
@@ -344,7 +348,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                 to1["IMEI"] = temp;
                 to1["Model"]=sheetData[i]["Product Model"]
                 to1["Color"]=sheetData[i]["Color"]
-                to1["Distributor"]=sheetData[i]["Distributor"]
+                to1["Distributor"]=sheetData[i]["Affiliated Warehouse/Store ID"]
                 to1["VerificationTime"]=null
                 objct1.push(to1)
             }
@@ -393,7 +397,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                 to2["IMEI"] = temp;
                 to2["Model"]=sheetData[i]["Product Model"]
                 to2["Color"]=sheetData[i]["Color"]
-                to2["Distributor"]=sheetData[i]["Distributor"]
+                to2["Distributor"]=sheetData[i]["Sales Store Code"]
                 to2["VerificationTime"]=sheetData[i]["Verification Time"]
                 objct2.push(to2)
             }
@@ -441,7 +445,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                 var to3={}
                 to3["IMEI"] = sheetData[i]["IMEI 1"]
                 to3["Model"]=sheetData[i]["Product Model"]
-                to3["Distributor"]=sheetData[i]["Distributor"]
+                to3["Distributor"]=sheetData[i]["Sales Store Code"]
                 objct3.push(to3)
             }
             actualSaleModel.deleteMany({})
@@ -488,7 +492,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                 var to4={}
                 to4["IMEI"] = parseFloat(sheetData[i]["IMEI NO"])
                 to4["Model"]=sheetData[i]["MODEL"]
-                to4["Distributor"]=sheetData[i]["Located Warehouse/Store"]
+                to4["Distributor"]=sheetData[i]["Affiliated Warehouse/Store ID"]
                 objct4.push(to4)
             }
             scanModel.deleteMany({})
@@ -683,7 +687,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
             const sheetData = xlsx.utils.sheet_to_json(worksheet);
             for(var i=0;i<sheetData.length;i++){
                 var to8={}
-                to8["Distributor"]=sheetData[i]["Distributor"]
+                to8["Distributor"]=sheetData[i]["Affiliated Warehouse/Store ID"]
                 to8["SALE"]=parseFloat(sheetData[i]["SALE"])
                 objct8.push(to8)
             }
@@ -728,7 +732,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
             const sheetData = xlsx.utils.sheet_to_json(worksheet);
             for(var i=0;i<sheetData.length;i++){
                 var to9={}
-                to9["Distributor"]=sheetData[i]["Distributor"]
+                to9["Distributor"]=sheetData[i]["Affiliated Warehouse/Store ID"]
                 to9["FOS"]=sheetData[i]["FOS"]
                 objct9.push(to9)
             }
@@ -773,7 +777,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
             const sheetData = xlsx.utils.sheet_to_json(worksheet);
             for(var i=0;i<sheetData.length;i++){
                 var to10={}
-                to10["Distributor"]=sheetData[i]["Distributor"]
+                to10["Distributor"]=sheetData[i]["Affiliated Warehouse/Store ID"]
                 to10["CLASS"]=sheetData[i]["CLASS"]
                 objct10.push(to10)
             }
@@ -818,7 +822,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
             const sheetData = xlsx.utils.sheet_to_json(worksheet);
             for(var i=0;i<sheetData.length;i++){
                 var to11={}
-                to11["Distributor"]=sheetData[i]["DEALER NAME"]
+                to11["Distributor"]=sheetData[i]["Affiliated Warehouse/Store ID"]
                 to11["Limit"]=sheetData[i]["LIMITS"]
                 objct11.push(to11)
             }
@@ -864,7 +868,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
             for(var i=0;i<sheetData.length;i++){
                 var to12={}
                 to12["TallyName"]=sheetData[i]["Tally"]
-                to12["PortalName"]=sheetData[i]["Portal"]
+                to12["PortalName"]=sheetData[i]["Affiliated Warehouse/Store ID"]
                 objct12.push(to12)
             }
             nameModel.deleteMany({})
@@ -1000,7 +1004,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
             const sheetData = xlsx.utils.sheet_to_json(worksheet);
             for(var i=0;i<sheetData.length;i++){
                 var to15={}
-                to15["Distributor"]=sheetData[i]["Distributor"]
+                to15["Distributor"]=sheetData[i]["Affiliated Warehouse/Store ID"]
                 to15["IMEI"]=parseFloat(sheetData[i]["IMEI 1"])
                 object.push(to15)
             }
@@ -1059,7 +1063,7 @@ app.get(process.env.sduri, (req, res) => {
         if(err){
             console.log(err)
         }
-        else{
+        else{ 
                 classes=[]
                 for(var i=0;i<temp1.length;i++){
                     var x=data.find(o=>o.Distributor==temp1[i])
@@ -1201,43 +1205,21 @@ app.get(process.env.sduri, (req, res) => {
                         }
                     }
                     if(temp3=="No"){
-                        res.render(process.env.ssd,{
-                            dealerDetails:arr[0],
-                            modelDetails:arr[1],
-                            fosDetails:arr[2],
-                            dealer:obj['dealer'],
-                            model:obj['model'],
-                            sale:sale,
-                            stock:stock,
-                            isColor:temp3,
-                            fos:obj['fos'],
-                            class:classes,
-                            type:temp4,
-                            selectedfos:temp5,
-                            tsale:tsale,
-                            tstock:tstock,
-                            stockstr:obj['stockstr'],
-                            baseurl:process.env.BASE_URL,
-                            link:process.env.link
-                        })
-                    }
-                    else{
-                        t=[]
-                        for(var i=0;i<temp2.length;i++){
-                            t.push(imeiModel.distinct('Color',imeiModel.find({'Model':temp2[i]})));
+                        dd=[]
+                        for(var i=0;i<obj['dealer'].length;i++){
+                            dd.push(nameModel.distinct("TallyName",nameModel.find({"PortalName":obj['dealer'][i]})))
                         }
-                        Promise.all(t).then((value)=>{
-                            arr1=value;
+                        Promise.all(dd).then((val)=>{
+                            names=val
                             res.render(process.env.ssd,{
                                 dealerDetails:arr[0],
+                                dealerNames:names,
                                 modelDetails:arr[1],
                                 fosDetails:arr[2],
                                 dealer:obj['dealer'],
                                 model:obj['model'],
-                                colors:colors,
                                 sale:sale,
                                 stock:stock,
-                                distColors:arr1,
                                 isColor:temp3,
                                 fos:obj['fos'],
                                 class:classes,
@@ -1248,6 +1230,48 @@ app.get(process.env.sduri, (req, res) => {
                                 stockstr:obj['stockstr'],
                                 baseurl:process.env.BASE_URL,
                                 link:process.env.link
+                            })
+                        }).catch((err)=>{
+                            console.log(err)
+                        })
+                    }
+                    else{
+                        t=[]
+                        for(var i=0;i<temp2.length;i++){
+                            t.push(imeiModel.distinct('Color',imeiModel.find({'Model':temp2[i]})));
+                        }
+                        Promise.all(t).then((value)=>{
+                            arr1=value;
+                            dd=[]
+                            for(var i=0;i<obj['dealer'].length;i++){
+                                dd.push(nameModel.distinct("TallyName",nameModel.find({"PortalName":obj['dealer'][i]})))
+                            }
+                            Promise.all(dd).then((val)=>{
+                                names=val
+                                res.render(process.env.ssd,{
+                                    dealerDetails:arr[0],
+                                    dealerNames:names,
+                                    modelDetails:arr[1],
+                                    fosDetails:arr[2],
+                                    dealer:obj['dealer'],
+                                    model:obj['model'],
+                                    colors:colors,
+                                    sale:sale,
+                                    stock:stock,
+                                    distColors:arr1,
+                                    isColor:temp3,
+                                    fos:obj['fos'],
+                                    class:classes,
+                                    type:temp4,
+                                    selectedfos:temp5,
+                                    tsale:tsale,
+                                    tstock:tstock,
+                                    stockstr:obj['stockstr'],
+                                    baseurl:process.env.BASE_URL,
+                                    link:process.env.link
+                                })
+                            }).catch((err)=>{
+                                console.log(err)
                             })
                         }).catch((error) => {
                                 console.log(error)
@@ -1376,15 +1400,25 @@ app.get(process.env.oduri,(req,res)=>{
                         outstd.sort((a,b)=>{
                             return classobj.indexOf(a.fos.split(' ')[1])-classobj.indexOf(b.fos.split(' ')[1]);
                         })
-                        res.render(process.env.od,{
-                            dealerDetails:dealers,
-                            modelDetails:models,
-                            fosDetails:fosds,
-                            outstanding:outstd,
-                            model:temp2,
-                            selectedfos:temp5,
-                            baseurl:process.env.BASE_URL,
-                            link:process.env.link
+                        dd=[]
+                        for(var i=0;i<outstd.length;i++){
+                            dd.push(nameModel.distinct("TallyName",nameModel.find({"PortalName":outstd[i]['shop']})))
+                        }
+                        Promise.all(dd).then((val)=>{
+                            names=val
+                            res.render(process.env.od,{
+                                dealerDetails:dealers,
+                                modelDetails:models,
+                                fosDetails:fosds,
+                                outstanding:outstd,
+                                dealerNames:names,
+                                model:temp2,
+                                selectedfos:temp5,
+                                baseurl:process.env.BASE_URL,
+                                link:process.env.link
+                            })
+                        }).catch((err)=>{
+                            console.log(err)
                         })
                     }).catch((error) => {
                         console.log(error)
@@ -1417,6 +1451,7 @@ app.get(process.env.aduri,(req,res)=>{
         }
         Promise.all(outstandingreports).then((returnedValues) => {
             var outstd=[]
+            var dd=[]
             var itr=0
             var array=returnedValues
             var flags=[]
@@ -1455,6 +1490,7 @@ app.get(process.env.aduri,(req,res)=>{
                     }
                     cnt.push(temp)
                 }
+                dd.push(nameModel.distinct("TallyName",nameModel.find({"PortalName":dealers[i]})))
                 outstd.push({
                     'fos':array[itr]+' '+array[itr+1],
                     'shop':dealers[i],
@@ -1465,13 +1501,19 @@ app.get(process.env.aduri,(req,res)=>{
                 })
                 itr+=2
             }
-            res.render(process.env.ad,{
-                modelDetails:t2,
-                outstanding:outstd,
-                flag:flags,
-                baseurl:process.env.BASE_URL,
-                img:process.env.img,
-                link:process.env.link
+            Promise.all(dd).then((val)=>{
+                names=val
+                res.render(process.env.ad,{
+                    modelDetails:t2,
+                    outstanding:outstd,
+                    dealerNames:names,
+                    flag:flags,
+                    baseurl:process.env.BASE_URL,
+                    img:process.env.img,
+                    link:process.env.link
+                })
+            }).catch((err)=>{
+                console.log(err)
             })
         }).catch((error) => {
             console.log(error)
@@ -1482,23 +1524,33 @@ app.get(process.env.aduri,(req,res)=>{
 });
 
 app.get(process.env.suri,(req,res)=>{
-    res.render(process.env.ss,{
-        dealerDetails:dealers,
-        modelDetails:models,
-        fosDetails:fosds,
-        dealer:temp1,
-        model:temp2,
-        isColor:temp3,
-        type:temp4,
-        selectedfos:temp5,
-        baseurl:process.env.BASE_URL,
-        suri:process.env.suri,
-        muri:process.env.muri,
-        ouri:process.env.ouri,
-        auri:process.env.auri,
-        duri:process.env.duri,
-        sduri:process.env.sduri,
-        uri:process.env.uri
+    dd=[]
+    for(var i=0;i<dealers.length;i++){
+        dd.push(nameModel.distinct("TallyName",nameModel.find({"PortalName":dealers[i]})))
+    }
+    Promise.all(dd).then((val)=>{
+        names=val
+        res.render(process.env.ss,{
+            dealerDetails:dealers,
+            dealerNames:names,
+            modelDetails:models,
+            fosDetails:fosds,
+            dealer:temp1,
+            model:temp2,
+            isColor:temp3,
+            type:temp4,
+            selectedfos:temp5,
+            baseurl:process.env.BASE_URL,
+            suri:process.env.suri,
+            muri:process.env.muri,
+            ouri:process.env.ouri,
+            auri:process.env.auri,
+            duri:process.env.duri,
+            sduri:process.env.sduri,
+            uri:process.env.uri
+        })
+    }).catch((err)=>{
+        console.log(err)
     })
 })
 
@@ -1555,7 +1607,7 @@ app.post(process.env.wl, (req, res) => {
     hour=hour%24
     min=min%60
     if((hour>=0&&hour<11)||(hour==11&&min<45)){
-        var msg="Today's data will be updated 11:45am";
+        var msg="Today's data will be updated by 11:45am";
         client.messages.create({
             from: process.env.NO,
             to: fromNumber,
@@ -1623,16 +1675,27 @@ app.post(process.env.wl, (req, res) => {
                     }
                     var out=parseFloat(value[itr+3])+parseFloat(value[itr+4])
                     var gap=parseFloat(out)-parseFloat(sum2)
-                    client.messages.create({
-                        from: process.env.NO,
-                        to: fromNumber,
-                        body: '*'+dlr.split('-')[0]+'*'+'\n'+'*Date:* '+date+'\n'+'*T.Outstanding:* '+out.toString()+'\n'+'*Above 15Days:* '+value[itr+5].toString()+'\n'+'*Yesterday Deposit:* '+value[itr+4].toString()+'\n'+'*Stock Value:* '+sum2.toString()+'\n'+'*Gap:* '+gap.toString()+'\n'+'*Limit:* '+value[itr+2].toString()
-                    }).then(message => {
-                        console.log('Message sent:', message.sid);
-                        res.end(twiml.toString());
-                    }).catch(error => {
-                        console.error('Error sending message:', error);
-                        res.status(500).end();
+                    var dealerName=[]
+                    dealerName.push(nameModel.distinct("TallyName",nameModel.find({"PortalName":dlr})))
+                    Promise.all(dealerName).then((val)=>{
+                        nm=val
+                        // var msg='*'+nm[0][0].split('(')[0]+'*'+'\n'+'*Date:* '+date+'\n'+'*T.Outstanding:* '+out.toString()+'\n'+'*Above 15Days:* '+value[itr+5].toString()+'\n'+'*Yesterday Deposit:* '+value[itr+4].toString()+'\n'+'*Stock Value:* '+sum2.toString()+'\n'+'*Gap:* '+gap.toString()+'\n'+'*Limit:* '+value[itr+2].toString()
+                        // res.send({
+                        //     message:msg
+                        // })
+                        client.messages.create({
+                            from: process.env.NO,
+                            to: fromNumber,
+                            body: '*'+nm[0][0].split('(')[0]+'*'+'\n'+'*Date:* '+date+'\n'+'*T.Outstanding:* '+out.toString()+'\n'+'*Above 15Days:* '+value[itr+5].toString()+'\n'+'*Yesterday Deposit:* '+value[itr+4].toString()+'\n'+'*Stock Value:* '+sum2.toString()+'\n'+'*Gap:* '+gap.toString()+'\n'+'*Limit:* '+value[itr+2].toString()
+                        }).then(message => {
+                            console.log('Message sent:', message.sid);
+                            res.end(twiml.toString());
+                        }).catch(error => {
+                            console.error('Error sending message:', error);
+                            res.status(500).end();
+                        });
+                    }).catch((error)=>{
+                        console.log(error)
                     });
                 }).catch((error)=>{
                     console.log(error)
