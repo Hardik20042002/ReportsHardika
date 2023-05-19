@@ -1401,6 +1401,7 @@ app.get(process.env.oduri,(req,res)=>{
                             return classobj.indexOf(a.fos.split(' ')[1])-classobj.indexOf(b.fos.split(' ')[1]);
                         })
                         dd=[]
+                        
                         for(var i=0;i<outstd.length;i++){
                             dd.push(nameModel.distinct("TallyName",nameModel.find({"PortalName":outstd[i]['shop']})))
                         }
