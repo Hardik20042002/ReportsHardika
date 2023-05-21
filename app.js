@@ -1401,7 +1401,6 @@ app.get(process.env.oduri,(req,res)=>{
                             return classobj.indexOf(a.fos.split(' ')[1])-classobj.indexOf(b.fos.split(' ')[1]);
                         })
                         dd=[]
-                        
                         for(var i=0;i<outstd.length;i++){
                             dd.push(nameModel.distinct("TallyName",nameModel.find({"PortalName":outstd[i]['shop']})))
                         }
@@ -1594,6 +1593,13 @@ app.get(process.env.auri,(req,res)=>{
     })
 })
 
+var pad=(str,len)=>{
+    for(var i=1;i<=len;i++){
+        str+=' '
+    }
+    return str
+}
+
 app.post(process.env.wl, (req, res) => {
     const twiml = new twilio.twiml.MessagingResponse();
     const messageBody = req.body.Body;
@@ -1642,6 +1648,7 @@ app.post(process.env.wl, (req, res) => {
                     outreport.push(scanModel.find({"Distributor":dlr,"Model":v[2][i]}))
                     outreport.push(actualSaleModel.find({"Distributor":dlr,"Model":v[2][i]}))
                     outreport.push(priceModel.distinct('DP',priceModel.find({"Model":v[2][i]})))
+                    outreport.push(imeiModel.find({"Distributor":dlr,"Model":v[2][i],"VerificationTime":{$ne:null}}).count())
                 }
                 outreport.push(fosModel.distinct('FOS',fosModel.find({'Distributor':dlr})))
                 outreport.push(classModel.distinct('CLASS',classModel.find({'Distributor':dlr})))
@@ -1650,8 +1657,9 @@ app.post(process.env.wl, (req, res) => {
                 outreport.push(chqModel.distinct('Chq',chqModel.find({'Distributor':nameMap.get(dlr)})))
                 outreport.push(ovdModel.distinct('Overdue',ovdModel.find({'Distributor':nameMap.get(dlr)})))
                 Promise.all(outreport).then((value)=>{
-                    var itr=0
+                    var itr=0,maxmodel=5
                     var sum1=0,sum2=0
+                    var ssarr=[]
                     for(var i=0;i<models.length;i++){
                         var arr1=[]
                         for(var k=0;k<value[itr].length;k++){
@@ -1670,24 +1678,81 @@ app.post(process.env.wl, (req, res) => {
                                 x--;
                             }
                         }
+                        var name=models[i].split(' ').join('').substr(4)
+                        name=name.split('(')[0]+' '+name.split('(')[1].split('+')[0]+','+name.split('(')[1].split('+')[1].split('G')[0]
+                        if(x!=0||value[itr+4]!=0){
+                            ssarr.push({
+                                "model":name,
+                                "stock":x,
+                                "sale":value[itr+4]
+                            })
+                            if(maxmodel<name.length){
+                                maxmodel=name.length
+                            }
+                        }
                         sum1+=x;
                         sum2+=(x*value[itr+3])
-                        itr+=4
+                        itr+=5
                     }
+                    ssarr.sort((a,b)=>{
+                        if(b["sale"]==a["sale"]){
+                            return b["stock"]-a["stock"]
+                        }
+                        return b["sale"]-a["sale"]
+                    })
+                    var salestock="+"
+                    for(var i=1;i<=maxmodel+8;i++){
+                        if(i==maxmodel+1||i==maxmodel+5){
+                            salestock+='+'
+                        }
+                        else{
+                            salestock+='-'
+                        }
+                    }
+                    salestock+='+\n'
+                    salestock+='|'+pad("Model",maxmodel-5)
+                    salestock+="|stk|sal|\n+"
+                    for(var i=1;i<=maxmodel+8;i++){
+                        if(i==maxmodel+1||i==maxmodel+5){
+                            salestock+='+'
+                        }
+                        else{
+                            salestock+='-'
+                        }
+                    }
+                    salestock+='+\n'
+                    for(var i=0;i<ssarr.length;i++){
+                        ssarr[i]["model"]=pad(ssarr[i]["model"],maxmodel-ssarr[i]["model"].length)
+                        var stock=ssarr[i]["stock"].toString()
+                        ssarr[i]["stock"]=pad(stock,3-stock.length)
+                        var sale=ssarr[i]["sale"].toString()
+                        ssarr[i]["sale"]=pad(sale,3-sale.length)
+                        salestock+=('|'+ssarr[i]["model"]+'|'+ssarr[i]["stock"]+'|'+ssarr[i]["sale"]+'|\n')
+                    }
+                    salestock+='+'
+                    for(var i=1;i<=maxmodel+8;i++){
+                        if(i==maxmodel+1||i==maxmodel+5){
+                            salestock+='+'
+                        }
+                        else{
+                            salestock+='-'
+                        }
+                    }
+                    salestock+='+\n'
                     var out=parseFloat(value[itr+3])+parseFloat(value[itr+4])
                     var gap=parseFloat(out)-parseFloat(sum2)
                     var dealerName=[]
                     dealerName.push(nameModel.distinct("TallyName",nameModel.find({"PortalName":dlr})))
                     Promise.all(dealerName).then((val)=>{
                         nm=val
-                        // var msg='*'+nm[0][0].split('(')[0]+'*'+'\n'+'*Date:* '+date+'\n'+'*T.Outstanding:* '+out.toString()+'\n'+'*Above 15Days:* '+value[itr+5].toString()+'\n'+'*Yesterday Deposit:* '+value[itr+4].toString()+'\n'+'*Stock Value:* '+sum2.toString()+'\n'+'*Gap:* '+gap.toString()+'\n'+'*Limit:* '+value[itr+2].toString()
+                        var msg='*'+nm[0][0].split('(')[0]+'*'+'\n'+'*Date:* '+date+'\n'+'*T.Outstanding:* '+out.toString()+'\n'+'*Above 15Days:* '+value[itr+5].toString()+'\n'+'*Yesterday Deposit:* '+value[itr+4].toString()+'\n'+'*Stock Value:* '+sum2.toString()+'\n'+'*Gap:* '+gap.toString()+'\n'+'*Limit:* '+value[itr+2].toString()+'\n'+'```'+salestock+'```'
                         // res.send({
                         //     message:msg
                         // })
                         client.messages.create({
                             from: process.env.NO,
                             to: fromNumber,
-                            body: '*'+nm[0][0].split('(')[0]+'*'+'\n'+'*Date:* '+date+'\n'+'*T.Outstanding:* '+out.toString()+'\n'+'*Above 15Days:* '+value[itr+5].toString()+'\n'+'*Yesterday Deposit:* '+value[itr+4].toString()+'\n'+'*Stock Value:* '+sum2.toString()+'\n'+'*Gap:* '+gap.toString()+'\n'+'*Limit:* '+value[itr+2].toString()
+                            body: msg
                         }).then(message => {
                             console.log('Message sent:', message.sid);
                             res.end(twiml.toString());
@@ -1706,6 +1771,6 @@ app.post(process.env.wl, (req, res) => {
             });
         })
     }
-  });
+});
 
 app.listen(port, () => console.log('server run at port ' + port));
