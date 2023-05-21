@@ -1658,7 +1658,7 @@ app.post(process.env.wl, (req, res) => {
                 outreport.push(ovdModel.distinct('Overdue',ovdModel.find({'Distributor':nameMap.get(dlr)})))
                 Promise.all(outreport).then((value)=>{
                     var itr=0,maxmodel=5
-                    var sum1=0,sum2=0
+                    var sum1=0,sum2=0,tstk=0,tsal=0
                     var ssarr=[]
                     for(var i=0;i<models.length;i++){
                         var arr1=[]
@@ -1686,6 +1686,8 @@ app.post(process.env.wl, (req, res) => {
                                 "stock":x,
                                 "sale":value[itr+4]
                             })
+                            tstk+=x;
+                            tsal+=value[itr+4]
                             if(maxmodel<name.length){
                                 maxmodel=name.length
                             }
@@ -1738,7 +1740,26 @@ app.post(process.env.wl, (req, res) => {
                             salestock+='-'
                         }
                     }
+                    salestock+='+\n|'
+                    salestock+=pad("Total",maxmodel-5)
+                    salestock+='|'
+                    var stkstr=tstk.toString()
+                    salestock+=(pad(stkstr,3-stkstr.length))
+                    salestock+='|'
+                    var salstr=tsal.toString()
+                    salestock+=(pad(salstr,3-salstr.length))
+                    salestock+='|\n'
+                    salestock+='+'
+                    for(var i=1;i<=maxmodel+8;i++){
+                        if(i==maxmodel+1||i==maxmodel+5){
+                            salestock+='+'
+                        }
+                        else{
+                            salestock+='-'
+                        }
+                    }
                     salestock+='+\n'
+                    console.log(salestock)
                     var out=parseFloat(value[itr+3])+parseFloat(value[itr+4])
                     var gap=parseFloat(out)-parseFloat(sum2)
                     var dealerName=[]
