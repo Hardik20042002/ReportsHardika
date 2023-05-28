@@ -1656,6 +1656,7 @@ app.post(process.env.wl, (req, res) => {
                 outreport.push(outstandingModel.distinct('Outstanding',outstandingModel.find({'Distributor':nameMap.get(dlr)})))
                 outreport.push(chqModel.distinct('Chq',chqModel.find({'Distributor':nameMap.get(dlr)})))
                 outreport.push(ovdModel.distinct('Overdue',ovdModel.find({'Distributor':nameMap.get(dlr)})))
+                outreport.push(prevModel.distinct('SALE',prevModel.find({'Distributor':dlr})))
                 Promise.all(outreport).then((value)=>{
                     var itr=0,maxmodel=5
                     var sum1=0,sum2=0,tstk=0,tsal=0
@@ -1762,11 +1763,12 @@ app.post(process.env.wl, (req, res) => {
                     console.log(salestock)
                     var out=parseFloat(value[itr+3])+parseFloat(value[itr+4])
                     var gap=parseFloat(out)-parseFloat(sum2)
+                    var lastMonth=parseFloat(value[itr+6])
                     var dealerName=[]
                     dealerName.push(nameModel.distinct("TallyName",nameModel.find({"PortalName":dlr})))
                     Promise.all(dealerName).then((val)=>{
                         nm=val
-                        var msg='*'+nm[0][0].split('(')[0]+'*'+'\n'+'*Date:* '+date+'\n'+'*T.Outstanding:* '+out.toString()+'\n'+'*Above 15Days:* '+value[itr+5].toString()+'\n'+'*Yesterday Deposit:* '+value[itr+4].toString()+'\n'+'*Stock Value:* '+sum2.toString()+'\n'+'*Gap:* '+gap.toString()+'\n'+'*Limit:* '+value[itr+2].toString()+'\n'+'```'+salestock+'```'
+                        var msg='*'+nm[0][0].split('(')[0]+'*'+'\n'+'*Date:* '+date+'\n'+'*T.Outstanding:* '+out.toString()+'\n'+'*Above 15Days:* '+value[itr+5].toString()+'\n'+'*Yesterday Deposit:* '+value[itr+4].toString()+'\n'+'*Stock Value:* '+sum2.toString()+'\n'+'*Gap:* '+gap.toString()+'\n'+'*Limit:* '+value[itr+2].toString()+'\n'+'```'+salestock+'```'+'\n*Last Month Sale: *'+lastMonth.toString()+'\n'
                         // res.send({
                         //     message:msg
                         // })
