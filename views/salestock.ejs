@@ -5,15 +5,23 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://phpcoder.tech/multiselect/js/jquery.multiselect.js"></script>
     <link rel="stylesheet" href="https://phpcoder.tech/multiselect/css/jquery.multiselect.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Genos:ital,wght@1,300&display=swap" rel="stylesheet">
-  </head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.js"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
+    <style>
+        .container-fluid{
+            height: 100px;
+        }
+    </style>
 </head>
+<body>
 <nav class="navbar navbar-dark bg-dark fixed-top">
     <div class="container-fluid">
         <a class="navbar-brand d-inline" href="#">                               
@@ -55,7 +63,7 @@
         <div class="card-header border-dark border-2"><h5>Sale Stock Reports</h5></div>
         <div class="card-body">
             <form action="POST">
-                <%if(dealer==undefined&&model==undefined&&isColor==undefined&&type==undefined&&selectedfos==undefined){%>
+                <%if(dealer==undefined&&model==undefined&&type==undefined&&selectedfos==undefined){%>
                     <div class="form-group row" style="margin: 0px;">
                         <label for="colFormLabelLg" class="col-sm-4 col-form-label col-form-label-lg">Dealers</label>
                         <div class="col-sm-7">
@@ -74,16 +82,6 @@
                                 <% for(var count=0;count<modelDetails.length;count++) { %>
                                     <option value="<%= modelDetails[count]%>" selected><%= modelDetails[count] %></option>
                                 <% } %>
-                            </select>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="form-group row" style="margin: 0px;">
-                        <label for="colFormLabelLg" class="col-sm-4 col-form-label col-form-label-lg">Color Wise</label>
-                        <div class="col-sm-7">
-                            <select name="color" id="color" class="form-control" multiple>
-                                <option value="Yes">Yes</option>
-                                <option value="No" selected>No</option>
                             </select>
                         </div>
                     </div>
@@ -141,21 +139,6 @@
                     </div>
                     <br>
                     <div class="form-group row" style="margin: 0px;">
-                        <label for="colFormLabelLg" class="col-sm-4 col-form-label col-form-label-lg">Color Wise</label>
-                        <div class="col-sm-7">
-                            <select name="color" id="color" class="form-control" multiple>
-                                <%if(isColor=="No"){%>
-                                    <option value="Yes">Yes</option>
-                                    <option value="No" selected>No</option>
-                                <%}else{%>
-                                    <option value="Yes" selected>Yes</option>
-                                    <option value="No">No</option>
-                                <%}%>
-                            </select>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="form-group row" style="margin: 0px;">
                         <label for="colFormLabelLg" class="col-sm-4 col-form-label col-form-label-lg">Report Type</label>
                         <div class="col-sm-7">
                             <select name="type" id="type" class="form-control" multiple>
@@ -203,33 +186,33 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     <script>
         jQuery('#dealer').multiselect({
+            includeSelectAllOption: true,
+            enableFiltering:true,
+            enableCaseInsensitiveFiltering:true,
             columns: 1,
             placeholder: 'Select Dealers',
-            search: true,
-            selectAll: true
         });
         jQuery('#model').multiselect({
+            includeSelectAllOption: true,
             columns: 1,
             placeholder: 'Select Models',
-            search: true,
-            selectAll: true
-        });
-        jQuery('#color').multiselect({
-            columns: 1,
-            placeholder: 'Do you want colorwise report?',
-            search: true
+            enableFiltering:true,
+            enableCaseInsensitiveFiltering:true,
         });
         jQuery('#type').multiselect({
+            includeSelectAllOption: true,
             columns: 1,
             placeholder: 'Select the required fields?',
-            search: true,
-            selectAll: true
+            enableFiltering:true,
+            enableCaseInsensitiveFiltering:true,
         });
         jQuery('#fosd').multiselect({
+            includeSelectAllOption: true,
+            includeSearchOption: true,
             columns: 1,
             placeholder: 'Select fos?',
-            search: true,
-            selectAll: true
+            enableFiltering:true,
+            enableCaseInsensitiveFiltering:true,
         });
         document.getElementById('det')
             .addEventListener('click', (e) => {
@@ -246,13 +229,6 @@
                 for(var i=0;i<upload2.length;i++){
                     if(upload2.options[i].selected){
                         model.push(upload2.options[i].value)
-                    }
-                }
-                color=[]
-                const upload3 = document.getElementById('color');
-                for(var i=0;i<upload3.length;i++){
-                    if(upload3.options[i].selected){
-                        color.push(upload3.options[i].value)
                     }
                 }
                 report=[]
@@ -277,7 +253,6 @@
                     body: JSON.stringify({
                         deal,
                         model,
-                        color,
                         report,
                         fosd
                     }),
