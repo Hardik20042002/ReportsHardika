@@ -2076,6 +2076,7 @@ app.post(process.env.wl, (req, res) => {
                             salestock+='+\n'
                             console.log(ssarr)
                             for(var i=0;i<ssarr.length;i++){
+                                if(ssarr[i]["stock"]==0 && ssarr[i]["sale"]==0){continue}
                                 ssarr[i]["model"]=pad(ssarr[i]["model"],maxmodel-ssarr[i]["model"].length)
                                 var stock=ssarr[i]["stock"].toString()
                                 ssarr[i]["stock"]=pad(stock,3-stock.length)
@@ -2121,6 +2122,7 @@ app.post(process.env.wl, (req, res) => {
                                 nm=val
                                 var msg
                                 if(nm[0][0]=='S.M TRADERS (KASNA) (OPPO)'){
+                                    gap+=parseFloat(value[itr+7])
                                     msg='*'+'S.M Traders/Best'+'*'+'\n'+'*Date:* '+date+'\n'+'*T.Outstanding:* '+out.toString()+'+'+value[itr+7].toString()+'\n'+'*Above 15Days:* '+value[itr+5].toString()+'\n'+'*Yesterday Deposit:* '+value[itr+4].toString()+'\n'+'*Stock Value:* '+sum2.toString()+'\n'+'*Gap:* '+gap.toString()+'\n'+'*Limit:* '+value[itr+2].toString()+'\n'+'```'+salestock+'```'+'*Last Month Sale:* '+lastMonth.toString()+'\n'
                                 }
                                 else{
