@@ -73,7 +73,7 @@
                             <th><%= outstanding[i]['ovd']%></th>
                             <th><%= outstanding[i]['chq']%></th>
                             <th><%= outstanding[i]['price']%></th>
-                            <th><%= (parseFloat(outstanding[i]['outstanding'])+parseFloat(outstanding[i]['chq'])+parseFloat(outstanding[i]['best']))-parseFloat(outstanding[i]['price'])%></th>
+                            <th><%= (parseFloat(outstanding[i]['outstanding'])+parseFloat(outstanding[i]['chq'])+parseFloat(outstanding[i]['best'])-parseFloat(outstanding[i]['price'])%></th>
                         </tr>
                     <%}else{%>
                         <tr scope="row">
