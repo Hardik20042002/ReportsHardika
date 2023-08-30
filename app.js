@@ -415,6 +415,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
             const worksheet = workbook.Sheets[sheetName];
             const sheetData = xlsx.utils.sheet_to_json(worksheet);
             for(var i=0;i<sheetData.length;i++){
+                if(sheetData[i]["Client Name"]==="JAI AMBEY COMMUNICATION-DADRI-GREATER NOIDA-UP WEST"||sheetData[i]["Client Name"]==="JAI AMBEY COMMUNICATION ENTERPRISES-DADRI-GREATER NOIDA-UP WEST"||sheetData[i]["Client Name"]==="JAI AMBEY COMMUNICATION -2 (DADRI) (OPPO)"){continue}
                 var to2={}
                 temp = parseFloat(sheetData[i]["Sales Volume-Verification"])
                 to2["CNT"] = temp;
@@ -1522,6 +1523,8 @@ app.get(process.env.sduri, (req, res) => {
                     t.push(prevModel.distinct('SALE',prevModel.find({'Distributor':temp1[i]})))
                     t.push(fosModel.distinct('FOS',fosModel.find({'Distributor':temp1[i]})))
                     t.push(classModel.distinct('CLASS',classModel.find({'Distributor':temp1[i]})))
+                    t.push(imeiModel.find({"Distributor":temp1[i]}).count())
+                    t.push(actualSaleModel.find({"Distributor":temp1[i]}))
                 }
                 Promise.all(t).then((returnedValues) => {
                     var arr = returnedValues;
@@ -1534,7 +1537,7 @@ app.get(process.env.sduri, (req, res) => {
                     var tstock=[]
                     var stockstr=[]
                     for(var i=0;i<temp1.length;i++){
-                        var c1=0,c2=0
+                        var c1=0,c2=0,tc=0
                         for(var j=0;j<temp2.length;j++){
                                 var st=arr[itr],sl=arr[itr+1]
                                 stock.push(st)
@@ -1561,9 +1564,12 @@ app.get(process.env.sduri, (req, res) => {
                         else{
                             fos.push(arr[itr]+' '+arr[itr+1]+' '+x.Class[0].CLASS)
                         }
-                        tsale.push(c2)
-                        tstock.push(c1)
-                        itr+=3
+                        for(var k=0;k<arr[itr+4].length;k++){
+                            tc+=arr[itr+4][k].CNT
+                        }
+                        tsale.push(tc)
+                        tstock.push(arr[itr+3])
+                        itr+=5
                     }
                     obj={
                         'dealer':temp1,
