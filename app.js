@@ -415,7 +415,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
             const worksheet = workbook.Sheets[sheetName];
             const sheetData = xlsx.utils.sheet_to_json(worksheet);
             for(var i=0;i<sheetData.length;i++){
-                if(sheetData[i]["Client Name"]==="JAI AMBEY COMMUNICATION-DADRI-GREATER NOIDA-UP WEST"||sheetData[i]["Client Name"]==="JAI AMBEY COMMUNICATION ENTERPRISES-DADRI-GREATER NOIDA-UP WEST"||sheetData[i]["Client Name"]==="JAI AMBEY COMMUNICATION -2 (DADRI) (OPPO)"){continue}
+                if(sheetData[i]["Client Name"]==="JAI AMBEY COMMUNICATION-DADRI-GREATER NOIDA-UP WEST"||sheetData[i]["Client Name"]==="JAI AMBEY COMMUNICATION ENTERPRISES-DADRI-GREATER NOIDA-UP WEST"||sheetData[i]["Client Name"]==="JAI AMBEY COMMUNICATION -2 (DADRI) (OPPO)"||sheetData[i]["Client Name"]==="ANUSKA MOBILE CENTER-AICHER MARKET-GREATER NOIDA-UP WEST"||sheetData[i]["Client Name"]==="ANUSHKA MOBILE HOUSE-SADAR-GAUTAM BUDDHA NAGAR-UP WEST"){continue}
                 var to2={}
                 temp = parseFloat(sheetData[i]["Sales Volume-Verification"])
                 to2["CNT"] = temp;
@@ -1734,10 +1734,10 @@ app.get(process.env.oduri,(req,res)=>{
                                 outstd.push({
                                     'fos':array[itr]+' '+array[itr+1],
                                     'shop':dealers[i],
-                                    'limit':array[itr+2],
-                                    'outstanding':array[itr+3],
+                                    'limit':(array[itr+2].length==0?0:array[itr+2]),
+                                    'outstanding':(array[itr+3].length==0?0:array[itr+3]),
                                     'chq':(array[itr+4].length==0?0:array[itr+4]),
-                                    'ovd':array[itr+5],
+                                    'ovd':(array[itr+5].length==0?0:array[itr+5]),
                                     'qty':sum1,
                                     'price':sum2,
                                     'best':array[itr+6]
@@ -1748,10 +1748,10 @@ app.get(process.env.oduri,(req,res)=>{
                                 outstd.push({
                                     'fos':array[itr]+' '+array[itr+1],
                                     'shop':dealers[i],
-                                    'limit':array[itr+2],
-                                    'outstanding':array[itr+3],
+                                    'limit':(array[itr+2].length==0?0:array[itr+2]),
+                                    'outstanding':(array[itr+3].length==0?0:array[itr+3]),
                                     'chq':(array[itr+4].length==0?0:array[itr+4]),
-                                    'ovd':array[itr+5],
+                                    'ovd':(array[itr+5].length==0?0:array[itr+5]),
                                     'qty':sum1,
                                     'price':sum2,
                                 })
