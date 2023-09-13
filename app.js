@@ -297,6 +297,9 @@ const map = new Map([
     ['rajamobile','RAJA MOBILE REPAIRING CENTER-KASNA-GREATER NOIDA-UP WEST'],
     ['rinku','RINKU MOBILE POINT-DADRI-GREATER NOIDA-UP WEST'],
     ['rinkumobile','RINKU MOBILE POINT-DADRI-GREATER NOIDA-UP WEST'],
+    ['anushka2','ANUSHKA MOBILE HOUSE-SADAR-GAUTAM BUDDHA NAGAR-UP WEST'],
+    ['anushkamobilehouse2','ANUSHKA MOBILE HOUSE-SADAR-GAUTAM BUDDHA NAGAR-UP WEST'],
+    ['anushkamobilehouse','ANUSHKA MOBILE HOUSE-SADAR-GAUTAM BUDDHA NAGAR-UP WEST']
 ])
 
 app.get(process.env.uri, (req, res) => {
@@ -415,7 +418,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
             const worksheet = workbook.Sheets[sheetName];
             const sheetData = xlsx.utils.sheet_to_json(worksheet);
             for(var i=0;i<sheetData.length;i++){
-                if(sheetData[i]["Client Name"]==="JAI AMBEY COMMUNICATION-DADRI-GREATER NOIDA-UP WEST"||sheetData[i]["Client Name"]==="JAI AMBEY COMMUNICATION ENTERPRISES-DADRI-GREATER NOIDA-UP WEST"||sheetData[i]["Client Name"]==="JAI AMBEY COMMUNICATION -2 (DADRI) (OPPO)"||sheetData[i]["Client Name"]==="ANUSKA MOBILE CENTER-AICHER MARKET-GREATER NOIDA-UP WEST"||sheetData[i]["Client Name"]==="ANUSHKA MOBILE HOUSE-SADAR-GAUTAM BUDDHA NAGAR-UP WEST"){continue}
+                if(sheetData[i]["Client Name"]==="JAI AMBEY COMMUNICATION-DADRI-GREATER NOIDA-UP WEST"||sheetData[i]["Client Name"]==="JAI AMBEY COMMUNICATION ENTERPRISES-DADRI-GREATER NOIDA-UP WEST"||sheetData[i]["Client Name"]==="JAI AMBEY COMMUNICATION -2 (DADRI) (OPPO)"||sheetData[i]["Client Name"]==="ANUSKA MOBILE CENTER-AICHER MARKET-GREATER NOIDA-UP WEST"||sheetData[i]["Client Name"]==="ANUSHKA MOBILE HOUSE-SADAR-GAUTAM BUDDHA NAGAR-UP WEST"||sheetData[i]["Client Name"]==="KASHISH COMMUNICATION-KULESARA-GREATER NOIDA-UP WEST"){continue}
                 var to2={}
                 temp = parseFloat(sheetData[i]["Sales Volume-Verification"])
                 to2["CNT"] = temp;
