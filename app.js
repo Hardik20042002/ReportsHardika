@@ -2121,8 +2121,7 @@ app.post(process.env.wl, (req, res) => {
                                 }
                             }
                             salestock+='+\n'
-                            console.log(salestock)
-                            var out=parseFloat(value[itr+3])+parseFloat(value[itr+4])
+                            var out=parseFloat((value[itr+3].length==0?0:value[itr+3]))+parseFloat((value[itr+4].length==0?0:value[itr+4]))
                             var gap=parseFloat(out)-parseFloat(sum2)
                             var lastMonth=parseFloat(value[itr+6])
                             var dealerName=[]
