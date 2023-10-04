@@ -75,6 +75,20 @@
                             <th><%= outstanding[i]['price']%></th>
                             <th><%= (parseFloat(outstanding[i]['outstanding'])+parseFloat(outstanding[i]['chq'])+parseFloat(outstanding[i]['best'])-parseFloat(outstanding[i]['price']))%></th>
                         </tr>
+                    <%}else if(dealerNames[i][0]=='BALAJI TRADERS (GREATER NOIDA) (OPPO)'){%>
+                        <tr scope="row">
+                            <%cnt1+=outstanding[i]['outstanding']%>
+                            <%cnt2+=outstanding[i]['price']%>
+                            <th><%= outstanding[i]['fos'].split(' ')[0]%></th>
+                            <th><%= outstanding[i]['fos'].split(' ')[1]%></th>
+                            <th>BALAJI TRADERS/BALAJI COMMUNICATION</th>
+                            <th><%= outstanding[i]['limit']%></th>
+                            <th><%= parseFloat(outstanding[i]['outstanding'])+parseFloat(outstanding[i]['chq'])%> + <%= outstanding[i]['balaji'] %></th>
+                            <th><%= outstanding[i]['ovd']%></th>
+                            <th><%= outstanding[i]['chq']%></th>
+                            <th><%= outstanding[i]['price']%></th>
+                            <th><%= (parseFloat(outstanding[i]['outstanding'])+parseFloat(outstanding[i]['chq'])+parseFloat(outstanding[i]['balaji'])-parseFloat(outstanding[i]['price']))%></th>
+                        </tr>
                     <%}else{%>
                         <tr scope="row">
                             <%cnt1+=outstanding[i]['outstanding']%>
