@@ -109,6 +109,8 @@ const map = new Map([
     ['brs','BRS ELECTRONICS-KASNA-GREATER NOIDA-UP WEST'],
     ['brselectronics','BRS ELECTRONICS-KASNA-GREATER NOIDA-UP WEST'],
     ['balajitrader','BALAJI COMMUNICATION-GREATER NOIDA-UP WEST'],
+    ['balajicommunication','BALAJI COMMUNICATION-GREATER NOIDA-UP WEST'],
+    ['balajicomm','BALAJI COMMUNICATION-GREATER NOIDA-UP WEST'],
     ['balajitraders','BALAJI COMMUNICATION-GREATER NOIDA-UP WEST'],
     ['computer','COMPUTER WIZARD-PARI CHOWK-GREATER NOIDA-UP WEST'],
     ['wizard','COMPUTER WIZARD-PARI CHOWK-GREATER NOIDA-UP WEST'],
@@ -1704,6 +1706,9 @@ app.get(process.env.oduri,(req,res)=>{
                         if(t1[i]=="S M TRADER-KASNA-GREATER NOIDA-UP WEST"){
                             outstandingreports.push(outstandingModel.distinct('Outstanding',outstandingModel.find({'Distributor':"BEST GADGETS CENTER (KASNA) (OPPO)"})))
                         }
+                        if(t1[i]=="BALAJI COMMUNICATION-GREATER NOIDA-UP WEST"){
+                            outstandingreports.push(outstandingModel.distinct('Outstanding',outstandingModel.find({'Distributor':"BALAJI COMMUNICATION (SUTHYANA) (OPPO)"})))
+                        }
                     }
                     Promise.all(outstandingreports).then((returnedValues) => {
                         var outstd=[]
@@ -1744,6 +1749,20 @@ app.get(process.env.oduri,(req,res)=>{
                                     'qty':sum1,
                                     'price':sum2,
                                     'best':array[itr+6]
+                                })
+                                itr+=7
+                            }
+                            else if(t1[i]=="BALAJI COMMUNICATION-GREATER NOIDA-UP WEST"){
+                                outstd.push({
+                                    'fos':array[itr]+' '+array[itr+1],
+                                    'shop':dealers[i],
+                                    'limit':(array[itr+2].length==0?0:array[itr+2]),
+                                    'outstanding':(array[itr+3].length==0?0:array[itr+3]),
+                                    'chq':(array[itr+4].length==0?0:array[itr+4]),
+                                    'ovd':(array[itr+5].length==0?0:array[itr+5]),
+                                    'qty':sum1,
+                                    'price':sum2,
+                                    'balaji':array[itr+6]
                                 })
                                 itr+=7
                             }
@@ -2012,6 +2031,9 @@ app.post(process.env.wl, (req, res) => {
                         if(dlr=="S M TRADER-KASNA-GREATER NOIDA-UP WEST"){
                             outreport.push(outstandingModel.distinct('Outstanding',outstandingModel.find({'Distributor':"BEST GADGETS CENTER (KASNA) (OPPO)"})))
                         }
+                        if(dlr=="BALAJI COMMUNICATION-GREATER NOIDA-UP WEST"){
+                            outreport.push(outstandingModel.distinct('Outstanding',outstandingModel.find({'Distributor':"BALAJI COMMUNICATION (SUTHYANA) (OPPO)"})))
+                        }
                         Promise.all(outreport).then((value)=>{
                             var itr=0,maxmodel=5
                             var sum1=0,sum2=0,tstk=0,tsal=0
@@ -2133,9 +2155,16 @@ app.post(process.env.wl, (req, res) => {
                                     gap+=parseFloat(value[itr+7])
                                     msg='*'+'S.M Traders/Best'+'*'+'\n'+'*Date:* '+date+'\n'+'*T.Outstanding:* '+out.toString()+'+'+value[itr+7].toString()+'\n'+'*Above 15Days:* '+value[itr+5].toString()+'\n'+'*Yesterday Deposit:* '+value[itr+4].toString()+'\n'+'*Stock Value:* '+sum2.toString()+'\n'+'*Gap:* '+gap.toString()+'\n'+'*Limit:* '+value[itr+2].toString()+'\n'+'```'+salestock+'```'+'*Last Month Sale:* '+lastMonth.toString()+'\n'
                                 }
+                                else if(nm[0][0]=='BALAJI TRADERS (GREATER NOIDA) (OPPO)'){
+                                    gap+=parseFloat(value[itr+7])
+                                    msg='*'+'Balaji Traders/Balaji Comm'+'*'+'\n'+'*Date:* '+date+'\n'+'*T.Outstanding:* '+out.toString()+'+'+value[itr+7].toString()+'\n'+'*Above 15Days:* '+value[itr+5].toString()+'\n'+'*Yesterday Deposit:* '+value[itr+4].toString()+'\n'+'*Stock Value:* '+sum2.toString()+'\n'+'*Gap:* '+gap.toString()+'\n'+'*Limit:* '+value[itr+2].toString()+'\n'+'```'+salestock+'```'+'*Last Month Sale:* '+lastMonth.toString()+'\n'
+                                }
                                 else{
                                     msg='*'+nm[0][0].split('(')[0]+'*'+'\n'+'*Date:* '+date+'\n'+'*T.Outstanding:* '+out.toString()+'\n'+'*Above 15Days:* '+value[itr+5].toString()+'\n'+'*Yesterday Deposit:* '+value[itr+4].toString()+'\n'+'*Stock Value:* '+sum2.toString()+'\n'+'*Gap:* '+gap.toString()+'\n'+'*Limit:* '+value[itr+2].toString()+'\n'+'```'+salestock+'```'+'*Last Month Sale:* '+lastMonth.toString()+'\n'
                                 }
+                                // res.send({
+                                //     "ans":msg
+                                // })
                                 client.messages.create({
                                     from: process.env.NO,
                                     to: fromNumber,
