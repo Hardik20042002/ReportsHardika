@@ -2043,7 +2043,7 @@ app.post(process.env.wl, (req, res) => {
                                 for(var k=0;k<value[itr].length;k++){
                                     arr1.push(value[itr][k].IMEI)
                                 }
-                                var x=arr1.length
+                                var x=arr1.length,tcnt=0
                                 for(var k=0;k<value[itr+1].length;k++){
                                     var im=value[itr+1][k].IMEI
                                     if(arr1.includes(im)){
@@ -2054,6 +2054,7 @@ app.post(process.env.wl, (req, res) => {
                                     var im=value[itr+2][k].IMEI
                                     if(arr1.includes(im)){
                                         x--;
+                                        tcnt+=1;
                                     }
                                 }
                                 var cnt=0
@@ -2065,10 +2066,10 @@ app.post(process.env.wl, (req, res) => {
                                 if(x!=0||value[itr+4]!=0){
                                     ssarr.push({
                                         "model":name,
-                                        "stock":x,
+                                        "stock":x+tcnt,
                                         "sale":cnt
                                     })
-                                    tstk+=x;
+                                    tstk+=(x+tcnt);
                                     tsal+=cnt
                                     if(maxmodel<name.length){
                                         maxmodel=name.length
