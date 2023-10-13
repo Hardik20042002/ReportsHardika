@@ -420,7 +420,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
             const worksheet = workbook.Sheets[sheetName];
             const sheetData = xlsx.utils.sheet_to_json(worksheet);
             for(var i=0;i<sheetData.length;i++){
-                if(sheetData[i]["Client Name"]==="JAI AMBEY COMMUNICATION-DADRI-GREATER NOIDA-UP WEST"||sheetData[i]["Client Name"]==="JAI AMBEY COMMUNICATION ENTERPRISES-DADRI-GREATER NOIDA-UP WEST"||sheetData[i]["Client Name"]==="JAI AMBEY COMMUNICATION -2 (DADRI) (OPPO)"||sheetData[i]["Client Name"]==="ANUSKA MOBILE CENTER-AICHER MARKET-GREATER NOIDA-UP WEST"||sheetData[i]["Client Name"]==="ANUSHKA MOBILE HOUSE-SADAR-GAUTAM BUDDHA NAGAR-UP WEST"||sheetData[i]["Client Name"]==="KASHISH COMMUNICATION-KULESARA-GREATER NOIDA-UP WEST"){continue}
+                if(sheetData[i]["Client Name"]==="JAI AMBEY COMMUNICATION-DADRI-GREATER NOIDA-UP WEST"||sheetData[i]["Client Name"]==="JAI AMBEY COMMUNICATION ENTERPRISES-DADRI-GREATER NOIDA-UP WEST"||sheetData[i]["Client Name"]==="JAI AMBEY COMMUNICATION -2 (DADRI) (OPPO)"||sheetData[i]["Client Name"]==="ANUSKA MOBILE CENTER-AICHER MARKET-GREATER NOIDA-UP WEST"||sheetData[i]["Client Name"]==="ANUSHKA MOBILE HOUSE-SADAR-GAUTAM BUDDHA NAGAR-UP WEST"){continue}
                 var to2={}
                 temp = parseFloat(sheetData[i]["Sales Volume-Verification"])
                 to2["CNT"] = temp;
@@ -1705,9 +1705,13 @@ app.get(process.env.oduri,(req,res)=>{
                         outstandingreports.push(ovdModel.distinct('Overdue',ovdModel.find({'Distributor':nameMap.get(t1[i])})))
                         if(t1[i]=="S M TRADER-KASNA-GREATER NOIDA-UP WEST"){
                             outstandingreports.push(outstandingModel.distinct('Outstanding',outstandingModel.find({'Distributor':"BEST GADGETS CENTER (KASNA) (OPPO)"})))
+                            outstandingreports.push(chqModel.distinct('Chq',chqModel.find({'Distributor':"BEST GADGETS CENTER (KASNA) (OPPO)"})))
+                            outstandingreports.push(ovdModel.distinct('Overdue',ovdModel.find({'Distributor':"BEST GADGETS CENTER (KASNA) (OPPO)"})))
                         }
                         if(t1[i]=="BALAJI COMMUNICATION-GREATER NOIDA-UP WEST"){
                             outstandingreports.push(outstandingModel.distinct('Outstanding',outstandingModel.find({'Distributor':"BALAJI COMMUNICATION (SUTHYANA) (OPPO)"})))
+                            outstandingreports.push(chqModel.distinct('Chq',chqModel.find({'Distributor':"BALAJI COMMUNICATION (SUTHYANA) (OPPO)"})))
+                            outstandingreports.push(ovdModel.distinct('Overdue',ovdModel.find({'Distributor':"BALAJI COMMUNICATION (SUTHYANA) (OPPO)"})))
                         }
                     }
                     Promise.all(outstandingreports).then((returnedValues) => {
@@ -1748,9 +1752,11 @@ app.get(process.env.oduri,(req,res)=>{
                                     'ovd':(array[itr+5].length==0?0:array[itr+5]),
                                     'qty':sum1,
                                     'price':sum2,
-                                    'best':array[itr+6]
+                                    'bestout':array[itr+6].length==0?0:array[itr+6],
+                                    'bestchq':array[itr+7].length==0?0:array[itr+7],
+                                    'bestovd':array[itr+8].length==0?0:array[itr+8]
                                 })
-                                itr+=7
+                                itr+=9
                             }
                             else if(t1[i]=="BALAJI COMMUNICATION-GREATER NOIDA-UP WEST"){
                                 outstd.push({
@@ -1762,9 +1768,11 @@ app.get(process.env.oduri,(req,res)=>{
                                     'ovd':(array[itr+5].length==0?0:array[itr+5]),
                                     'qty':sum1,
                                     'price':sum2,
-                                    'balaji':array[itr+6]
+                                    'balajiout':array[itr+6].length==0?0:array[itr+6],
+                                    'balajichq':array[itr+7].length==0?0:array[itr+7],
+                                    'balajiovd':array[itr+8].length==0?0:array[itr+8]
                                 })
-                                itr+=7
+                                itr+=9
                             }
                             else{
                                 outstd.push({
@@ -2030,9 +2038,13 @@ app.post(process.env.wl, (req, res) => {
                         outreport.push(prevModel.distinct('SALE',prevModel.find({'Distributor':dlr})))
                         if(dlr=="S M TRADER-KASNA-GREATER NOIDA-UP WEST"){
                             outreport.push(outstandingModel.distinct('Outstanding',outstandingModel.find({'Distributor':"BEST GADGETS CENTER (KASNA) (OPPO)"})))
+                            outreport.push(chqModel.distinct('Chq',chqModel.find({'Distributor':"BEST GADGETS CENTER (KASNA) (OPPO)"})))
+                            outreport.push(ovdModel.distinct('Overdue',ovdModel.find({'Distributor':"BEST GADGETS CENTER (KASNA) (OPPO)"})))
                         }
                         if(dlr=="BALAJI COMMUNICATION-GREATER NOIDA-UP WEST"){
                             outreport.push(outstandingModel.distinct('Outstanding',outstandingModel.find({'Distributor':"BALAJI COMMUNICATION (SUTHYANA) (OPPO)"})))
+                            outreport.push(chqModel.distinct('Chq',chqModel.find({'Distributor':"BALAJI COMMUNICATION (SUTHYANA) (OPPO)"})))
+                            outreport.push(ovdModel.distinct('Overdue',ovdModel.find({'Distributor':"BALAJI COMMUNICATION (SUTHYANA) (OPPO)"})))
                         }
                         Promise.all(outreport).then((value)=>{
                             var itr=0,maxmodel=5
@@ -2153,12 +2165,12 @@ app.post(process.env.wl, (req, res) => {
                                 nm=val
                                 var msg
                                 if(nm[0][0]=='S.M TRADERS (KASNA) (OPPO)'){
-                                    gap+=parseFloat(value[itr+7])
-                                    msg='*'+'S.M Traders/Best'+'*'+'\n'+'*Date:* '+date+'\n'+'*T.Outstanding:* '+out.toString()+'+'+value[itr+7].toString()+'\n'+'*Above 15Days:* '+value[itr+5].toString()+'\n'+'*Yesterday Deposit:* '+value[itr+4].toString()+'\n'+'*Stock Value:* '+sum2.toString()+'\n'+'*Gap:* '+gap.toString()+'\n'+'*Limit:* '+value[itr+2].toString()+'\n'+'```'+salestock+'```'+'*Last Month Sale:* '+lastMonth.toString()+'\n'
+                                    gap+=(parseFloat(value[itr+7])+parseFloat(value[itr+8]))
+                                    msg='*'+'S.M Traders/Best'+'*'+'\n'+'*Date:* '+date+'\n'+'*T.Outstanding:* '+out.toString()+'+'+value[itr+7].toString()+'\n'+'*Above 15Days:* '+value[itr+5].toString()+'+'+value[itr+9].toString()+'\n'+'*Yesterday Deposit:* '+value[itr+4].toString()+'+'+value[itr+8].toString()+'\n'+'*Stock Value:* '+sum2.toString()+'\n'+'*Gap:* '+gap.toString()+'\n'+'*Limit:* '+value[itr+2].toString()+'\n'+'```'+salestock+'```'+'*Last Month Sale:* '+lastMonth.toString()+'\n'
                                 }
                                 else if(nm[0][0]=='BALAJI TRADERS (GREATER NOIDA) (OPPO)'){
-                                    gap+=parseFloat(value[itr+7])
-                                    msg='*'+'Balaji Traders/Balaji Comm'+'*'+'\n'+'*Date:* '+date+'\n'+'*T.Outstanding:* '+out.toString()+'+'+value[itr+7].toString()+'\n'+'*Above 15Days:* '+value[itr+5].toString()+'\n'+'*Yesterday Deposit:* '+value[itr+4].toString()+'\n'+'*Stock Value:* '+sum2.toString()+'\n'+'*Gap:* '+gap.toString()+'\n'+'*Limit:* '+value[itr+2].toString()+'\n'+'```'+salestock+'```'+'*Last Month Sale:* '+lastMonth.toString()+'\n'
+                                    gap+=(parseFloat(value[itr+7])+parseFloat(value[itr+8]))
+                                    msg='*'+'Balaji Traders/Balaji Comm'+'*'+'\n'+'*Date:* '+date+'\n'+'*T.Outstanding:* '+out.toString()+'+'+value[itr+7].toString()+'\n'+'*Above 15Days:* '+value[itr+5].toString()+'+'+value[itr+9].toString()+'\n'+'*Yesterday Deposit:* '+value[itr+4].toString()+'+'+value[itr+8].toString()+'\n'+'*Stock Value:* '+sum2.toString()+'\n'+'*Gap:* '+gap.toString()+'\n'+'*Limit:* '+value[itr+2].toString()+'\n'+'```'+salestock+'```'+'*Last Month Sale:* '+lastMonth.toString()+'\n'
                                 }
                                 else{
                                     msg='*'+nm[0][0].split('(')[0]+'*'+'\n'+'*Date:* '+date+'\n'+'*T.Outstanding:* '+out.toString()+'\n'+'*Above 15Days:* '+value[itr+5].toString()+'\n'+'*Yesterday Deposit:* '+value[itr+4].toString()+'\n'+'*Stock Value:* '+sum2.toString()+'\n'+'*Gap:* '+gap.toString()+'\n'+'*Limit:* '+value[itr+2].toString()+'\n'+'```'+salestock+'```'+'*Last Month Sale:* '+lastMonth.toString()+'\n'
