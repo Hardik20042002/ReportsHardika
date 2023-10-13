@@ -1752,9 +1752,9 @@ app.get(process.env.oduri,(req,res)=>{
                                     'ovd':(array[itr+5].length==0?0:array[itr+5]),
                                     'qty':sum1,
                                     'price':sum2,
-                                    'bestout':array[itr+6].length==0?0:array[itr+6],
-                                    'bestchq':array[itr+7].length==0?0:array[itr+7],
-                                    'bestovd':array[itr+8].length==0?0:array[itr+8]
+                                    'bestout':(array[itr+6].length==0?0:array[itr+6]),
+                                    'bestchq':(array[itr+7].length==0?0:array[itr+7]),
+                                    'bestovd':(array[itr+8].length==0?0:array[itr+8])
                                 })
                                 itr+=9
                             }
@@ -1768,9 +1768,9 @@ app.get(process.env.oduri,(req,res)=>{
                                     'ovd':(array[itr+5].length==0?0:array[itr+5]),
                                     'qty':sum1,
                                     'price':sum2,
-                                    'balajiout':array[itr+6].length==0?0:array[itr+6],
-                                    'balajichq':array[itr+7].length==0?0:array[itr+7],
-                                    'balajiovd':array[itr+8].length==0?0:array[itr+8]
+                                    'balajiout':(array[itr+6].length==0?0:array[itr+6]),
+                                    'balajichq':(array[itr+7].length==0?0:array[itr+7]),
+                                    'balajiovd':(array[itr+8].length==0?0:array[itr+8])
                                 })
                                 itr+=9
                             }
