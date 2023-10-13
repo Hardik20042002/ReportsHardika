@@ -2165,11 +2165,13 @@ app.post(process.env.wl, (req, res) => {
                                 nm=val
                                 var msg
                                 if(nm[0][0]=='S.M TRADERS (KASNA) (OPPO)'){
-                                    gap+=(parseFloat(value[itr+7])+parseFloat(value[itr+8]))
+                                    var out1=parseFloat((value[itr+7].length==0?0:value[itr+7]))+parseFloat((value[itr+8].length==0?0:value[itr+8]))
+                                    gap+=(parseFloat(out1))
                                     msg='*'+'S.M Traders/Best'+'*'+'\n'+'*Date:* '+date+'\n'+'*T.Outstanding:* '+out.toString()+'+'+value[itr+7].toString()+'\n'+'*Above 15Days:* '+value[itr+5].toString()+'+'+value[itr+9].toString()+'\n'+'*Yesterday Deposit:* '+value[itr+4].toString()+'+'+value[itr+8].toString()+'\n'+'*Stock Value:* '+sum2.toString()+'\n'+'*Gap:* '+gap.toString()+'\n'+'*Limit:* '+value[itr+2].toString()+'\n'+'```'+salestock+'```'+'*Last Month Sale:* '+lastMonth.toString()+'\n'
                                 }
                                 else if(nm[0][0]=='BALAJI TRADERS (GREATER NOIDA) (OPPO)'){
-                                    gap+=(parseFloat(value[itr+7])+parseFloat(value[itr+8]))
+                                    var out1=parseFloat((value[itr+7].length==0?0:value[itr+7]))+parseFloat((value[itr+8].length==0?0:value[itr+8]))
+                                    gap+=(parseFloat(out1))
                                     msg='*'+'Balaji Traders/Balaji Comm'+'*'+'\n'+'*Date:* '+date+'\n'+'*T.Outstanding:* '+out.toString()+'+'+value[itr+7].toString()+'\n'+'*Above 15Days:* '+value[itr+5].toString()+'+'+value[itr+9].toString()+'\n'+'*Yesterday Deposit:* '+value[itr+4].toString()+'+'+value[itr+8].toString()+'\n'+'*Stock Value:* '+sum2.toString()+'\n'+'*Gap:* '+gap.toString()+'\n'+'*Limit:* '+value[itr+2].toString()+'\n'+'```'+salestock+'```'+'*Last Month Sale:* '+lastMonth.toString()+'\n'
                                 }
                                 else{
