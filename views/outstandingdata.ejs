@@ -69,9 +69,9 @@
                             <th><%= outstanding[i]['fos'].split(' ')[1]%></th>
                             <th>S.M TRADERS/BEST</th>
                             <th><%= outstanding[i]['limit']%></th>
-                            <th><%= parseFloat(outstanding[i]['outstanding'])+parseFloat(outstanding[i]['chq'])%> + <%= parseFloat([i]['bestout'])+parseFloat(outstanding[i]['bestchq']) %></th>
-                            <th><%= parseFloat([i]['ovd'])%> + <%= parseFloat([i]['bestovd'])%></th>
-                            <th><%= parseFloat([i]['chq'])%> + <%= parseFloat([i]['bestchq'])%></th>
+                            <th><%= parseFloat(outstanding[i]['outstanding'])+parseFloat(outstanding[i]['chq'])%> + <%= parseFloat(outstanding[i]['bestout'])+parseFloat(outstanding[i]['bestchq']) %></th>
+                            <th><%= parseFloat(outstanding[i]['ovd'])%> + <%= parseFloat(outstanding[i]['bestovd'])%></th>
+                            <th><%= parseFloat(outstanding[i]['chq'])%> + <%= parseFloat(outstanding[i]['bestchq'])%></th>
                             <th><%= outstanding[i]['price']%></th>
                             <th><%= (parseFloat(outstanding[i]['outstanding'])+parseFloat(outstanding[i]['chq'])+parseFloat(outstanding[i]['bestout'])+parseFloat(outstanding[i]['bestchq']))-parseFloat(outstanding[i]['price'])%></th>
                         </tr>
@@ -83,9 +83,9 @@
                             <th><%= outstanding[i]['fos'].split(' ')[1]%></th>
                             <th>BALAJI TRADERS/BALAJI COMMUNICATION</th>
                             <th><%= outstanding[i]['limit']%></th>
-                            <th><%= parseFloat(outstanding[i]['outstanding'])+parseFloat(outstanding[i]['chq'])%> + <%= parseFloat([i]['balajiout'])+parseFloat(outstanding[i]['balajichq']) %></th>
-                            <th><%= parseFloat([i]['ovd'])%> + <%= parseFloat([i]['balajiovd'])%></th>
-                            <th><%= parseFloat([i]['chq'])%> + <%= parseFloat([i]['balajichq'])%></th>
+                            <th><%= parseFloat(outstanding[i]['outstanding'])+parseFloat(outstanding[i]['chq'])%> + <%= parseFloat(outstanding[i]['balajiout'])+parseFloat(outstanding[i]['balajichq']) %></th>
+                            <th><%= parseFloat(outstanding[i]['ovd'])%> + <%= parseFloat(outstanding[i]['balajiovd'])%></th>
+                            <th><%= parseFloat(outstanding[i]['chq'])%> + <%= parseFloat(outstanding[i]['balajichq'])%></th>
                             <th><%= outstanding[i]['price']%></th>
                             <th><%= (parseFloat(outstanding[i]['outstanding'])+parseFloat(outstanding[i]['chq'])+parseFloat(outstanding[i]['balajiout'])+parseFloat(outstanding[i]['balajichq']))-parseFloat(outstanding[i]['price'])%></th>
                         </tr>
