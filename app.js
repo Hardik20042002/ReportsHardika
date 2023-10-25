@@ -99,6 +99,9 @@ const map = new Map([
     ['anushkamobilecenter2','ANUSKA MOBILE CENTER-AICHER MARKET-GREATER NOIDA-UP WEST'],
     ['ayush','AYUSH COMMUNICATION-GREATER NOIDA-GREATER NOIDA-UP WEST'],
     ['ayushcommunication','AYUSH COMMUNICATION-GREATER NOIDA-GREATER NOIDA-UP WEST'],
+    ['ar','A R COMMUNICATION-SADAR-GAUTAM BUDDHA NAGAR-UP WEST'],
+    ['arcommunication','A R COMMUNICATION-SADAR-GAUTAM BUDDHA NAGAR-UP WEST'],
+    ['arcomm','A R COMMUNICATION-SADAR-GAUTAM BUDDHA NAGAR-UP WEST'],
     ['balajimobilezone','BALAJI MOBILE AND ELECTRONICS-DADRI-GREATER NOIDA-UP WEST'],
     ['balajidadri','BALAJI MOBILE AND ELECTRONICS-DADRI-GREATER NOIDA-UP WEST'],
     ['balajimobileandelectronics','BALAJI MOBILE AND ELECTRONICS-DADRI-GREATER NOIDA-UP WEST'],
@@ -125,6 +128,9 @@ const map = new Map([
     ['famousmobilepoint','FAMOUS MOBILE POINT-GREATER NOIDA-GREATER NOIDA-UP WEST'],
     ['fauji','FAUJI TELECOM-DADRI-GREATER NOIDA-UP WEST'],
     ['faujitelecom','FAUJI TELECOM-DADRI-GREATER NOIDA-UP WEST'],
+    ['fam','FAM MOBILE WORLD-DADRI-GAUTAM BUDDHA NAGAR-UP WEST'],
+    ['fammobile','FAM MOBILE WORLD-DADRI-GAUTAM BUDDHA NAGAR-UP WEST'],
+    ['fammobileworld','FAM MOBILE WORLD-DADRI-GAUTAM BUDDHA NAGAR-UP WEST'],
     ['goel','GOEL MOBILE AND SAMARTH ELECTRONICS-GREATER NOIDA-GREATER NOIDA-UP WEST'],
     ['samarth','GOEL MOBILE AND SAMARTH ELECTRONICS-GREATER NOIDA-GREATER NOIDA-UP WEST'],
     ['goelmobileandsamarthelectronics','GOEL MOBILE AND SAMARTH ELECTRONICS-GREATER NOIDA-GREATER NOIDA-UP WEST'],
@@ -142,6 +148,9 @@ const map = new Map([
     ['jaiambeycom','JAI AMBEY COMMUNICATION-DADRI-GREATER NOIDA-UP WEST'],
     ['jaiambeycommunication','JAI AMBEY COMMUNICATION-DADRI-GREATER NOIDA-UP WEST'],
     ['jaiambecom','JAI AMBEY COMMUNICATION-DADRI-GREATER NOIDA-UP WEST'],
+    ['jmd','JMD MOBILE SHOP-SADAR-GAUTAM BUDDHA NAGAR-UP WEST'],
+    ['jmdmobile','JMD MOBILE SHOP-SADAR-GAUTAM BUDDHA NAGAR-UP WEST'],
+    ['jmdmobileshop','JMD MOBILE SHOP-SADAR-GAUTAM BUDDHA NAGAR-UP WEST'],
     ['kgn','K G N COMMUNICATION-SECTOR 87-GREATER NOIDA-UP WEST'],
     ['kgncom','K G N COMMUNICATION-SECTOR 87-GREATER NOIDA-UP WEST'],
     ['kgncommunication','K G N COMMUNICATION-SECTOR 87-GREATER NOIDA-UP WEST'],
@@ -184,6 +193,8 @@ const map = new Map([
     ['mobilesolution','MOBILE SOLUTION-GAMMA 1-GREATER NOIDA-UP WEST'],
     ['mobileworld','MOBILE WORLD-GREATER NOIDA-GREATER NOIDA-UP WEST'],
     ['world','MOBILE WORLD-GREATER NOIDA-GREATER NOIDA-UP WEST'],
+    ['mobileplaza','M S MOBILE PLAZA-DADRI-GAUTAM BUDDHA NAGAR-UP WEST'],
+    ['msmobileplaza','M S MOBILE PLAZA-DADRI-GAUTAM BUDDHA NAGAR-UP WEST'],
     ['newlavish','NEW LAVISH COMM AND MOBILE WORLD-GREATER NOIDA-GREATER NOIDA-UP WEST'],
     ['newlavishcom','NEW LAVISH COMM AND MOBILE WORLD-GREATER NOIDA-GREATER NOIDA-UP WEST'],
     ['lavish','NEW LAVISH COMM AND MOBILE WORLD-GREATER NOIDA-GREATER NOIDA-UP WEST'],
@@ -726,17 +737,30 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
             const worksheet = workbook.Sheets[sheetName];
             const sheetData = xlsx.utils.sheet_to_json(worksheet);
             for(var i=0;i<sheetData.length;i++){
-                var to6={}
-                to6["Distributor"]=sheetData[i]["Dealer"]
-                var a=sheetData[i]["Debit"]
-                var b=sheetData[i]["Credit"]
-                if(a==undefined){
-                    to6["Outstanding"]=-1*parseInt(b)
+                const index=objct6.findIndex(obj => obj.Distributor===sheetData[i]["Dealer"])
+                if(index==-1){
+                    var to6={}
+                    to6["Distributor"]=sheetData[i]["Dealer"]
+                    var a=sheetData[i]["Debit"]
+                    var b=sheetData[i]["Credit"]
+                    if(a==undefined){
+                        to6["Outstanding"]=-1*parseInt(b)
+                    }
+                    else{
+                        to6["Outstanding"]=parseInt(a)
+                    }
+                    objct6.push(to6)
                 }
                 else{
-                    to6["Outstanding"]=parseInt(a)
+                    var a=sheetData[i]["Debit"]
+                    var b=sheetData[i]["Credit"]
+                    if(a==undefined){
+                        objct6[index]["Outstanding"]+=(-1*parseInt(b))
+                    }
+                    else{
+                        objct6[index]["Outstanding"]+=parseInt(a)
+                    }
                 }
-                objct6.push(to6)
             }
             outstandingModel.deleteMany({})
                 .then(()=>{
