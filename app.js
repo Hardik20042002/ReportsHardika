@@ -1991,7 +1991,7 @@ var pad=(str,len)=>{
     return str
 }
 
-var numbers=['whatsapp:+917303470338','whatsapp:+919540968282','whatsapp:+918130062964','whatsapp:+918700313892','whatsapp:+918802822097','whatsapp:+919958448848','whatsapp:+919810143424','whatsapp:+918860024618','whatsapp:+918700698315']
+var numbers=['whatsapp:+917303470338','whatsapp:+919540968282','whatsapp:+918430364426','whatsapp:+918700313892','whatsapp:+918802822097','whatsapp:+919958448848','whatsapp:+919810143424','whatsapp:+918860024618','whatsapp:+918700698315']
 
 app.post(process.env.wl, (req, res) => {
     const twiml = new twilio.twiml.MessagingResponse();
