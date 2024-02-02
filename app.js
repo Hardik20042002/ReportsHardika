@@ -28,7 +28,6 @@ const client = require('twilio')(accountSid, authToken);
 const twilio = require('twilio');
 var port = process.env.PORT || 3000;
 const upload = multer({ dest: './public/uploads' });
-
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true })
     .then(() => {
         console.log('connected to db')
@@ -318,7 +317,7 @@ const map = new Map([
 
 app.get(process.env.uri, (req, res) => {
     let a = nameModel.distinct("PortalName")
-    let b = imeiModel.distinct("Model")
+    let b = pnameModel.distinct("PortalName")
     let d = fosModel.distinct("FOS")
     temp1=undefined
     temp2=undefined
@@ -402,7 +401,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                                         const foundObject=val.find(obj=>obj.PortalName===arrobj[i].model)
                                         updatearr.push(actualSaleModel.updateOne({"Distributor":arrobj[i].name,"Model":foundObject.TallyName},
                                             {
-                                                $set:{
+                                                $inc:{
                                                     "CNT":arrobj[i].cnt
                                                 }
                                             },{ upsert: true }
@@ -478,7 +477,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                                         const foundObject=val.find(obj=>obj.PortalName===arrobj[i].model)
                                         updatearr.push(actualSaleModel.updateOne({"Distributor":arrobj[i].name,"Model":foundObject.TallyName},
                                             {
-                                                $set:{
+                                                $inc:{
                                                     "CNT":arrobj[i].cnt
                                                 }
                                             },{ upsert: true }
@@ -554,7 +553,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                                         const foundObject=val.find(obj=>obj.PortalName===arrobj[i].model)
                                         updatearr.push(actualSaleModel.updateOne({"Distributor":arrobj[i].name,"Model":foundObject.TallyName},
                                             {
-                                                $set:{
+                                                $inc:{
                                                     "CNT":arrobj[i].cnt
                                                 }
                                             },{ upsert: true }
@@ -629,7 +628,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                                         const foundObject=val.find(obj=>obj.PortalName===arrobj[i].model)
                                         updatearr.push(actualSaleModel.updateOne({"Distributor":arrobj[i].name,"Model":foundObject.TallyName},
                                             {
-                                                $set:{
+                                                $inc:{
                                                     "CNT":arrobj[i].cnt
                                                 }
                                             },{ upsert: true }
@@ -707,7 +706,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                                         const foundObject=val.find(obj=>obj.PortalName===arrobj[i].model)
                                         updatearr.push(actualSaleModel.updateOne({"Distributor":arrobj[i].name,"Model":foundObject.TallyName},
                                             {
-                                                $set:{
+                                                $inc:{
                                                     "CNT":arrobj[i].cnt
                                                 }
                                             },{ upsert: true }
@@ -801,7 +800,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                                         const foundObject=val.find(obj=>obj.PortalName===arrobj[i].model)
                                         updatearr.push(actualSaleModel.updateOne({"Distributor":arrobj[i].name,"Model":foundObject.TallyName},
                                             {
-                                                $set:{
+                                                $inc:{
                                                     "CNT":arrobj[i].cnt
                                                 }
                                             },{ upsert: true }
@@ -877,7 +876,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                                         const foundObject=val.find(obj=>obj.PortalName===arrobj[i].model)
                                         updatearr.push(actualSaleModel.updateOne({"Distributor":arrobj[i].name,"Model":foundObject.TallyName},
                                             {
-                                                $set:{
+                                                $inc:{
                                                     "CNT":arrobj[i].cnt
                                                 }
                                             },{ upsert: true }
@@ -950,7 +949,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                                         const foundObject=val.find(obj=>obj.PortalName===arrobj[i].model)
                                         updatearr.push(actualSaleModel.updateOne({"Distributor":arrobj[i].name,"Model":foundObject.TallyName},
                                             {
-                                                $set:{
+                                                $inc:{
                                                     "CNT":arrobj[i].cnt
                                                 }
                                             },{ upsert: true }
@@ -1023,7 +1022,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                                         const foundObject=val.find(obj=>obj.PortalName===arrobj[i].model)
                                         updatearr.push(actualSaleModel.updateOne({"Distributor":arrobj[i].name,"Model":foundObject.TallyName},
                                             {
-                                                $set:{
+                                                $inc:{
                                                     "CNT":arrobj[i].cnt
                                                 }
                                             },{ upsert: true }
@@ -1096,7 +1095,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                                         const foundObject=val.find(obj=>obj.PortalName===arrobj[i].model)
                                         updatearr.push(actualSaleModel.updateOne({"Distributor":arrobj[i].name,"Model":foundObject.TallyName},
                                             {
-                                                $set:{
+                                                $inc:{
                                                     "CNT":arrobj[i].cnt
                                                 }
                                             },{ upsert: true }
@@ -1169,7 +1168,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                                         const foundObject=val.find(obj=>obj.PortalName===arrobj[i].model)
                                         updatearr.push(actualSaleModel.updateOne({"Distributor":arrobj[i].name,"Model":foundObject.TallyName},
                                             {
-                                                $set:{
+                                                $inc:{
                                                     "CNT":arrobj[i].cnt
                                                 }
                                             },{ upsert: true }
@@ -1242,7 +1241,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                                         const foundObject=val.find(obj=>obj.PortalName===arrobj[i].model)
                                         updatearr.push(actualSaleModel.updateOne({"Distributor":arrobj[i].name,"Model":foundObject.TallyName},
                                             {
-                                                $set:{
+                                                $inc:{
                                                     "CNT":arrobj[i].cnt
                                                 }
                                             },{ upsert: true }
@@ -1318,7 +1317,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                                         const foundObject=val.find(obj=>obj.PortalName===arrobj[i].model)
                                         updatearr.push(actualSaleModel.updateOne({"Distributor":arrobj[i].name,"Model":foundObject.TallyName},
                                             {
-                                                $set:{
+                                                $inc:{
                                                     "CNT":arrobj[i].cnt
                                                 }
                                             },{ upsert: true }
@@ -1394,7 +1393,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                                         const foundObject=val.find(obj=>obj.PortalName===arrobj[i].model)
                                         updatearr.push(actualSaleModel.updateOne({"Distributor":arrobj[i].name,"Model":foundObject.TallyName},
                                             {
-                                                $set:{
+                                                $inc:{
                                                     "CNT":arrobj[i].cnt
                                                 }
                                             },{ upsert: true }
@@ -1463,7 +1462,7 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                         const foundObject=val.find(obj=>obj.PortalName===arrobj[i].model)
                         updatearr.push(actualSaleModel.updateOne({"Distributor":arrobj[i].name,"Model":foundObject.TallyName},
                             {
-                                $set:{
+                                $inc:{
                                     "CNT":arrobj[i].cnt
                                 }
                             },{ upsert: true }
@@ -1654,11 +1653,12 @@ app.get(process.env.mduri,(req,res)=>{
             const foundObject=val.find(obj=>obj.PortalName===models[i])
             modelreports.push(actualSaleModel.find({"Model":foundObject.TallyName}))
             modelreports.push(imeiModel.distinct('IMEI',imeiModel.find({"Model":models[i]})).count())
+            modelreports.push(foundObject.TallyName)
         }
         Promise.all(modelreports).then((value)=>{
             var modelwise=[]
             var itr=0
-            for(var i=0;i<value.length;i+=2){
+            for(var i=0;i<value.length;i+=3){
                 var modelobj={}
                 modelobj['model']=models[itr]
                 itr++
@@ -1668,6 +1668,7 @@ app.get(process.env.mduri,(req,res)=>{
                 }
                 modelobj['sale']=cnt
                 modelobj['stock']=value[i+1]
+                modelobj['tally']=value[i+2]
                 modelwise.push(modelobj)
             }
             modelwise.sort((a,b)=>{
@@ -2046,6 +2047,7 @@ app.post(process.env.wl, (req, res) => {
                     var outreport=[]
                     var models=v[2]
                     pnameModel.find({}).then((val)=>{
+                        var namereport=[],ni=0
                         for(var i=0;i<v[2].length;i++){
                             const foundObject=val.find(obj=>obj.PortalName===v[2][i])
                             outreport.push(imeiModel.find({"Distributor":dlr,"Model":v[2][i]}))
@@ -2053,6 +2055,7 @@ app.post(process.env.wl, (req, res) => {
                             outreport.push(activationModel.find({"Distributor":dlr,"Model":v[2][i]}))
                             outreport.push(actualSaleModel.find({"Distributor":dlr,"Model":foundObject.TallyName}))
                             outreport.push(priceModel.distinct('DP',priceModel.find({"Model":v[2][i]})))
+                            namereport.push(foundObject.TallyName)
                         }
                         outreport.push(fosModel.distinct('FOS',fosModel.find({'Distributor':dlr})))
                         outreport.push(classModel.distinct('CLASS',classModel.find({'Distributor':dlr})))
@@ -2074,7 +2077,7 @@ app.post(process.env.wl, (req, res) => {
                         Promise.all(outreport).then((value)=>{
                             var itr=0,maxmodel=5
                             var sum1=0,sum2=0,tstk=0,tsal=0
-                            var ssarr=[]
+                            var ssarr=[],inarr=[]
                             for(var i=0;i<models.length;i++){
                                 var arr1=[]
                                 for(var k=0;k<value[itr].length;k++){
@@ -2101,17 +2104,28 @@ app.post(process.env.wl, (req, res) => {
                                 var name=models[i].split(' ').join('').substr(4)
                                 name=name.split('(')[0]+' '+name.split('(')[1].split('+')[0]+','+name.split('(')[1].split('+')[1].split('G')[0]
                                 if(x!=0||value[itr+4]!=0){
-                                    ssarr.push({
-                                        "model":name,
-                                        "stock":x+tcnt,
-                                        "sale":cnt
-                                    })
-                                    tstk+=(x+tcnt);
-                                    tsal+=cnt
+                                    if(inarr.includes(namereport[ni])){
+                                        ssarr.push({
+                                            "model":name,
+                                            "stock":x+tcnt,
+                                            "sale":0
+                                        })
+                                    }
+                                    else{
+                                        ssarr.push({
+                                            "model":name,
+                                            "stock":x+tcnt,
+                                            "sale":cnt
+                                        })
+                                        tstk+=(x+tcnt);
+                                        tsal+=cnt
+                                        inarr.push(namereport[ni])
+                                    }
                                     if(maxmodel<name.length){
                                         maxmodel=name.length
                                     }
                                 }
+                                ni++
                                 sum1+=x;
                                 sum2+=(x*value[itr+4])
                                 itr+=5
