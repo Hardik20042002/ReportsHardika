@@ -2110,6 +2110,7 @@ app.post(process.env.wl, (req, res) => {
                                             "stock":x+tcnt,
                                             "sale":0
                                         })
+                                        tstk+=(x+tcnt);
                                     }
                                     else{
                                         ssarr.push({
