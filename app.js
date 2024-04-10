@@ -72,13 +72,14 @@ const map = new Map([
     ['Sunlight Orange', 'SO'],
     ['Sunset Blue', 'SUBL'],
     ['RAINBOW', 'RB'],
-    ['RED', 'R'],
+    ['RED', 'RB'],
     ['GREEN', 'GR'],
     ['BLACK', 'B'],
     ['GREY', 'GY'],
     ['ORANGE', 'O'],
     ['WHITE', 'W'],
     ['PURPLE', 'PUR'],
+    ['RED','R']
   ]);
   const dummy=new Map([
     ['atoz','A TO Z MOBILE-GREATER NOIDA-GREATER NOIDA-UP WEST'],
