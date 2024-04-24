@@ -4,7 +4,6 @@ var multer = require('multer');
 var path = require('path');
 var xlsx = require('xlsx');
 var fs = require('fs');
-
 var imeiModel = require('./models/imei');
 var fosModel = require('./models/fos');
 var prevModel=require('./models/prevsale');
