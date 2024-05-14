@@ -1,6 +1,6 @@
 var mongoose  =  require('mongoose');
 var csvSchema=new mongoose.Schema({
-    CNT:{
+    IMEI:{
         type:Number
     },
     Model:{
