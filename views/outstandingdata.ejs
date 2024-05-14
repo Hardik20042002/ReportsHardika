@@ -72,7 +72,7 @@
                             <th><%= parseFloat(outstanding[i]['outstanding'])+parseFloat(outstanding[i]['chq'])%> + <%= parseFloat(outstanding[i]['bestout'])+parseFloat(outstanding[i]['bestchq']) %></th>
                             <th><%= parseFloat(outstanding[i]['ovd'])%> + <%= parseFloat(outstanding[i]['bestovd'])%></th>
                             <th><%= parseFloat(outstanding[i]['chq'])%> + <%= parseFloat(outstanding[i]['bestchq'])%></th>
-                            <th><%= outstanding[i]['price']%></th>
+                            <th><%= parseFloat(outstanding[i]['price'])%></th>
                             <th><%= (parseFloat(outstanding[i]['outstanding'])+parseFloat(outstanding[i]['chq'])+parseFloat(outstanding[i]['bestout'])+parseFloat(outstanding[i]['bestchq']))-parseFloat(outstanding[i]['price'])%></th>
                         </tr>
                     <%}else if(dealerNames[i][0]=='BALAJI TRADERS (GREATER NOIDA) (OPPO)'){%>
@@ -86,7 +86,7 @@
                             <th><%= parseFloat(outstanding[i]['outstanding'])+parseFloat(outstanding[i]['chq'])%> + <%= parseFloat(outstanding[i]['balajiout'])+parseFloat(outstanding[i]['balajichq']) %></th>
                             <th><%= parseFloat(outstanding[i]['ovd'])%> + <%= parseFloat(outstanding[i]['balajiovd'])%></th>
                             <th><%= parseFloat(outstanding[i]['chq'])%> + <%= parseFloat(outstanding[i]['balajichq'])%></th>
-                            <th><%= outstanding[i]['price']%></th>
+                            <th><%= parseFloat(outstanding[i]['price'])%></th>
                             <th><%= (parseFloat(outstanding[i]['outstanding'])+parseFloat(outstanding[i]['chq'])+parseFloat(outstanding[i]['balajiout'])+parseFloat(outstanding[i]['balajichq']))-parseFloat(outstanding[i]['price'])%></th>
                         </tr>
                     <%}else{%>
