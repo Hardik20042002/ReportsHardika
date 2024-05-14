@@ -71,7 +71,6 @@ const map = new Map([
     ['Sunlight Orange', 'SO'],
     ['Sunset Blue', 'SUBL'],
     ['RAINBOW', 'RB'],
-    ['RED', 'RB'],
     ['GREEN', 'GR'],
     ['BLACK', 'B'],
     ['GREY', 'GY'],
@@ -280,17 +279,12 @@ const map = new Map([
     ['susshma','SUSSHMA MOBILE POINT-GREATER NOIDA-GREATER NOIDA-UP WEST'],
     ['sushma','SUSSHMA MOBILE POINT-GREATER NOIDA-GREATER NOIDA-UP WEST'],
     ['susshmamobilepoint','SUSSHMA MOBILE POINT-GREATER NOIDA-GREATER NOIDA-UP WEST'],
-    ['sandeep','SANDEEP TELECOM-SADAR-GAUTAM BUDDHA NAGAR-UP WEST'],
-    ['sandeeptelecom','SANDEEP TELECOM-SADAR-GAUTAM BUDDHA NAGAR-UP WEST'],
+    ['sandeep','SANDEEP MOBILE CENTRE (SURAJPUR) (OPPO)'],
     ['sanjay','SANJAY COMMUNICATION-GEJHA-GREATER NOIDA-UP WEST'],
     ['sanjaycom','SANJAY COMMUNICATION-GEJHA-GREATER NOIDA-UP WEST'],
     ['shyamlal','SHYAM LAL AND SONS-DADRI-GREATER NOIDA-UP WEST'],
     ['shyamlalandsons','SHYAM LAL AND SONS-DADRI-GREATER NOIDA-UP WEST'],
     ['shyam','SHYAM LAL AND SONS-DADRI-GREATER NOIDA-UP WEST'],
-    ['sc','S C PHONE PLAZA-GAUTAM BUDDHA NAGAR-UP WEST'],
-    ['scphone','S C PHONE PLAZA-GAUTAM BUDDHA NAGAR-UP WEST'],
-    ['scplaza','S C PHONE PLAZA-GAUTAM BUDDHA NAGAR-UP WEST'],
-    ['scphoneplaza','S C PHONE PLAZA-GAUTAM BUDDHA NAGAR-UP WEST'],
     ['tomar','TOMAR ELECTRONICS-SECTOR 141-GREATER NOIDA-UP WEST'],
     ['tomarelectronics','TOMAR ELECTRONICS-SECTOR 141-GREATER NOIDA-UP WEST'],
     ['tanish','TANISH TELECOM-SURAJPUR-GREATER NOIDA-UP WEST'],
@@ -353,8 +347,9 @@ app.get(process.env.uri, (req, res) => {
         console.log(error)
     });
 });
+
 app.post(process.env.uri, upload.single('file'), (req, res) => {
-    var cnt=0;
+    var cnt=0,temp;
     var object=[]
     const workbook = xlsx.readFile(req.file.path);
     const sheets = workbook.SheetNames;
@@ -365,14 +360,14 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
             const sheetData = xlsx.utils.sheet_to_json(worksheet);
             for(var i=0;i<sheetData.length;i++){
                 var to1={}
-                temp = parseFloat(sheetData[i]["IMEI 1"])
+                temp = parseFloat(sheetData[i]["IMEI"])
                 to1["IMEI"] = temp;
-                to1["Model"]=sheetData[i]["Product Model"]
-                to1["Distributor"]=sheetData[i]["business customers"]
+                to1["Model"]=sheetData[i]["Goods Version"]
+                to1["Distributor"]=sheetData[i]["Customer Name"]
                 to1["VerificationTime"]=null
                 objct1.push(to1)
             }
-            imeiModel.deleteMany({})
+            imeiModel.deleteMany({'VerificationTime':null})
                 .then(()=>{
                     imeiModel.insertMany(objct1)
                         .then(()=>{
@@ -384,47 +379,27 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                                 for(var i=0;i<object.length;i++){
                                     var dist=object[i]["Distributor"]
                                     var im=object[i]["IMEI 1"]
-                                    var mo=object[i]["Product Model"]
-                                    var rem=object[i]["REMARKS"]
-                                    if(rem=="IN STOCK"){
-                                        updatearr.push(imeiModel.updateOne({"IMEI":im},
-                                            {
-                                                $set:{
-                                                    "Distributor":dist
-                                                }
+                                    updatearr.push(imeiModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
                                             }
-                                        ))
-                                    }
-                                    else{
-                                        const foundObject=arrobj.find(obj=>obj.name===dist && obj.model===mo);
-                                        if(foundObject){
-                                            foundObject.cnt+=1;
                                         }
-                                        else{
-                                            arrobj.push({name:dist,model:mo,cnt:1})
+                                    ))
+                                    updatearr.push(actualSaleModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
+                                            }
                                         }
-                                    }
+                                    ))
                                 }
-                                pnameModel.find({}).then((val)=>{
-                                    for(var i=0;i<arrobj.length;i++){
-                                        const foundObject=val.find(obj=>obj.PortalName===arrobj[i].model)
-                                        updatearr.push(actualSaleModel.updateOne({"Distributor":arrobj[i].name,"Model":foundObject.TallyName},
-                                            {
-                                                $inc:{
-                                                    "CNT":arrobj[i].cnt
-                                                }
-                                            },{ upsert: true }
-                                        ))
-                                    }
-                                    Promise.all(updatearr).then(()=>{
-                                        console.log("Completed")
-                                        console.log(new Date())
-                                        res.redirect(process.env.uri);
-                                    }).catch((err)=>{
-                                        console.log("Re Upload the correct REUPLOADING file")
-                                    })
+                                Promise.all(updatearr).then(()=>{
+                                    console.log("Completed")
+                                    console.log(new Date())
+                                    res.redirect(process.env.uri);
                                 }).catch((err)=>{
-                                    console.log(err)
+                                    console.log("Re Upload the correct REUPLOADING file")
                                 })
                             }                            
                         })
@@ -442,17 +417,19 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
             for(var i=0;i<sheetData.length;i++){
                 if(sheetData[i]["Client Name"]==="JAI AMBEY COMMUNICATION-DADRI-GREATER NOIDA-UP WEST"||sheetData[i]["Client Name"]==="JAI AMBEY COMMUNICATION ENTERPRISES-DADRI-GREATER NOIDA-UP WEST"||sheetData[i]["Client Name"]==="JAI AMBEY COMMUNICATION -2 (DADRI) (OPPO)"||sheetData[i]["Client Name"]==="ANUSKA MOBILE CENTER-AICHER MARKET-GREATER NOIDA-UP WEST"||sheetData[i]["Client Name"]==="ANUSHKA MOBILE HOUSE-SADAR-GAUTAM BUDDHA NAGAR-UP WEST"){continue}
                 var to2={}
-                temp = parseFloat(sheetData[i]["Sales Volume-Verification"])
-                to2["CNT"] = temp;
-                to2["Model"]=sheetData[i]["Marketing Name"]
-                to2["Distributor"]=sheetData[i]["Client Name"]
+                temp = parseFloat(sheetData[i]["IMEI1"])
+                to2["IMEI"] = temp;
+                to2["Model"]=sheetData[i]["CSC_Goods_Version"]
+                to2["Color"]=sheetData[i]["Color"]
+                to2["Distributor"]=sheetData[i]["Client_Name"]
+                to2["VerificationTime"]=sheetData[i]["Verification_Time"]
                 objct2.push(to2)
             }
-            actualSaleModel.deleteMany({})
+            imeiModel.deleteMany({'VerificationTime':{$ne:null}})
                 .then(()=>{
-                    actualSaleModel.insertMany(objct2)
+                    imeiModel.insertMany(objct2)
                         .then(()=>{
-                            console.log('RegisterSuccess')
+                            console.log('SaleSuccess')
                             cnt++
                             if(cnt==15){
                                 var updatearr=[]
@@ -460,47 +437,27 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                                 for(var i=0;i<object.length;i++){
                                     var dist=object[i]["Distributor"]
                                     var im=object[i]["IMEI 1"]
-                                    var mo=object[i]["Product Model"]
-                                    var rem=object[i]["REMARKS"]
-                                    if(rem=="IN STOCK"){
-                                        updatearr.push(imeiModel.updateOne({"IMEI":im},
-                                            {
-                                                $set:{
-                                                    "Distributor":dist
-                                                }
+                                    updatearr.push(imeiModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
                                             }
-                                        ))
-                                    }
-                                    else{
-                                        const foundObject=arrobj.find(obj=>obj.name===dist && obj.model===mo);
-                                        if(foundObject){
-                                            foundObject.cnt+=1;
                                         }
-                                        else{
-                                            arrobj.push({name:dist,model:mo,cnt:1})
+                                    ))
+                                    updatearr.push(actualSaleModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
+                                            }
                                         }
-                                    }
+                                    ))
                                 }
-                                pnameModel.find({}).then((val)=>{
-                                    for(var i=0;i<arrobj.length;i++){
-                                        const foundObject=val.find(obj=>obj.PortalName===arrobj[i].model)
-                                        updatearr.push(actualSaleModel.updateOne({"Distributor":arrobj[i].name,"Model":foundObject.TallyName},
-                                            {
-                                                $inc:{
-                                                    "CNT":arrobj[i].cnt
-                                                }
-                                            },{ upsert: true }
-                                        ))
-                                    }
-                                    Promise.all(updatearr).then(()=>{
-                                        console.log("Completed")
-                                        console.log(new Date())
-                                        res.redirect(process.env.uri);
-                                    }).catch((err)=>{
-                                        console.log("Re Upload the correct REUPLOADING file")
-                                    })
+                                Promise.all(updatearr).then(()=>{
+                                    console.log("Completed")
+                                    console.log(new Date())
+                                    res.redirect(process.env.uri);
                                 }).catch((err)=>{
-                                    console.log(err)
+                                    console.log("Re Upload the correct REUPLOADING file")
                                 })
                             }                            
                         })
@@ -517,16 +474,18 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
             const worksheet = workbook.Sheets[sheetName];
             const sheetData = xlsx.utils.sheet_to_json(worksheet);
             for(var i=0;i<sheetData.length;i++){
-                var to3={}
-                temp = parseFloat(sheetData[i]["IMEI"])
-                to3["IMEI"] = temp;
-                to3["Model"]=sheetData[i]["Goods Version"]
-                to3["Distributor"]=sheetData[i]["business customers"]
-                objct3.push(to3)
+                if(sheetData[i]["Verified(Y/N)"]=="No"){
+                    var to3={}
+                    temp = parseFloat(sheetData[i]["IMEI1"])
+                    to3["IMEI"] = temp;
+                    to3["Model"]=sheetData[i]["CSC_Goods_Version"]
+                    to3["Distributor"]=sheetData[i]["Client_Name"]
+                    objct3.push(to3)
+                }
             }
-            activationModel.deleteMany({})
+            actualSaleModel.deleteMany({})
                 .then(()=>{
-                    activationModel.insertMany(objct3)
+                    actualSaleModel.insertMany(objct3)
                         .then(()=>{
                             console.log('ActivationSuccess')
                             cnt++
@@ -536,47 +495,27 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                                 for(var i=0;i<object.length;i++){
                                     var dist=object[i]["Distributor"]
                                     var im=object[i]["IMEI 1"]
-                                    var mo=object[i]["Product Model"]
-                                    var rem=object[i]["REMARKS"]
-                                    if(rem=="IN STOCK"){
-                                        updatearr.push(imeiModel.updateOne({"IMEI":im},
-                                            {
-                                                $set:{
-                                                    "Distributor":dist
-                                                }
+                                    updatearr.push(imeiModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
                                             }
-                                        ))
-                                    }
-                                    else{
-                                        const foundObject=arrobj.find(obj=>obj.name===dist && obj.model===mo);
-                                        if(foundObject){
-                                            foundObject.cnt+=1;
                                         }
-                                        else{
-                                            arrobj.push({name:dist,model:mo,cnt:1})
+                                    ))
+                                    updatearr.push(actualSaleModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
+                                            }
                                         }
-                                    }
+                                    ))
                                 }
-                                pnameModel.find({}).then((val)=>{
-                                    for(var i=0;i<arrobj.length;i++){
-                                        const foundObject=val.find(obj=>obj.PortalName===arrobj[i].model)
-                                        updatearr.push(actualSaleModel.updateOne({"Distributor":arrobj[i].name,"Model":foundObject.TallyName},
-                                            {
-                                                $inc:{
-                                                    "CNT":arrobj[i].cnt
-                                                }
-                                            },{ upsert: true }
-                                        ))
-                                    }
-                                    Promise.all(updatearr).then(()=>{
-                                        console.log("Completed")
-                                        console.log(new Date())
-                                        res.redirect(process.env.uri);
-                                    }).catch((err)=>{
-                                        console.log("Re Upload the correct REUPLOADING file")
-                                    })
+                                Promise.all(updatearr).then(()=>{
+                                    console.log("Completed")
+                                    console.log(new Date())
+                                    res.redirect(process.env.uri);
                                 }).catch((err)=>{
-                                    console.log(err)
+                                    console.log("Re Upload the correct REUPLOADING file")
                                 })
                             }                            
                         })
@@ -611,47 +550,27 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                                 for(var i=0;i<object.length;i++){
                                     var dist=object[i]["Distributor"]
                                     var im=object[i]["IMEI 1"]
-                                    var mo=object[i]["Product Model"]
-                                    var rem=object[i]["REMARKS"]
-                                    if(rem=="IN STOCK"){
-                                        updatearr.push(imeiModel.updateOne({"IMEI":im},
-                                            {
-                                                $set:{
-                                                    "Distributor":dist
-                                                }
+                                    updatearr.push(imeiModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
                                             }
-                                        ))
-                                    }
-                                    else{
-                                        const foundObject=arrobj.find(obj=>obj.name===dist && obj.model===mo);
-                                        if(foundObject){
-                                            foundObject.cnt+=1;
                                         }
-                                        else{
-                                            arrobj.push({name:dist,model:mo,cnt:1})
+                                    ))
+                                    updatearr.push(actualSaleModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
+                                            }
                                         }
-                                    }
+                                    ))
                                 }
-                                pnameModel.find({}).then((val)=>{
-                                    for(var i=0;i<arrobj.length;i++){
-                                        const foundObject=val.find(obj=>obj.PortalName===arrobj[i].model)
-                                        updatearr.push(actualSaleModel.updateOne({"Distributor":arrobj[i].name,"Model":foundObject.TallyName},
-                                            {
-                                                $inc:{
-                                                    "CNT":arrobj[i].cnt
-                                                }
-                                            },{ upsert: true }
-                                        ))
-                                    }
-                                    Promise.all(updatearr).then(()=>{
-                                        console.log("Completed")
-                                        console.log(new Date())
-                                        res.redirect(process.env.uri);
-                                    }).catch((err)=>{
-                                        console.log("Re Upload the correct REUPLOADING file")
-                                    })
+                                Promise.all(updatearr).then(()=>{
+                                    console.log("Completed")
+                                    console.log(new Date())
+                                    res.redirect(process.env.uri);
                                 }).catch((err)=>{
-                                    console.log(err)
+                                    console.log("Re Upload the correct REUPLOADING file")
                                 })
                             }                            
                         })
@@ -689,51 +608,32 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                                 for(var i=0;i<object.length;i++){
                                     var dist=object[i]["Distributor"]
                                     var im=object[i]["IMEI 1"]
-                                    var mo=object[i]["Product Model"]
-                                    var rem=object[i]["REMARKS"]
-                                    if(rem=="IN STOCK"){
-                                        updatearr.push(imeiModel.updateOne({"IMEI":im},
-                                            {
-                                                $set:{
-                                                    "Distributor":dist
-                                                }
+                                    updatearr.push(imeiModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
                                             }
-                                        ))
-                                    }
-                                    else{
-                                        const foundObject=arrobj.find(obj=>obj.name===dist && obj.model===mo);
-                                        if(foundObject){
-                                            foundObject.cnt+=1;
                                         }
-                                        else{
-                                            arrobj.push({name:dist,model:mo,cnt:1})
+                                    ))
+                                    updatearr.push(actualSaleModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
+                                            }
                                         }
-                                    }
+                                    ))
                                 }
-                                pnameModel.find({}).then((val)=>{
-                                    for(var i=0;i<arrobj.length;i++){
-                                        const foundObject=val.find(obj=>obj.PortalName===arrobj[i].model)
-                                        updatearr.push(actualSaleModel.updateOne({"Distributor":arrobj[i].name,"Model":foundObject.TallyName},
-                                            {
-                                                $inc:{
-                                                    "CNT":arrobj[i].cnt
-                                                }
-                                            },{ upsert: true }
-                                        ))
-                                    }
-                                    Promise.all(updatearr).then(()=>{
-                                        console.log("Completed")
-                                        console.log(new Date())
-                                        res.redirect(process.env.uri);
-                                    }).catch((err)=>{
-                                        console.log("Re Upload the correct REUPLOADING file")
-                                    })
+                                Promise.all(updatearr).then(()=>{
+                                    console.log("Completed")
+                                    console.log(new Date())
+                                    res.redirect(process.env.uri);
                                 }).catch((err)=>{
-                                    console.log(err)
+                                    console.log("Re Upload the correct REUPLOADING file")
                                 })
                             }                            
                         })
                         .catch((err)=>{
+                            console.log(err)
                             console.log("Re Upload the correct warehouse stock")
                         })
                 })
@@ -783,47 +683,27 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                                 for(var i=0;i<object.length;i++){
                                     var dist=object[i]["Distributor"]
                                     var im=object[i]["IMEI 1"]
-                                    var mo=object[i]["Product Model"]
-                                    var rem=object[i]["REMARKS"]
-                                    if(rem=="IN STOCK"){
-                                        updatearr.push(imeiModel.updateOne({"IMEI":im},
-                                            {
-                                                $set:{
-                                                    "Distributor":dist
-                                                }
+                                    updatearr.push(imeiModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
                                             }
-                                        ))
-                                    }
-                                    else{
-                                        const foundObject=arrobj.find(obj=>obj.name===dist && obj.model===mo);
-                                        if(foundObject){
-                                            foundObject.cnt+=1;
                                         }
-                                        else{
-                                            arrobj.push({name:dist,model:mo,cnt:1})
+                                    ))
+                                    updatearr.push(actualSaleModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
+                                            }
                                         }
-                                    }
+                                    ))
                                 }
-                                pnameModel.find({}).then((val)=>{
-                                    for(var i=0;i<arrobj.length;i++){
-                                        const foundObject=val.find(obj=>obj.PortalName===arrobj[i].model)
-                                        updatearr.push(actualSaleModel.updateOne({"Distributor":arrobj[i].name,"Model":foundObject.TallyName},
-                                            {
-                                                $inc:{
-                                                    "CNT":arrobj[i].cnt
-                                                }
-                                            },{ upsert: true }
-                                        ))
-                                    }
-                                    Promise.all(updatearr).then(()=>{
-                                        console.log("Completed")
-                                        console.log(new Date())
-                                        res.redirect(process.env.uri);
-                                    }).catch((err)=>{
-                                        console.log("Re Upload the correct REUPLOADING file")
-                                    })
+                                Promise.all(updatearr).then(()=>{
+                                    console.log("Completed")
+                                    console.log(new Date())
+                                    res.redirect(process.env.uri);
                                 }).catch((err)=>{
-                                    console.log(err)
+                                    console.log("Re Upload the correct REUPLOADING file")
                                 })
                             }                            
                         })
@@ -859,47 +739,27 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                                 for(var i=0;i<object.length;i++){
                                     var dist=object[i]["Distributor"]
                                     var im=object[i]["IMEI 1"]
-                                    var mo=object[i]["Product Model"]
-                                    var rem=object[i]["REMARKS"]
-                                    if(rem=="IN STOCK"){
-                                        updatearr.push(imeiModel.updateOne({"IMEI":im},
-                                            {
-                                                $set:{
-                                                    "Distributor":dist
-                                                }
+                                    updatearr.push(imeiModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
                                             }
-                                        ))
-                                    }
-                                    else{
-                                        const foundObject=arrobj.find(obj=>obj.name===dist && obj.model===mo);
-                                        if(foundObject){
-                                            foundObject.cnt+=1;
                                         }
-                                        else{
-                                            arrobj.push({name:dist,model:mo,cnt:1})
+                                    ))
+                                    updatearr.push(actualSaleModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
+                                            }
                                         }
-                                    }
+                                    ))
                                 }
-                                pnameModel.find({}).then((val)=>{
-                                    for(var i=0;i<arrobj.length;i++){
-                                        const foundObject=val.find(obj=>obj.PortalName===arrobj[i].model)
-                                        updatearr.push(actualSaleModel.updateOne({"Distributor":arrobj[i].name,"Model":foundObject.TallyName},
-                                            {
-                                                $inc:{
-                                                    "CNT":arrobj[i].cnt
-                                                }
-                                            },{ upsert: true }
-                                        ))
-                                    }
-                                    Promise.all(updatearr).then(()=>{
-                                        console.log("Completed")
-                                        console.log(new Date())
-                                        res.redirect(process.env.uri);
-                                    }).catch((err)=>{
-                                        console.log("Re Upload the correct REUPLOADING file")
-                                    })
+                                Promise.all(updatearr).then(()=>{
+                                    console.log("Completed")
+                                    console.log(new Date())
+                                    res.redirect(process.env.uri);
                                 }).catch((err)=>{
-                                    console.log(err)
+                                    console.log("Re Upload the correct REUPLOADING file")
                                 })
                             }                            
                         })
@@ -932,47 +792,27 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                                 for(var i=0;i<object.length;i++){
                                     var dist=object[i]["Distributor"]
                                     var im=object[i]["IMEI 1"]
-                                    var mo=object[i]["Product Model"]
-                                    var rem=object[i]["REMARKS"]
-                                    if(rem=="IN STOCK"){
-                                        updatearr.push(imeiModel.updateOne({"IMEI":im},
-                                            {
-                                                $set:{
-                                                    "Distributor":dist
-                                                }
+                                    updatearr.push(imeiModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
                                             }
-                                        ))
-                                    }
-                                    else{
-                                        const foundObject=arrobj.find(obj=>obj.name===dist && obj.model===mo);
-                                        if(foundObject){
-                                            foundObject.cnt+=1;
                                         }
-                                        else{
-                                            arrobj.push({name:dist,model:mo,cnt:1})
+                                    ))
+                                    updatearr.push(actualSaleModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
+                                            }
                                         }
-                                    }
+                                    ))
                                 }
-                                pnameModel.find({}).then((val)=>{
-                                    for(var i=0;i<arrobj.length;i++){
-                                        const foundObject=val.find(obj=>obj.PortalName===arrobj[i].model)
-                                        updatearr.push(actualSaleModel.updateOne({"Distributor":arrobj[i].name,"Model":foundObject.TallyName},
-                                            {
-                                                $inc:{
-                                                    "CNT":arrobj[i].cnt
-                                                }
-                                            },{ upsert: true }
-                                        ))
-                                    }
-                                    Promise.all(updatearr).then(()=>{
-                                        console.log("Completed")
-                                        console.log(new Date())
-                                        res.redirect(process.env.uri);
-                                    }).catch((err)=>{
-                                        console.log("Re Upload the correct REUPLOADING file")
-                                    })
+                                Promise.all(updatearr).then(()=>{
+                                    console.log("Completed")
+                                    console.log(new Date())
+                                    res.redirect(process.env.uri);
                                 }).catch((err)=>{
-                                    console.log(err)
+                                    console.log("Re Upload the correct REUPLOADING file")
                                 })
                             }                            
                         })
@@ -1005,47 +845,27 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                                 for(var i=0;i<object.length;i++){
                                     var dist=object[i]["Distributor"]
                                     var im=object[i]["IMEI 1"]
-                                    var mo=object[i]["Product Model"]
-                                    var rem=object[i]["REMARKS"]
-                                    if(rem=="IN STOCK"){
-                                        updatearr.push(imeiModel.updateOne({"IMEI":im},
-                                            {
-                                                $set:{
-                                                    "Distributor":dist
-                                                }
+                                    updatearr.push(imeiModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
                                             }
-                                        ))
-                                    }
-                                    else{
-                                        const foundObject=arrobj.find(obj=>obj.name===dist && obj.model===mo);
-                                        if(foundObject){
-                                            foundObject.cnt+=1;
                                         }
-                                        else{
-                                            arrobj.push({name:dist,model:mo,cnt:1})
+                                    ))
+                                    updatearr.push(actualSaleModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
+                                            }
                                         }
-                                    }
+                                    ))
                                 }
-                                pnameModel.find({}).then((val)=>{
-                                    for(var i=0;i<arrobj.length;i++){
-                                        const foundObject=val.find(obj=>obj.PortalName===arrobj[i].model)
-                                        updatearr.push(actualSaleModel.updateOne({"Distributor":arrobj[i].name,"Model":foundObject.TallyName},
-                                            {
-                                                $inc:{
-                                                    "CNT":arrobj[i].cnt
-                                                }
-                                            },{ upsert: true }
-                                        ))
-                                    }
-                                    Promise.all(updatearr).then(()=>{
-                                        console.log("Completed")
-                                        console.log(new Date())
-                                        res.redirect(process.env.uri);
-                                    }).catch((err)=>{
-                                        console.log("Re Upload the correct REUPLOADING file")
-                                    })
+                                Promise.all(updatearr).then(()=>{
+                                    console.log("Completed")
+                                    console.log(new Date())
+                                    res.redirect(process.env.uri);
                                 }).catch((err)=>{
-                                    console.log(err)
+                                    console.log("Re Upload the correct REUPLOADING file")
                                 })
                             }                            
                         })
@@ -1078,47 +898,27 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                                 for(var i=0;i<object.length;i++){
                                     var dist=object[i]["Distributor"]
                                     var im=object[i]["IMEI 1"]
-                                    var mo=object[i]["Product Model"]
-                                    var rem=object[i]["REMARKS"]
-                                    if(rem=="IN STOCK"){
-                                        updatearr.push(imeiModel.updateOne({"IMEI":im},
-                                            {
-                                                $set:{
-                                                    "Distributor":dist
-                                                }
+                                    updatearr.push(imeiModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
                                             }
-                                        ))
-                                    }
-                                    else{
-                                        const foundObject=arrobj.find(obj=>obj.name===dist && obj.model===mo);
-                                        if(foundObject){
-                                            foundObject.cnt+=1;
                                         }
-                                        else{
-                                            arrobj.push({name:dist,model:mo,cnt:1})
+                                    ))
+                                    updatearr.push(actualSaleModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
+                                            }
                                         }
-                                    }
+                                    ))
                                 }
-                                pnameModel.find({}).then((val)=>{
-                                    for(var i=0;i<arrobj.length;i++){
-                                        const foundObject=val.find(obj=>obj.PortalName===arrobj[i].model)
-                                        updatearr.push(actualSaleModel.updateOne({"Distributor":arrobj[i].name,"Model":foundObject.TallyName},
-                                            {
-                                                $inc:{
-                                                    "CNT":arrobj[i].cnt
-                                                }
-                                            },{ upsert: true }
-                                        ))
-                                    }
-                                    Promise.all(updatearr).then(()=>{
-                                        console.log("Completed")
-                                        console.log(new Date())
-                                        res.redirect(process.env.uri);
-                                    }).catch((err)=>{
-                                        console.log("Re Upload the correct REUPLOADING file")
-                                    })
+                                Promise.all(updatearr).then(()=>{
+                                    console.log("Completed")
+                                    console.log(new Date())
+                                    res.redirect(process.env.uri);
                                 }).catch((err)=>{
-                                    console.log(err)
+                                    console.log("Re Upload the correct REUPLOADING file")
                                 })
                             }                            
                         })
@@ -1151,47 +951,27 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                                 for(var i=0;i<object.length;i++){
                                     var dist=object[i]["Distributor"]
                                     var im=object[i]["IMEI 1"]
-                                    var mo=object[i]["Product Model"]
-                                    var rem=object[i]["REMARKS"]
-                                    if(rem=="IN STOCK"){
-                                        updatearr.push(imeiModel.updateOne({"IMEI":im},
-                                            {
-                                                $set:{
-                                                    "Distributor":dist
-                                                }
+                                    updatearr.push(imeiModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
                                             }
-                                        ))
-                                    }
-                                    else{
-                                        const foundObject=arrobj.find(obj=>obj.name===dist && obj.model===mo);
-                                        if(foundObject){
-                                            foundObject.cnt+=1;
                                         }
-                                        else{
-                                            arrobj.push({name:dist,model:mo,cnt:1})
+                                    ))
+                                    updatearr.push(actualSaleModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
+                                            }
                                         }
-                                    }
+                                    ))
                                 }
-                                pnameModel.find({}).then((val)=>{
-                                    for(var i=0;i<arrobj.length;i++){
-                                        const foundObject=val.find(obj=>obj.PortalName===arrobj[i].model)
-                                        updatearr.push(actualSaleModel.updateOne({"Distributor":arrobj[i].name,"Model":foundObject.TallyName},
-                                            {
-                                                $inc:{
-                                                    "CNT":arrobj[i].cnt
-                                                }
-                                            },{ upsert: true }
-                                        ))
-                                    }
-                                    Promise.all(updatearr).then(()=>{
-                                        console.log("Completed")
-                                        console.log(new Date())
-                                        res.redirect(process.env.uri);
-                                    }).catch((err)=>{
-                                        console.log("Re Upload the correct REUPLOADING file")
-                                    })
+                                Promise.all(updatearr).then(()=>{
+                                    console.log("Completed")
+                                    console.log(new Date())
+                                    res.redirect(process.env.uri);
                                 }).catch((err)=>{
-                                    console.log(err)
+                                    console.log("Re Upload the correct REUPLOADING file")
                                 })
                             }                            
                         })
@@ -1224,47 +1004,27 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                                 for(var i=0;i<object.length;i++){
                                     var dist=object[i]["Distributor"]
                                     var im=object[i]["IMEI 1"]
-                                    var mo=object[i]["Product Model"]
-                                    var rem=object[i]["REMARKS"]
-                                    if(rem=="IN STOCK"){
-                                        updatearr.push(imeiModel.updateOne({"IMEI":im},
-                                            {
-                                                $set:{
-                                                    "Distributor":dist
-                                                }
+                                    updatearr.push(imeiModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
                                             }
-                                        ))
-                                    }
-                                    else{
-                                        const foundObject=arrobj.find(obj=>obj.name===dist && obj.model===mo);
-                                        if(foundObject){
-                                            foundObject.cnt+=1;
                                         }
-                                        else{
-                                            arrobj.push({name:dist,model:mo,cnt:1})
+                                    ))
+                                    updatearr.push(actualSaleModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
+                                            }
                                         }
-                                    }
+                                    ))
                                 }
-                                pnameModel.find({}).then((val)=>{
-                                    for(var i=0;i<arrobj.length;i++){
-                                        const foundObject=val.find(obj=>obj.PortalName===arrobj[i].model)
-                                        updatearr.push(actualSaleModel.updateOne({"Distributor":arrobj[i].name,"Model":foundObject.TallyName},
-                                            {
-                                                $inc:{
-                                                    "CNT":arrobj[i].cnt
-                                                }
-                                            },{ upsert: true }
-                                        ))
-                                    }
-                                    Promise.all(updatearr).then(()=>{
-                                        console.log("Completed")
-                                        console.log(new Date())
-                                        res.redirect(process.env.uri);
-                                    }).catch((err)=>{
-                                        console.log("Re Upload the correct REUPLOADING file")
-                                    })
+                                Promise.all(updatearr).then(()=>{
+                                    console.log("Completed")
+                                    console.log(new Date())
+                                    res.redirect(process.env.uri);
                                 }).catch((err)=>{
-                                    console.log(err)
+                                    console.log("Re Upload the correct REUPLOADING file")
                                 })
                             }                            
                         })
@@ -1300,47 +1060,27 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                                 for(var i=0;i<object.length;i++){
                                     var dist=object[i]["Distributor"]
                                     var im=object[i]["IMEI 1"]
-                                    var mo=object[i]["Product Model"]
-                                    var rem=object[i]["REMARKS"]
-                                    if(rem=="IN STOCK"){
-                                        updatearr.push(imeiModel.updateOne({"IMEI":im},
-                                            {
-                                                $set:{
-                                                    "Distributor":dist
-                                                }
+                                    updatearr.push(imeiModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
                                             }
-                                        ))
-                                    }
-                                    else{
-                                        const foundObject=arrobj.find(obj=>obj.name===dist && obj.model===mo);
-                                        if(foundObject){
-                                            foundObject.cnt+=1;
                                         }
-                                        else{
-                                            arrobj.push({name:dist,model:mo,cnt:1})
+                                    ))
+                                    updatearr.push(actualSaleModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
+                                            }
                                         }
-                                    }
+                                    ))
                                 }
-                                pnameModel.find({}).then((val)=>{
-                                    for(var i=0;i<arrobj.length;i++){
-                                        const foundObject=val.find(obj=>obj.PortalName===arrobj[i].model)
-                                        updatearr.push(actualSaleModel.updateOne({"Distributor":arrobj[i].name,"Model":foundObject.TallyName},
-                                            {
-                                                $inc:{
-                                                    "CNT":arrobj[i].cnt
-                                                }
-                                            },{ upsert: true }
-                                        ))
-                                    }
-                                    Promise.all(updatearr).then(()=>{
-                                        console.log("Completed")
-                                        console.log(new Date())
-                                        res.redirect(process.env.uri);
-                                    }).catch((err)=>{
-                                        console.log("Re Upload the correct REUPLOADING file")
-                                    })
+                                Promise.all(updatearr).then(()=>{
+                                    console.log("Completed")
+                                    console.log(new Date())
+                                    res.redirect(process.env.uri);
                                 }).catch((err)=>{
-                                    console.log(err)
+                                    console.log("Re Upload the correct REUPLOADING file")
                                 })
                             }                            
                         })
@@ -1376,47 +1116,27 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                                 for(var i=0;i<object.length;i++){
                                     var dist=object[i]["Distributor"]
                                     var im=object[i]["IMEI 1"]
-                                    var mo=object[i]["Product Model"]
-                                    var rem=object[i]["REMARKS"]
-                                    if(rem=="IN STOCK"){
-                                        updatearr.push(imeiModel.updateOne({"IMEI":im},
-                                            {
-                                                $set:{
-                                                    "Distributor":dist
-                                                }
+                                    updatearr.push(imeiModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
                                             }
-                                        ))
-                                    }
-                                    else{
-                                        const foundObject=arrobj.find(obj=>obj.name===dist && obj.model===mo);
-                                        if(foundObject){
-                                            foundObject.cnt+=1;
                                         }
-                                        else{
-                                            arrobj.push({name:dist,model:mo,cnt:1})
+                                    ))
+                                    updatearr.push(actualSaleModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
+                                            }
                                         }
-                                    }
+                                    ))
                                 }
-                                pnameModel.find({}).then((val)=>{
-                                    for(var i=0;i<arrobj.length;i++){
-                                        const foundObject=val.find(obj=>obj.PortalName===arrobj[i].model)
-                                        updatearr.push(actualSaleModel.updateOne({"Distributor":arrobj[i].name,"Model":foundObject.TallyName},
-                                            {
-                                                $inc:{
-                                                    "CNT":arrobj[i].cnt
-                                                }
-                                            },{ upsert: true }
-                                        ))
-                                    }
-                                    Promise.all(updatearr).then(()=>{
-                                        console.log("Completed")
-                                        console.log(new Date())
-                                        res.redirect(process.env.uri);
-                                    }).catch((err)=>{
-                                        console.log("Re Upload the correct REUPLOADING file")
-                                    })
+                                Promise.all(updatearr).then(()=>{
+                                    console.log("Completed")
+                                    console.log(new Date())
+                                    res.redirect(process.env.uri);
                                 }).catch((err)=>{
-                                    console.log(err)
+                                    console.log("Re Upload the correct REUPLOADING file")
                                 })
                             }                            
                         })
@@ -1445,48 +1165,28 @@ app.post(process.env.uri, upload.single('file'), (req, res) => {
                 for(var i=0;i<object.length;i++){
                     var dist=object[i]["Distributor"]
                     var im=object[i]["IMEI 1"]
-                    var mo=object[i]["Product Model"]
-                    var rem=object[i]["REMARKS"]
-                    if(rem=="IN STOCK"){
-                        updatearr.push(imeiModel.updateOne({"IMEI":im},
-                            {
-                                $set:{
-                                    "Distributor":dist
-                                }
+                    updatearr.push(imeiModel.updateOne({"IMEI":im},
+                        {
+                            $set:{
+                                "Distributor":dist
                             }
-                        ))
-                    }
-                    else{
-                        const foundObject=arrobj.find(obj=>obj.name===dist && obj.model===mo);
-                        if(foundObject){
-                            foundObject.cnt+=1;
                         }
-                        else{
-                            arrobj.push({name:dist,model:mo,cnt:1})
-                        }
-                    }
+                    ))
+                    updatearr.push(actualSaleModel.updateOne({"IMEI":im},
+                                        {
+                                            $set:{
+                                                "Distributor":dist
+                                            }
+                                        }
+                                    ))
                 }
-                pnameModel.find({}).then((val)=>{
-                    for(var i=0;i<arrobj.length;i++){
-                        const foundObject=val.find(obj=>obj.PortalName===arrobj[i].model)
-                        updatearr.push(actualSaleModel.updateOne({"Distributor":arrobj[i].name,"Model":foundObject.TallyName},
-                            {
-                                $inc:{
-                                    "CNT":arrobj[i].cnt
-                                }
-                            },{ upsert: true }
-                        ))
-                    }
-                    Promise.all(updatearr).then(()=>{
-                        console.log("Completed")
-                        console.log(new Date())
-                        res.redirect(process.env.uri);
-                    }).catch((err)=>{
-                        console.log("Re Upload the correct REUPLOADING file")
-                    })
+                Promise.all(updatearr).then(()=>{
+                    console.log("Completed")
+                    console.log(new Date())
+                    res.redirect(process.env.uri);
                 }).catch((err)=>{
-                    console.log(err)
-                })
+                    console.log("Re Upload the correct REUPLOADING file")
+                })        
             }
         }
     }
@@ -1553,16 +1253,15 @@ app.get(process.env.sduri, (req, res) => {
                 t.push(fosModel.distinct("FOS"))
                 for(var i=0;i<temp1.length;i++){
                     for(var j=0;j<temp2.length;j++){
-                        const foundObject=val.find(obj=>obj.PortalName===temp2[j])
-                        t.push(imeiModel.distinct('IMEI',imeiModel.find({"Distributor":temp1[i],"Model":temp2[j]})).count())
-                        t.push(actualSaleModel.find({"Distributor":temp1[i],"Model":foundObject.TallyName}))
+                        t.push(imeiModel.find({"Distributor":temp1[i],"Model":temp2[j],"VerificationTime":{$ne:null}}).count())
+                        t.push(imeiModel.find({"Distributor":temp1[i],"Model":temp2[j],"VerificationTime":null}).count())
                         t.push(stockModel.find({'Model':temp2[j]}))
                     }
                     t.push(prevModel.distinct('SALE',prevModel.find({'Distributor':temp1[i]})))
                     t.push(fosModel.distinct('FOS',fosModel.find({'Distributor':temp1[i]})))
                     t.push(classModel.distinct('CLASS',classModel.find({'Distributor':temp1[i]})))
-                    t.push(imeiModel.find({"Distributor":temp1[i]}).count())
-                    t.push(actualSaleModel.find({"Distributor":temp1[i]}))
+                    t.push(imeiModel.find({"Distributor":temp1[i],"VerificationTime":{$ne:null}}).count())
+                    t.push(imeiModel.find({"Distributor":temp1[i],"VerificationTime":null}).count())
                 }
                 Promise.all(t).then((returnedValues) => {
                     var arr = returnedValues;
@@ -1575,17 +1274,9 @@ app.get(process.env.sduri, (req, res) => {
                     var tstock=[]
                     var stockstr=[]
                     for(var i=0;i<temp1.length;i++){
-                        var c1=0,c2=0,tc=0
                         for(var j=0;j<temp2.length;j++){
-                                var st=arr[itr],sl=arr[itr+1]
-                                stock.push(st)
-                                var cntr=0
-                                for(var k=0;k<sl.length;k++){
-                                    cntr+=sl[k].CNT
-                                }
-                                sale.push(cntr)
-                                c1+=st
-                                c2+=cntr
+                                sale.push(arr[itr])
+                                stock.push(arr[itr+1])
                                 var str=""
                                 for(var k=0;k<arr[itr+2].length;k++){
                                     str+=map.get(arr[itr+2][k].Color)
@@ -1602,11 +1293,8 @@ app.get(process.env.sduri, (req, res) => {
                         else{
                             fos.push(arr[itr]+' '+arr[itr+1]+' '+x.Class[0].CLASS)
                         }
-                        for(var k=0;k<arr[itr+4].length;k++){
-                            tc+=arr[itr+4][k].CNT
-                        }
-                        tsale.push(tc)
-                        tstock.push(arr[itr+3])
+                        tsale.push(arr[itr+3])
+                        tstock.push(arr[itr+4])
                         itr+=5
                     }
                     obj={
@@ -1656,28 +1344,21 @@ app.get(process.env.sduri, (req, res) => {
 });
 
 app.get(process.env.mduri,(req,res)=>{
-    pnameModel.find({}).then((val)=>{
+    imeiModel.distinct("Model").then((val)=>{
         var modelreports=[]
-        for(var i=0;i<models.length;i++){
-            const foundObject=val.find(obj=>obj.PortalName===models[i])
-            modelreports.push(actualSaleModel.find({"Model":foundObject.TallyName}))
-            modelreports.push(imeiModel.distinct('IMEI',imeiModel.find({"Model":models[i]})).count())
-            modelreports.push(foundObject.TallyName)
+        for(var i=0;i<val.length;i++){
+            modelreports.push(imeiModel.find({"Model":val[i],"VerificationTime":{$ne:null}}).count())
+            modelreports.push(imeiModel.find({"Model":val[i],"VerificationTime":null}).count())
         }
         Promise.all(modelreports).then((value)=>{
             var modelwise=[]
             var itr=0
-            for(var i=0;i<value.length;i+=3){
+            for(var i=0;i<value.length;i+=2){
                 var modelobj={}
-                modelobj['model']=models[itr]
+                modelobj['model']=val[itr]
                 itr++
-                var cnt=0
-                for(var j=0;j<value[i].length;j++){
-                    cnt+=value[i][j].CNT
-                }
-                modelobj['sale']=cnt
+                modelobj['sale']=value[i]
                 modelobj['stock']=value[i+1]
-                modelobj['tally']=value[i+2]
                 modelwise.push(modelobj)
             }
             modelwise.sort((a,b)=>{
@@ -1685,7 +1366,7 @@ app.get(process.env.mduri,(req,res)=>{
             })
             res.render(process.env.md,{
                 dealerDetails:dealers,
-                modelDetails:models,
+                modelDetails:val,
                 fosDetails:fosds,
                 modelreport:modelwise,
                 baseurl:process.env.BASE_URL,
@@ -1693,10 +1374,10 @@ app.get(process.env.mduri,(req,res)=>{
             })
         }).catch((error)=>{
             console.log(error)
-        });
+        }); 
     }).catch((error)=>{
         console.log(error)
-    });
+    });   
 });
 
 app.get(process.env.oduri,(req,res)=>{
@@ -1720,16 +1401,16 @@ app.get(process.env.oduri,(req,res)=>{
                     nameMap.set(names[i].PortalName,names[i].TallyName)
                 }
                 t=[]
-                t.push(nameModel.distinct("PortalName"))
+                t.push(imeiModel.distinct('Distributor'))
                 t.push(imeiModel.distinct('Model'))
                 Promise.all(t).then((val)=>{
                     var t1=val[0],t2=val[1]
                     var outstandingreports=[]
                     for(var i=0;i<t1.length;i++){
                         for(var j=0;j<t2.length;j++){
-                            outstandingreports.push(imeiModel.find({"Distributor":t1[i],"Model":t2[j]}))
+                            outstandingreports.push(imeiModel.find({"Distributor":t1[i],"Model":t2[j],"VerificationTime":null}))
                             outstandingreports.push(scanModel.find({"Distributor":t1[i],"Model":t2[j]}))
-                            outstandingreports.push(activationModel.find({"Distributor":t1[i],"Model":t2[j]}))
+                            outstandingreports.push(actualSaleModel.find({"Distributor":t1[i],"Model":t2[j]}))
                             outstandingreports.push(priceModel.distinct('DP',priceModel.find({"Model":t2[j]})))
                         }
                         outstandingreports.push(fosModel.distinct('FOS',fosModel.find({'Distributor':t1[i]})))
@@ -1780,7 +1461,7 @@ app.get(process.env.oduri,(req,res)=>{
                             if(t1[i]=="S M TRADER-KASNA-GREATER NOIDA-UP WEST"){
                                 outstd.push({
                                     'fos':array[itr]+' '+array[itr+1],
-                                    'shop':dealers[i],
+                                    'shop':t1[i],
                                     'limit':(array[itr+2].length==0?0:array[itr+2]),
                                     'outstanding':(array[itr+3].length==0?0:array[itr+3]),
                                     'chq':(array[itr+4].length==0?0:array[itr+4]),
@@ -1791,12 +1472,13 @@ app.get(process.env.oduri,(req,res)=>{
                                     'bestchq':(array[itr+7].length==0?0:array[itr+7]),
                                     'bestovd':(array[itr+8].length==0?0:array[itr+8])
                                 })
+                                // console.log(outstd)
                                 itr+=9
                             }
                             else if(t1[i]=="BALAJI COMMUNICATION-GREATER NOIDA-UP WEST"){
                                 outstd.push({
                                     'fos':array[itr]+' '+array[itr+1],
-                                    'shop':dealers[i],
+                                    'shop':t1[i],
                                     'limit':(array[itr+2].length==0?0:array[itr+2]),
                                     'outstanding':(array[itr+3].length==0?0:array[itr+3]),
                                     'chq':(array[itr+4].length==0?0:array[itr+4]),
@@ -1807,12 +1489,13 @@ app.get(process.env.oduri,(req,res)=>{
                                     'balajichq':(array[itr+7].length==0?0:array[itr+7]),
                                     'balajiovd':(array[itr+8].length==0?0:array[itr+8])
                                 })
+                                // console.log(outstd)
                                 itr+=9
                             }
                             else{
                                 outstd.push({
                                     'fos':array[itr]+' '+array[itr+1],
-                                    'shop':dealers[i],
+                                    'shop':t1[i],
                                     'limit':(array[itr+2].length==0?0:array[itr+2]),
                                     'outstanding':(array[itr+3].length==0?0:array[itr+3]),
                                     'chq':(array[itr+4].length==0?0:array[itr+4]),
@@ -1826,6 +1509,7 @@ app.get(process.env.oduri,(req,res)=>{
                         outstd.sort((a,b)=>{
                             return classobj.indexOf(a.fos.split(' ')[1])-classobj.indexOf(b.fos.split(' ')[1]);
                         })
+                        console.log(outstd[1])
                         dd=[]
                         for(var i=0;i<outstd.length;i++){
                             dd.push(nameModel.distinct("TallyName",nameModel.find({"PortalName":outstd[i]['shop']})))
@@ -1860,21 +1544,20 @@ app.get(process.env.oduri,(req,res)=>{
 
 app.get(process.env.aduri,(req,res)=>{
     t=[]
-    t.push(nameModel.distinct("PortalName"))
+    t.push(imeiModel.distinct('Distributor'))
     t.push(imeiModel.distinct('Model'))
     Promise.all(t).then((val)=>{
         var t1=val[0],t2=val[1]
         var outstandingreports=[]
         for(var i=0;i<t1.length;i++){
             for(var j=0;j<t2.length;j++){
-                outstandingreports.push(activationModel.find({"Distributor":t1[i],"Model":t2[j]}).count())
+                outstandingreports.push(actualSaleModel.find({"Distributor":t1[i],"Model":t2[j]}).count())
             }
             outstandingreports.push(fosModel.distinct('FOS',fosModel.find({'Distributor':t1[i]})))
             outstandingreports.push(classModel.distinct('CLASS',classModel.find({'Distributor':t1[i]})))
         }
         Promise.all(outstandingreports).then((returnedValues) => {
             var outstd=[]
-            var dd=[]
             var itr=0
             var array=returnedValues
             var flags=[]
@@ -1886,36 +1569,29 @@ app.get(process.env.aduri,(req,res)=>{
                 var zero=false
                 for(var j=0;j<t2.length;j++){
                     var temp=array[itr]
-                    itr+=1
+                    itr++
                     if(temp>0){
                         flags[j]=true;
                         zero=true;
                     }
                     cnt.push(temp)
                 }
-                dd.push(nameModel.distinct("TallyName",nameModel.find({"PortalName":dealers[i]})))
                 outstd.push({
                     'fos':array[itr]+' '+array[itr+1],
-                    'shop':dealers[i],
+                    'shop':t1[i],
                     'model':t2,
                     'cnt':cnt,
                     'isZero':zero,
                 })
                 itr+=2
             }
-            Promise.all(dd).then((val)=>{
-                names=val
-                res.render(process.env.ad,{
-                    modelDetails:t2,
-                    outstanding:outstd,
-                    dealerNames:names,
-                    flag:flags,
-                    baseurl:process.env.BASE_URL,
-                    img:process.env.img,
-                    link:process.env.link
-                })
-            }).catch((err)=>{
-                console.log(err)
+            res.render(process.env.ad,{
+                modelDetails:t2,
+                outstanding:outstd,
+                flag:flags,
+                baseurl:process.env.BASE_URL,
+                img:process.env.img,
+                link:process.env.link
             })
         }).catch((error) => {
             console.log(error)
@@ -2049,199 +1725,175 @@ app.post(process.env.wl, (req, res) => {
                     nameMap.set(names[i].PortalName,names[i].TallyName)
                 }
                 var t=[]
-                t.push(imeiModel.find({"Distributor":dlr}).count())
+                t.push(imeiModel.find({"Distributor":dlr,"VerificationTime":{$ne:null}}).count())
                 t.push(imeiModel.distinct("Distributor"))
                 t.push(imeiModel.distinct('Model'))
                 Promise.all(t).then((v)=>{
                     var outreport=[]
                     var models=v[2]
-                    pnameModel.find({}).then((val)=>{
-                        var namereport=[],ni=0
-                        for(var i=0;i<v[2].length;i++){
-                            const foundObject=val.find(obj=>obj.PortalName===v[2][i])
-                            outreport.push(imeiModel.find({"Distributor":dlr,"Model":v[2][i]}))
-                            outreport.push(scanModel.find({"Distributor":dlr,"Model":v[2][i]}))
-                            outreport.push(activationModel.find({"Distributor":dlr,"Model":v[2][i]}))
-                            outreport.push(actualSaleModel.find({"Distributor":dlr,"Model":foundObject.TallyName}))
-                            outreport.push(priceModel.distinct('DP',priceModel.find({"Model":v[2][i]})))
-                            namereport.push(foundObject.TallyName)
+                    for(var i=0;i<v[2].length;i++){
+                        outreport.push(imeiModel.find({"Distributor":dlr,"Model":v[2][i],"VerificationTime":null}))
+                        outreport.push(scanModel.find({"Distributor":dlr,"Model":v[2][i]}))
+                        outreport.push(actualSaleModel.find({"Distributor":dlr,"Model":v[2][i]}))
+                        outreport.push(priceModel.distinct('DP',priceModel.find({"Model":v[2][i]})))
+                        outreport.push(imeiModel.find({"Distributor":dlr,"Model":v[2][i],"VerificationTime":{$ne:null}}).count())
+                    }
+                    outreport.push(fosModel.distinct('FOS',fosModel.find({'Distributor':dlr})))
+                    outreport.push(classModel.distinct('CLASS',classModel.find({'Distributor':dlr})))
+                    outreport.push(limitModel.distinct('Limit',limitModel.find({'Distributor':dlr})))
+                    outreport.push(outstandingModel.distinct('Outstanding',outstandingModel.find({'Distributor':nameMap.get(dlr)})))
+                    outreport.push(chqModel.distinct('Chq',chqModel.find({'Distributor':nameMap.get(dlr)})))
+                    outreport.push(ovdModel.distinct('Overdue',ovdModel.find({'Distributor':nameMap.get(dlr)})))
+                    outreport.push(prevModel.distinct('SALE',prevModel.find({'Distributor':dlr})))
+                    if(dlr=="S M TRADER-KASNA-GREATER NOIDA-UP WEST"){
+                        outreport.push(outstandingModel.distinct('Outstanding',outstandingModel.find({'Distributor':"BEST GADGETS CENTER (KASNA) (OPPO)"})))
+                        outreport.push(chqModel.distinct('Chq',chqModel.find({'Distributor':"BEST GADGETS CENTER (KASNA) (OPPO)"})))
+                        outreport.push(ovdModel.distinct('Overdue',ovdModel.find({'Distributor':"BEST GADGETS CENTER (KASNA) (OPPO)"})))
+                    }
+                    if(dlr=="BALAJI COMMUNICATION-GREATER NOIDA-UP WEST"){
+                        outreport.push(outstandingModel.distinct('Outstanding',outstandingModel.find({'Distributor':"BALAJI COMMUNICATION (SUTHYANA) (OPPO)"})))
+                        outreport.push(chqModel.distinct('Chq',chqModel.find({'Distributor':"BALAJI COMMUNICATION (SUTHYANA) (OPPO)"})))
+                        outreport.push(ovdModel.distinct('Overdue',ovdModel.find({'Distributor':"BALAJI COMMUNICATION (SUTHYANA) (OPPO)"})))
+                    }
+                    Promise.all(outreport).then((value)=>{
+                        var itr=0,maxmodel=5
+                        var sum1=0,sum2=0,tstk=0,tsal=0
+                        var ssarr=[]
+                        for(var i=0;i<models.length;i++){
+                            var arr1=[]
+                            for(var k=0;k<value[itr].length;k++){
+                                arr1.push(value[itr][k].IMEI)
+                            }
+                            var x=arr1.length,tcnt=0
+                            for(var k=0;k<value[itr+1].length;k++){
+                                var im=value[itr+1][k].IMEI
+                                if(arr1.includes(im)){
+                                    x--;
+                                }
+                            }
+                            for(var k=0;k<value[itr+2].length;k++){
+                                var im=value[itr+2][k].IMEI
+                                if(arr1.includes(im)){
+                                    x--;
+                                }
+                            }
+                            var name=models[i].split(' ').join('').substr(4)
+                            name=name.split('(')[0]+' '+name.split('(')[1].split('+')[0]+','+name.split('(')[1].split('+')[1].split('G')[0]
+                            if(x!=0||value[itr+4]!=0){
+                                ssarr.push({
+                                    "model":name,
+                                    "stock":x,
+                                    "sale":value[itr+4]
+                                })
+                                tstk+=(x);
+                                tsal+=value[itr+4]
+                                if(maxmodel<name.length){
+                                    maxmodel=name.length
+                                }
+                            }
+                            sum1+=x;
+                            sum2+=(x*value[itr+3])
+                            itr+=5
                         }
-                        outreport.push(fosModel.distinct('FOS',fosModel.find({'Distributor':dlr})))
-                        outreport.push(classModel.distinct('CLASS',classModel.find({'Distributor':dlr})))
-                        outreport.push(limitModel.distinct('Limit',limitModel.find({'Distributor':dlr})))
-                        outreport.push(outstandingModel.distinct('Outstanding',outstandingModel.find({'Distributor':nameMap.get(dlr)})))
-                        outreport.push(chqModel.distinct('Chq',chqModel.find({'Distributor':nameMap.get(dlr)})))
-                        outreport.push(ovdModel.distinct('Overdue',ovdModel.find({'Distributor':nameMap.get(dlr)})))
-                        outreport.push(prevModel.distinct('SALE',prevModel.find({'Distributor':dlr})))
-                        if(dlr=="S M TRADER-KASNA-GREATER NOIDA-UP WEST"){
-                            outreport.push(outstandingModel.distinct('Outstanding',outstandingModel.find({'Distributor':"BEST GADGETS CENTER (KASNA) (OPPO)"})))
-                            outreport.push(chqModel.distinct('Chq',chqModel.find({'Distributor':"BEST GADGETS CENTER (KASNA) (OPPO)"})))
-                            outreport.push(ovdModel.distinct('Overdue',ovdModel.find({'Distributor':"BEST GADGETS CENTER (KASNA) (OPPO)"})))
+                        ssarr.sort((a,b)=>{
+                            if(b["sale"]==a["sale"]){
+                                return b["stock"]-a["stock"]
+                            }
+                            return b["sale"]-a["sale"]
+                        })
+                        var salestock="+"
+                        for(var i=1;i<=maxmodel+8;i++){
+                            if(i==maxmodel+1||i==maxmodel+5){
+                                salestock+='+'
+                            }
+                            else{
+                                salestock+='-'
+                            }
                         }
-                        if(dlr=="BALAJI COMMUNICATION-GREATER NOIDA-UP WEST"){
-                            outreport.push(outstandingModel.distinct('Outstanding',outstandingModel.find({'Distributor':"BALAJI COMMUNICATION (SUTHYANA) (OPPO)"})))
-                            outreport.push(chqModel.distinct('Chq',chqModel.find({'Distributor':"BALAJI COMMUNICATION (SUTHYANA) (OPPO)"})))
-                            outreport.push(ovdModel.distinct('Overdue',ovdModel.find({'Distributor':"BALAJI COMMUNICATION (SUTHYANA) (OPPO)"})))
+                        salestock+='+\n'
+                        salestock+='|'+pad("Model",maxmodel-5)
+                        salestock+="|stk|sal|\n+"
+                        for(var i=1;i<=maxmodel+8;i++){
+                            if(i==maxmodel+1||i==maxmodel+5){
+                                salestock+='+'
+                            }
+                            else{
+                                salestock+='-'
+                            }
                         }
-                        Promise.all(outreport).then((value)=>{
-                            var itr=0,maxmodel=5
-                            var sum1=0,sum2=0,tstk=0,tsal=0
-                            var ssarr=[],inarr=[]
-                            for(var i=0;i<models.length;i++){
-                                var arr1=[]
-                                for(var k=0;k<value[itr].length;k++){
-                                    arr1.push(value[itr][k].IMEI)
-                                }
-                                var x=arr1.length,tcnt=0
-                                for(var k=0;k<value[itr+1].length;k++){
-                                    var im=value[itr+1][k].IMEI
-                                    if(arr1.includes(im)){
-                                        x--;
-                                    }
-                                }
-                                for(var k=0;k<value[itr+2].length;k++){
-                                    var im=value[itr+2][k].IMEI
-                                    if(arr1.includes(im)){
-                                        x--;
-                                        tcnt+=1;
-                                    }
-                                }
-                                var cnt=0
-                                for(var k=0;k<value[itr+3].length;k++){
-                                    cnt+=value[itr+3][k].CNT
-                                }
-                                var name=models[i].split(' ').join('').substr(4)
-                                name=name.split('(')[0]+' '+name.split('(')[1].split('+')[0]+','+name.split('(')[1].split('+')[1].split('G')[0]
-                                if(x!=0||value[itr+4]!=0){
-                                    if(inarr.includes(namereport[ni])){
-                                        ssarr.push({
-                                            "model":name,
-                                            "stock":x+tcnt,
-                                            "sale":0
-                                        })
-                                        tstk+=(x+tcnt);
-                                    }
-                                    else{
-                                        ssarr.push({
-                                            "model":name,
-                                            "stock":x+tcnt,
-                                            "sale":cnt
-                                        })
-                                        tstk+=(x+tcnt);
-                                        tsal+=cnt
-                                        inarr.push(namereport[ni])
-                                    }
-                                    if(maxmodel<name.length){
-                                        maxmodel=name.length
-                                    }
-                                }
-                                ni++
-                                sum1+=x;
-                                sum2+=(x*value[itr+4])
-                                itr+=5
+                        salestock+='+\n'
+                        console.log(ssarr)
+                        for(var i=0;i<ssarr.length;i++){
+                            if(ssarr[i]["stock"]==0 && ssarr[i]["sale"]==0){continue}
+                            ssarr[i]["model"]=pad(ssarr[i]["model"],maxmodel-ssarr[i]["model"].length)
+                            var stock=ssarr[i]["stock"].toString()
+                            ssarr[i]["stock"]=pad(stock,3-stock.length)
+                            var sale=ssarr[i]["sale"].toString()
+                            ssarr[i]["sale"]=pad(sale,3-sale.length)
+                            salestock+=('|'+ssarr[i]["model"]+'|'+ssarr[i]["stock"]+'|'+ssarr[i]["sale"]+'|\n')
+                        }
+                        salestock+='+'
+                        for(var i=1;i<=maxmodel+8;i++){
+                            if(i==maxmodel+1||i==maxmodel+5){
+                                salestock+='+'
                             }
-                            ssarr.sort((a,b)=>{
-                                if(b["sale"]==a["sale"]){
-                                    return b["stock"]-a["stock"]
-                                }
-                                return b["sale"]-a["sale"]
-                            })
-                            var salestock="+"
-                            for(var i=1;i<=maxmodel+8;i++){
-                                if(i==maxmodel+1||i==maxmodel+5){
-                                    salestock+='+'
-                                }
-                                else{
-                                    salestock+='-'
-                                }
+                            else{
+                                salestock+='-'
                             }
-                            salestock+='+\n'
-                            salestock+='|'+pad("Model",maxmodel-5)
-                            salestock+="|stk|sal|\n+"
-                            for(var i=1;i<=maxmodel+8;i++){
-                                if(i==maxmodel+1||i==maxmodel+5){
-                                    salestock+='+'
-                                }
-                                else{
-                                    salestock+='-'
-                                }
+                        }
+                        salestock+='+\n|'
+                        salestock+=pad("Total",maxmodel-5)
+                        salestock+='|'
+                        var stkstr=tstk.toString()
+                        salestock+=(pad(stkstr,3-stkstr.length))
+                        salestock+='|'
+                        var salstr=tsal.toString()
+                        salestock+=(pad(salstr,3-salstr.length))
+                        salestock+='|\n'
+                        salestock+='+'
+                        for(var i=1;i<=maxmodel+8;i++){
+                            if(i==maxmodel+1||i==maxmodel+5){
+                                salestock+='+'
                             }
-                            salestock+='+\n'
-                            console.log(ssarr)
-                            for(var i=0;i<ssarr.length;i++){
-                                if(ssarr[i]["stock"]==0 && ssarr[i]["sale"]==0){continue}
-                                ssarr[i]["model"]=pad(ssarr[i]["model"],maxmodel-ssarr[i]["model"].length)
-                                var stock=ssarr[i]["stock"].toString()
-                                ssarr[i]["stock"]=pad(stock,3-stock.length)
-                                var sale=ssarr[i]["sale"].toString()
-                                ssarr[i]["sale"]=pad(sale,3-sale.length)
-                                salestock+=('|'+ssarr[i]["model"]+'|'+ssarr[i]["stock"]+'|'+ssarr[i]["sale"]+'|\n')
+                            else{
+                                salestock+='-'
                             }
-                            salestock+='+'
-                            for(var i=1;i<=maxmodel+8;i++){
-                                if(i==maxmodel+1||i==maxmodel+5){
-                                    salestock+='+'
-                                }
-                                else{
-                                    salestock+='-'
-                                }
+                        }
+                        salestock+='+\n'
+                        var out=parseFloat((value[itr+3].length==0?0:value[itr+3]))+parseFloat((value[itr+4].length==0?0:value[itr+4]))
+                        var gap=parseFloat(out)-parseFloat(sum2)
+                        var lastMonth=parseFloat(value[itr+6])
+                        var dealerName=[]
+                        dealerName.push(nameModel.distinct("TallyName",nameModel.find({"PortalName":dlr})))
+                        Promise.all(dealerName).then((val)=>{
+                            nm=val
+                            var msg
+                            if(nm[0][0]=='S.M TRADERS (KASNA) (OPPO)'){
+                                var out1=parseFloat((value[itr+7].length==0?0:value[itr+7]))+parseFloat((value[itr+8].length==0?0:value[itr+8]))
+                                gap+=(parseFloat(out1))
+                                msg='*'+'S.M Traders/Best'+'*'+'\n'+'*Date:* '+date+'\n'+'*T.Outstanding:* '+out.toString()+'+'+value[itr+7].toString()+'\n'+'*Above 15Days:* '+value[itr+5].toString()+'+'+value[itr+9].toString()+'\n'+'*Yesterday Deposit:* '+value[itr+4].toString()+'+'+value[itr+8].toString()+'\n'+'*Stock Value:* '+sum2.toString()+'\n'+'*Gap:* '+gap.toString()+'\n'+'*Limit:* '+value[itr+2].toString()+'\n'+'```'+salestock+'```'+'*Last Month Sale:* '+lastMonth.toString()+'\n'
                             }
-                            salestock+='+\n|'
-                            salestock+=pad("Total",maxmodel-5)
-                            salestock+='|'
-                            var stkstr=tstk.toString()
-                            salestock+=(pad(stkstr,3-stkstr.length))
-                            salestock+='|'
-                            var salstr=tsal.toString()
-                            salestock+=(pad(salstr,3-salstr.length))
-                            salestock+='|\n'
-                            salestock+='+'
-                            for(var i=1;i<=maxmodel+8;i++){
-                                if(i==maxmodel+1||i==maxmodel+5){
-                                    salestock+='+'
-                                }
-                                else{
-                                    salestock+='-'
-                                }
+                            else if(nm[0][0]=='BALAJI TRADERS (GREATER NOIDA) (OPPO)'){
+                                var out1=parseFloat((value[itr+7].length==0?0:value[itr+7]))+parseFloat((value[itr+8].length==0?0:value[itr+8]))
+                                gap+=(parseFloat(out1))
+                                msg='*'+'Balaji Traders/Balaji Comm'+'*'+'\n'+'*Date:* '+date+'\n'+'*T.Outstanding:* '+out.toString()+'+'+value[itr+7].toString()+'\n'+'*Above 15Days:* '+value[itr+5].toString()+'+'+value[itr+9].toString()+'\n'+'*Yesterday Deposit:* '+value[itr+4].toString()+'+'+value[itr+8].toString()+'\n'+'*Stock Value:* '+sum2.toString()+'\n'+'*Gap:* '+gap.toString()+'\n'+'*Limit:* '+value[itr+2].toString()+'\n'+'```'+salestock+'```'+'*Last Month Sale:* '+lastMonth.toString()+'\n'
                             }
-                            salestock+='+\n'
-                            var out=parseFloat((value[itr+3].length==0?0:value[itr+3]))+parseFloat((value[itr+4].length==0?0:value[itr+4]))
-                            var gap=parseFloat(out)-parseFloat(sum2)
-                            var lastMonth=parseFloat(value[itr+6])
-                            var dealerName=[]
-                            dealerName.push(nameModel.distinct("TallyName",nameModel.find({"PortalName":dlr})))
-                            Promise.all(dealerName).then((val)=>{
-                                nm=val
-                                var msg
-                                if(nm[0][0]=='S.M TRADERS (KASNA) (OPPO)'){
-                                    var out1=parseFloat((value[itr+7].length==0?0:value[itr+7]))+parseFloat((value[itr+8].length==0?0:value[itr+8]))
-                                    gap+=(parseFloat(out1))
-                                    msg='*'+'S.M Traders/Best'+'*'+'\n'+'*Date:* '+date+'\n'+'*T.Outstanding:* '+out.toString()+'+'+value[itr+7].toString()+'\n'+'*Above 15Days:* '+value[itr+5].toString()+'+'+value[itr+9].toString()+'\n'+'*Yesterday Deposit:* '+value[itr+4].toString()+'+'+value[itr+8].toString()+'\n'+'*Stock Value:* '+sum2.toString()+'\n'+'*Gap:* '+gap.toString()+'\n'+'*Limit:* '+value[itr+2].toString()+'\n'+'```'+salestock+'```'+'*Last Month Sale:* '+lastMonth.toString()+'\n'
-                                }
-                                else if(nm[0][0]=='BALAJI TRADERS (GREATER NOIDA) (OPPO)'){
-                                    var out1=parseFloat((value[itr+7].length==0?0:value[itr+7]))+parseFloat((value[itr+8].length==0?0:value[itr+8]))
-                                    gap+=(parseFloat(out1))
-                                    msg='*'+'Balaji Traders/Balaji Comm'+'*'+'\n'+'*Date:* '+date+'\n'+'*T.Outstanding:* '+out.toString()+'+'+value[itr+7].toString()+'\n'+'*Above 15Days:* '+value[itr+5].toString()+'+'+value[itr+9].toString()+'\n'+'*Yesterday Deposit:* '+value[itr+4].toString()+'+'+value[itr+8].toString()+'\n'+'*Stock Value:* '+sum2.toString()+'\n'+'*Gap:* '+gap.toString()+'\n'+'*Limit:* '+value[itr+2].toString()+'\n'+'```'+salestock+'```'+'*Last Month Sale:* '+lastMonth.toString()+'\n'
-                                }
-                                else{
-                                    msg='*'+nm[0][0].split('(')[0]+'*'+'\n'+'*Date:* '+date+'\n'+'*T.Outstanding:* '+out.toString()+'\n'+'*Above 15Days:* '+value[itr+5].toString()+'\n'+'*Yesterday Deposit:* '+value[itr+4].toString()+'\n'+'*Stock Value:* '+sum2.toString()+'\n'+'*Gap:* '+gap.toString()+'\n'+'*Limit:* '+value[itr+2].toString()+'\n'+'```'+salestock+'```'+'*Last Month Sale:* '+lastMonth.toString()+'\n'
-                                }
-                                // res.send({
-                                //     "ans":msg
-                                // })
-                                client.messages.create({
-                                    from: process.env.NO,
-                                    to: fromNumber,
-                                    body: msg
-                                }).then(message => {
-                                    console.log('Message sent:', message.sid);
-                                    res.end(twiml.toString());
-                                }).catch(error => {
-                                    console.error('Error sending message:', error);
-                                    res.status(500).end();
-                                });
-                            }).catch((error)=>{
-                                console.log(error)
+                            else{
+                                msg='*'+nm[0][0].split('(')[0]+'*'+'\n'+'*Date:* '+date+'\n'+'*T.Outstanding:* '+out.toString()+'\n'+'*Above 15Days:* '+value[itr+5].toString()+'\n'+'*Yesterday Deposit:* '+value[itr+4].toString()+'\n'+'*Stock Value:* '+sum2.toString()+'\n'+'*Gap:* '+gap.toString()+'\n'+'*Limit:* '+value[itr+2].toString()+'\n'+'```'+salestock+'```'+'*Last Month Sale:* '+lastMonth.toString()+'\n'
+                            }
+                            // res.send({
+                            //     "ans":msg
+                            // })
+                            client.messages.create({
+                                from: process.env.NO,
+                                to: fromNumber,
+                                body: msg
+                            }).then(message => {
+                                console.log('Message sent:', message.sid);
+                                res.end(twiml.toString());
+                            }).catch(error => {
+                                console.error('Error sending message:', error);
+                                res.status(500).end();
                             });
                         }).catch((error)=>{
                             console.log(error)
@@ -2249,7 +1901,6 @@ app.post(process.env.wl, (req, res) => {
                     }).catch((error)=>{
                         console.log(error)
                     });
-                    
                 }).catch((error)=>{
                     console.log(error)
                 });
