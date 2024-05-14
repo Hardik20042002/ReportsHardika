@@ -57,15 +57,10 @@
                 <%for(var i=0;i<modelreport.length;i++){%>
                     <%if(modelreport[i]['sale']==0 && modelreport[i]['stock']==0){continue;}%>
                     <tr scope="row">
+                        <%cnt1+=modelreport[i]['sale']%>
                         <%cnt2+=modelreport[i]['stock']%>
                         <th><%= modelreport[i]['model']%></th>
-                        <%if(mapper.includes(modelreport[i]['tally'])){%>
-                            <th>0</th>
-                        <%}else{%>
-                            <th><%= modelreport[i]['sale']%></th>
-                            <%cnt1+=modelreport[i]['sale']%>
-                            <%mapper.push(modelreport[i]['tally'])%>
-                        <%}%>
+                        <th><%= modelreport[i]['sale']%></th>
                         <th><%= modelreport[i]['stock']%></th>
                     </tr>
                 <%}%>
