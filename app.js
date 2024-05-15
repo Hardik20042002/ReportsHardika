@@ -1774,7 +1774,7 @@ app.post(process.env.wl, (req, res) => {
                             for(var k=0;k<value[itr+2].length;k++){
                                 var im=value[itr+2][k].IMEI
                                 if(arr1.includes(im)){
-                                    x--;
+                                    x--;tcnt++;
                                 }
                             }
                             var name=models[i].split(' ').join('').substr(4)
@@ -1783,10 +1783,10 @@ app.post(process.env.wl, (req, res) => {
                                 ssarr.push({
                                     "model":name,
                                     "stock":x,
-                                    "sale":value[itr+4]
+                                    "sale":value[itr+4]+tcnt
                                 })
                                 tstk+=(x);
-                                tsal+=value[itr+4]
+                                tsal+=(value[itr+4]+tcnt)
                                 if(maxmodel<name.length){
                                     maxmodel=name.length
                                 }
