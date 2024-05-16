@@ -315,7 +315,9 @@ const map = new Map([
     ['anushkamobilehouse2','ANUSHKA MOBILE HOUSE-SADAR-GAUTAM BUDDHA NAGAR-UP WEST'],
     ['anushkamobilehouse','ANUSHKA MOBILE HOUSE-SADAR-GAUTAM BUDDHA NAGAR-UP WEST'],
     ['momin','MOMIN TELECOM-GAUTAM BUDDHA NAGAR-UP WEST'],
-    ['momintelecom','MOMIN TELECOM-GAUTAM BUDDHA NAGAR-UP WEST']
+    ['momintelecom','MOMIN TELECOM-GAUTAM BUDDHA NAGAR-UP WEST'],
+    ['mobilemart','MOBILE MART-SADAR-GAUTAM BUDDHA NAGAR-UP WEST'],
+    ['mart','MOBILE MART-SADAR-GAUTAM BUDDHA NAGAR-UP WEST']
 ])
 
 app.get(process.env.uri, (req, res) => {
