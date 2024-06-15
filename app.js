@@ -77,6 +77,8 @@ const map = new Map([
     ['ORANGE', 'O'],
     ['WHITE', 'W'],
     ['PURPLE', 'PUR'],
+    ['PINK','PIN'],
+    ['NAVY','NVY'],
     ['RED','R']
   ]);
   const dummy=new Map([
